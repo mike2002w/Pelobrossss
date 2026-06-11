@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PELOBROSSSS — Workout Analytics</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<style>
+  :root{
+    --bg1:#f6f7fb; --bg2:#eaeef7; --card:#ffffff; --card2:#f3f5fa;
+    --ink:#1c2230; --mut:#6b7280; --line:#e3e6ef;
+    --hot1:#ff6b6b; --hot2:#ff9f1c; --green:#2e9e4f; --gold:#ef7c0c; --blue:#2f6fed;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2)); color:var(--ink);
+    min-height:100vh; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1100px; margin:0 auto; padding:24px 18px 80px}
+  header.hero{text-align:center; padding:18px 0 8px}
+  .logo{font-size:34px; font-weight:900; letter-spacing:1px;
+    background:linear-gradient(90deg,var(--hot1),var(--hot2)); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .sub{color:var(--mut); margin-top:2px; font-size:14px}
+  .statgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin:22px 0}
+  .stat{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:14px 12px; text-align:center; box-shadow:0 1px 4px rgba(20,30,60,.05)}
+  .stat .n{font-size:26px; font-weight:800; background:linear-gradient(90deg,var(--hot1),var(--hot2)); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .stat .l{font-size:11px; color:var(--mut); text-transform:uppercase; letter-spacing:.5px; margin-top:3px}
+  section{background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 18px 20px; margin:18px 0; box-shadow:0 1px 4px rgba(20,30,60,.05)}
+  h2{margin:0 0 4px; font-size:18px; display:flex; align-items:center; gap:8px}
+  .hint{color:var(--mut); font-size:13px; margin:0 0 14px}
+  .chartbox{position:relative; height:340px}
+  .chartbox.tall{height:380px}
+  .controls{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:12px}
+  .chip{background:var(--card2); border:1px solid var(--line); color:var(--mut); border-radius:999px;
+    padding:6px 12px; font-size:12px; cursor:pointer; transition:.15s; font-weight:600}
+  .chip.on{color:#1a1a2e; border-color:transparent; background:linear-gradient(90deg,var(--hot1),var(--hot2))}
+  .pr-list{display:grid; gap:8px}
+  .pr{display:flex; align-items:center; gap:12px; background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:10px 14px}
+  .pr .date{font-size:12px; color:var(--mut); width:62px; flex:none}
+  .pr .ex{font-weight:700; flex:1}
+  .pr .val{font-weight:800; color:var(--gold)}
+  .pr.big{border-color:var(--gold); box-shadow:0 0 0 1px var(--gold) inset}
+  .plateau{display:flex; gap:12px; align-items:flex-start; background:var(--card2); border-left:4px solid var(--hot1); border-radius:10px; padding:12px 14px; margin-bottom:10px}
+  .plateau .pi{font-size:22px; flex:none}
+  .plateau b{color:var(--ink)}
+  .plateau .fix{color:var(--mut); font-size:13px; margin-top:3px}
+  .two{display:grid; grid-template-columns:1fr 1fr; gap:18px}
+  @media(max-width:720px){.two{grid-template-columns:1fr}}
+  .heat{display:grid; grid-template-columns:auto repeat(7,1fr); gap:5px; font-size:11px}
+  .heat .hd{color:var(--mut); text-align:center; font-weight:700}
+  .heat .mo{color:var(--mut); display:flex; align-items:center; font-weight:700; padding-right:6px}
+  .cell{aspect-ratio:1; border-radius:5px; background:#eef1f8; display:flex; align-items:center; justify-content:center; color:#10142a; font-weight:800; font-size:10px}
+  .legend{display:flex; gap:14px; flex-wrap:wrap; color:var(--mut); font-size:12px; margin-top:12px}
+  .legend i{display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:5px; vertical-align:-1px}
+  .note{color:var(--mut); font-size:12px; margin-top:14px; line-height:1.5}
+  .tag{display:inline-block; font-size:10px; padding:2px 7px; border-radius:6px; font-weight:700; text-transform:uppercase; letter-spacing:.4px}
+  .t-push{background:rgba(239,68,68,.12); color:#d12f2f}
+  .t-pull{background:rgba(47,111,237,.12); color:#2f6fed}
+  .t-legs{background:rgba(46,158,79,.14); color:#1f8a47}
+  .t-arms{background:rgba(239,124,12,.14); color:#c96a00}
+  .t-cardio{background:rgba(120,128,170,.14); color:#5b6178}
+  /* next workout */
+  .nw-head{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px}
+  .nw-focus{font-size:22px; font-weight:900}
+  .nw-row{display:flex; align-items:center; gap:12px; background:var(--card2); border:1px solid var(--line); border-radius:11px; padding:11px 14px; margin-bottom:8px}
+  .nw-row .ex{font-weight:700; flex:1}
+  .nw-row .last{font-size:12px; color:var(--mut); flex:none; width:120px; text-align:right}
+  .nw-row .tgt{font-weight:800; color:var(--gold); flex:none; width:150px; text-align:right}
+  .nw-alert{background:rgba(76,175,80,.10); border:1px solid var(--green); border-radius:11px; padding:11px 14px; margin-bottom:12px; font-size:14px}
+  .nw-alert b{color:#1f8a47}
+  @media(max-width:560px){.nw-row{flex-wrap:wrap} .nw-row .last,.nw-row .tgt{width:auto; text-align:left}}
+  /* protocols / ramp tables */
+  table.plan{width:100%; border-collapse:collapse; font-size:13px; margin-top:6px}
+  table.plan th,table.plan td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--line)}
+  table.plan th{color:var(--mut); font-weight:700; font-size:11px; text-transform:uppercase; letter-spacing:.4px}
+  table.plan td:first-child{font-weight:800; color:var(--gold); white-space:nowrap}
+  .proto{background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:14px}
+  .proto h3{margin:0 0 2px; font-size:16px}
+  .proto .why{color:var(--mut); font-size:12px; margin:0 0 8px}
+  .legsafe{background:rgba(255,107,107,.08); border-left:4px solid var(--hot1); border-radius:10px; padding:11px 14px; margin-top:12px; font-size:13px; color:var(--mut)}
+  .legsafe b{color:var(--ink)}
+  /* buttons / controls */
+  .btn{background:linear-gradient(90deg,var(--hot1),var(--hot2)); color:#1a1a2e; border:none; border-radius:10px;
+    padding:9px 16px; font-weight:800; font-size:13px; cursor:pointer}
+  .btn:active{transform:translateY(1px)}
+  .wrapctrl{display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:14px}
+  select{background:var(--card2); color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:8px 12px; font-size:13px; font-weight:600}
+  /* wrapped card */
+  #wrapCard{background:linear-gradient(150deg,#ffffff,#f3f5fa); border:1px solid var(--line); box-shadow:0 1px 4px rgba(20,30,60,.06);
+    border-radius:18px; padding:24px; max-width:420px; margin:0 auto}
+  .wc-top{display:flex; justify-content:space-between; align-items:baseline}
+  .wc-brand{font-weight:900; background:linear-gradient(90deg,var(--hot1),var(--hot2)); -webkit-background-clip:text; background-clip:text; color:transparent}
+  .wc-mo{font-size:22px; font-weight:900; margin:4px 0 16px}
+  .wc-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+  .wc-stat{background:rgba(20,30,60,.05); border-radius:12px; padding:12px}
+  .wc-stat .n{font-size:24px; font-weight:900; color:var(--gold)}
+  .wc-stat .l{font-size:11px; color:var(--mut); text-transform:uppercase; letter-spacing:.5px}
+  .wc-pr{margin-top:14px; font-size:13px}
+  .wc-pr b{color:#1f8a47}
+  footer{text-align:center; color:var(--mut); font-size:12px; margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="logo">PELOBROSSSS 💪</div>
+    <div class="sub">Workout Analytics · January – June 2026 · Michael, Jersey City</div>
+  </header>
+
+  <div class="statgrid" id="statgrid"></div>
+
+  <!-- NEXT WORKOUT -->
+  <section id="nextWorkoutSec" style="border-color:var(--gold)">
+    <h2>🎯 Your Next Workout</h2>
+    <p class="hint">Auto-picked from your recent sessions and last weights logged. Today is Jun 10, 2026.</p>
+    <div id="nextWorkout"></div>
+  </section>
+
+  <!-- STRENGTH PROGRESSION -->
+  <section>
+    <h2>📈 Strength Progression</h2>
+    <p class="hint">Top working set (warm-ups excluded) over time. Tap an exercise to toggle it.</p>
+    <div class="controls" id="strengthChips"></div>
+    <div class="chartbox tall"><canvas id="strengthChart"></canvas></div>
+    <p class="note" id="strengthNote"></p>
+  </section>
+
+  <!-- CARDIO TRENDS -->
+  <section>
+    <h2>🏃 Cardio Trends</h2>
+    <p class="hint">Calories, average heart rate and distance per session. Knee recovery drove the elliptical → treadmill → running → stairs progression.</p>
+    <div class="controls" id="cardioChips"></div>
+    <div class="chartbox"><canvas id="cardioChart"></canvas></div>
+  </section>
+
+  <div class="two">
+    <!-- PPL BALANCE -->
+    <section>
+      <h2>⚖️ Push / Pull / Legs Balance</h2>
+      <p class="hint">Share of all logged sessions by focus.</p>
+      <div class="chartbox" style="height:260px"><canvas id="pplChart"></canvas></div>
+      <p class="note" id="pplNote"></p>
+    </section>
+
+    <!-- WEEKLY VOLUME -->
+    <section>
+      <h2>🏋️ Weekly Strength Volume</h2>
+      <p class="hint">Total weight moved per week (Σ weight × reps, working sets; cables converted to lb).</p>
+      <div class="chartbox" style="height:260px"><canvas id="volChart"></canvas></div>
+    </section>
+  </div>
+
+  <!-- FREQUENCY HEATMAP -->
+  <section>
+    <h2>🗓️ Training Frequency</h2>
+    <p class="hint">Every logged session, by day. Color = focus. White gap in March = knee injury layoff.</p>
+    <div id="heat" class="heat"></div>
+    <div class="legend">
+      <span><i style="background:#ef5350"></i>Push</span>
+      <span><i style="background:#3b82f6"></i>Pull</span>
+      <span><i style="background:#2e9e4f"></i>Legs</span>
+      <span><i style="background:#f0a020"></i>Arms</span>
+      <span><i style="background:#9aa0c0"></i>Cardio</span>
+      <span><i style="background:#eef1f8;border:1px solid #e3e6ef"></i>Rest / none</span>
+    </div>
+  </section>
+
+  <!-- PLATEAUS -->
+  <section>
+    <h2>🚧 Plateau Watch</h2>
+    <p class="hint">Lifts stuck at the same top weight for 4+ sessions — your best targets to break next.</p>
+    <div id="plateaus"></div>
+  </section>
+
+  <!-- PR TIMELINE -->
+  <section>
+    <h2>🏆 PR Timeline</h2>
+    <p class="hint">Every personal record set this year, newest first.</p>
+    <div class="pr-list" id="prList"></div>
+  </section>
+
+  <!-- DAY OF WEEK -->
+  <section>
+    <h2>📅 Day-of-Week & Frequency</h2>
+    <p class="hint" id="freqHint"></p>
+    <div class="chartbox" style="height:260px"><canvas id="dowChart"></canvas></div>
+  </section>
+
+  <!-- STRENGTH-TO-CARDIO LOAD -->
+  <section>
+    <h2>⚡ Training Load & Fatigue Flags</h2>
+    <p class="hint">Weekly strength volume (bars) against cardio calories (line). Flags below mark sessions where a lift came in under its previous best on a hard-cardio day — possible interference or under-recovery.</p>
+    <div class="chartbox" style="height:300px"><canvas id="loadChart"></canvas></div>
+    <div id="fatigueFlags" style="margin-top:14px"></div>
+  </section>
+
+  <!-- PLATEAU PROTOCOLS -->
+  <section>
+    <h2>🔓 Plateau-Breaker Protocols</h2>
+    <p class="hint">3-week micro-cycles to push past your two stuck lifts (and triceps). Run one block, then re-test.</p>
+    <div id="protocols"></div>
+  </section>
+
+  <!-- LEGS RAMP -->
+  <section style="border-color:var(--green)">
+    <h2>🦵 Legs Re-Introduction Ramp</h2>
+    <p class="hint">Knee-safe 5-week rebuild back to your pre-injury baseline. Smith machine = total bar weight; always face the TOP of the angle.</p>
+    <div id="legsRamp"></div>
+    <div class="legsafe">
+      <b>⚠️ Knee rules:</b> Stop any set with lateral knee pain. Avoid the figure-4 stretch (caused lateral pain before). No deep knee-bent stretches. Add an extra rest day if the joint feels off the next morning.
+    </div>
+  </section>
+
+  <!-- MONTHLY WRAPPED -->
+  <section>
+    <h2>🎁 Monthly Wrapped</h2>
+    <p class="hint">A shareable recap card. Pick a month, then download it as an image.</p>
+    <div class="wrapctrl">
+      <select id="wrapMonth"></select>
+      <button class="btn" id="wrapDownload">⬇︎ Download card</button>
+    </div>
+    <div id="wrapCardHolder"><div id="wrapCard"></div></div>
+  </section>
+
+  <!-- DATA EXPORT -->
+  <section>
+    <h2>💾 Data Export</h2>
+    <p class="hint">Back up your full history so it's never trapped in a chat again.</p>
+    <div class="wrapctrl">
+      <button class="btn" id="expJson">⬇︎ Export JSON</button>
+      <button class="btn" id="expCsv">⬇︎ Export CSV (all sets)</button>
+      <span class="note" id="expInfo" style="margin:0"></span>
+    </div>
+  </section>
+
+  <footer>Built from the Pelobrossss handoff log · generated Jun 10, 2026 · keep stacking PRs 🔥</footer>
+</div>
+
+<script>
+/* ============================================================
+   DATA  — encoded from the Pelobrossss handoff log
+   sets: [weight, reps, isWarmup]  · u = unit for the exercise
+   Some February dates are approximate (from the transfer doc);
+   flagged with approx:true.
+   ============================================================ */
+const KG2LB = 2.2046;
+const W = (date,type,opts={}) => ({date,type,...opts});
+
+const workouts = [
+  // ---- JANUARY ----
+  W('2026-01-16','Cardio',{cardio:{machine:'Treadmill',min:20}, ex:[]}),
+  W('2026-01-17','Legs',{ex:[
+    {n:'Squats',e:'Smith',u:'lb',s:[[50,8,0],[50,8,0],[50,8,0]]},
+    {n:'RDLs',e:'Smith',u:'lb',s:[[20,8,0],[20,8,0],[20,8,0]]},
+    {n:'Calf Raises',e:'Smith',u:'lb',s:[[20,15,0],[20,15,0],[20,15,0]]},
+  ]}),
+  W('2026-01-20','Push',{cardio:{machine:'Run',min:30}, ex:[
+    {n:'Bench Press',e:'DB',u:'lb',s:[[20,10,1],[35,10,0],[40,10,0],[40,10,0]]},
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,0],[15,8,0],[15,8,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0]]},
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[25,8,0]]},
+  ]}),
+  W('2026-01-22','Pull',{ex:[
+    {n:'DB Rows',e:'DB',u:'lb',s:[[15,8,1],[25,8,0],[30,8,0],[30,8,0]]},
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
+    {n:'Tricep Ext Overhead',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[50,8,0],[50,8,0]]},
+  ]}),
+  W('2026-01-23','Legs',{cardio:{machine:'Elliptical',min:10}, ex:[
+    {n:'Squats',e:'Smith',u:'lb',s:[[50,8,0],[50,8,0],[50,8,0]]},
+    {n:'RDLs',e:'Smith',u:'lb',s:[[20,8,0],[25,8,0],[30,8,0]]},
+    {n:'Calf Raises',e:'Smith',u:'lb',s:[[25,15,0],[30,15,0],[30,17,0]]},
+  ]}),
+  W('2026-01-25','Push',{cardio:{machine:'Run',mi:2.2,min:30}, ex:[
+    {n:'Bench Press',e:'DB',u:'lb',s:[[20,8,1],[35,8,0],[40,8,0],[40,8,0]]},
+    {n:'Incline Flyes',e:'DB',u:'lb',s:[[15,10,0],[20,10,0],[20,10,0]]},
+    {n:'Tricep Ext Overhead',e:'DB',u:'lb',s:[[25,8,1],[40,8,0],[50,8,0],[50,8,0]]},
+  ]}),
+  W('2026-01-27','Pull',{ex:[
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,0],[15,8,0],[17.5,8,0]]},
+    {n:'Smith Rows',e:'Smith',u:'lb',s:[[20,8,1],[40,8,0],[50,8,0],[50,8,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[30,8,0],[30,8,0],[35,8,0]]},
+    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0],[10,12,0],[10,12,0]]},
+    {n:'Shrugs',e:'DB',u:'lb',s:[[40,8,0],[40,8,0],[45,8,0]]},
+  ]}),
+  W('2026-01-29','Legs',{cardio:{machine:'Run',min:20}, ex:[
+    {n:'Squats',e:'Smith',u:'lb',s:[[25,8,0],[35,8,0],[50,8,0],[50,8,0]]},
+    {n:'RDLs',e:'Smith',u:'lb',s:[[25,8,1],[35,8,0],[45,8,0]]},
+    {n:'Calf Raises',e:'Smith',u:'lb',s:[[25,15,0],[35,15,0],[35,15,0]]},
+  ]}),
+
+  // ---- FEBRUARY ----
+  W('2026-02-07','Push',{cardio:{machine:'Run',min:20}, ex:[
+    {n:'Bench Press',e:'DB',u:'lb',s:[[20,8,1],[30,8,0]]},
+    {n:'Squats',e:'Smith',u:'lb',s:[[30,8,0],[30,8,0],[30,8,0]]},
+    {n:'Smith Rows',e:'Smith',u:'lb',s:[[30,8,0],[30,8,0],[40,8,0]]},
+  ]}),
+  W('2026-02-09','Pull',{cardio:{machine:'Run',min:20}, ex:[
+    {n:'Bench Press',e:'DB',u:'lb',s:[[30,8,0],[40,8,0],[45,8,0],[45,8,0]]},
+    {n:'Incline Flyes',e:'DB',u:'lb',s:[[15,10,0],[15,10,0],[20,10,0]]},
+    {n:'DB Rows',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[17.5,8,0],[20,8,0],[22.5,8,0]]},
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[30,6,0],[30,6,0]]},
+    {n:'Tricep Ext Overhead',e:'DB',u:'lb',s:[[45,8,0],[45,8,0],[45,8,0]]},
+  ]}),
+  W('2026-02-10','Legs',{cardio:{machine:'Run',min:20}, ex:[
+    {n:'Squats',e:'Smith',u:'lb',s:[[45,8,0],[50,8,0],[50,8,0]]},
+    {n:'RDLs',e:'Smith',u:'lb',s:[[25,8,1],[50,8,0],[50,8,0]]},
+  ]}),
+  W('2026-02-13','Push',{approx:true,ex:[
+    {n:'Chest Press (machine)',e:'Machine',u:'lb',s:[[55,8,0]]},
+    {n:'Lat Pulldown (machine)',e:'Machine',u:'lb',s:[[100,8,0]]},
+    {n:'Shoulder Press (machine)',e:'Machine',u:'lb',s:[[65,6,0]]},
+    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0]]},
+  ]}),
+  W('2026-02-16','Pull',{approx:true,ex:[
+    {n:'Assisted Pull-ups',e:'Machine',u:'lb',s:[[85,8,0],[70,8,0]]},
+    {n:'Dips',e:'Machine',u:'lb',s:[[70,8,0],[55,8,0],[40,8,0]]},
+    {n:'Chin-ups',e:'Machine',u:'lb',s:[[60,8,0]]},
+  ]}),
+  W('2026-02-18','Legs',{approx:true,ex:[
+    {n:'Squats',e:'Smith',u:'lb',s:[[40,8,0],[50,8,0],[50,8,0]]},
+    {n:'RDLs',e:'Smith',u:'lb',s:[[45,8,0],[55,8,0],[55,8,0]]},
+  ]}),
+  W('2026-02-20','Push',{approx:true,ex:[
+    {n:'Bench Press',e:'DB',u:'lb',s:[[30,8,0],[40,8,0],[45,8,0]]},
+    {n:'Incline Flyes',e:'DB',u:'lb',s:[[15,10,0],[20,10,0],[20,10,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
+  ]}),
+  W('2026-02-21','Pull',{approx:true,cardio:{machine:'Run',min:30}, ex:[
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[15,8,0],[17.5,8,0],[22.5,8,0]]},
+    {n:'DB Rows',e:'DB',u:'lb',s:[[28,8,0],[30,8,0],[30,8,0]]},
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[25,8,0]]},
+  ]}),
+  W('2026-02-23','Push',{approx:true,note:'knee injury day', ex:[
+    {n:'Bench Press',e:'Smith',u:'lb',s:[[50,8,0],[55,8,0],[60,8,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
+    {n:'Incline Flyes',e:'DB',u:'lb',s:[[15,10,0],[15,10,0],[15,10,0]]},
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[25,8,0]]},
+    {n:'Tricep Ext Overhead',e:'DB',u:'lb',s:[[40,8,0],[45,8,0],[45,8,0]]},
+  ]}),
+  W('2026-02-27','Pull',{approx:true,ex:[
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[17.5,8,0],[22.5,8,0],[22.5,8,0]]},
+    {n:'DB Rows',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
+    {n:'Shrugs',e:'DB',u:'lb',s:[[35,8,0],[35,8,0],[35,8,0]]},
+    {n:'Bench Press',e:'DB',u:'lb',s:[[30,8,1],[35,8,0],[40,8,0],[45,8,0]]},
+    {n:'Incline Flyes',e:'DB',u:'lb',s:[[15,10,0],[20,10,0],[20,10,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[35,8,0]]},
+    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0],[10,12,0],[10,12,0]]},
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[25,8,0],[30,6,0]]},
+  ]}),
+
+  // ---- APRIL (knee layoff through March) ----
+  W('2026-04-05','Push',{cardio:{machine:'Elliptical',mi:3.32,min:19.62,cal:136,hr:118}, ex:[
+    {n:'Bench Press',e:'Smith',u:'lb',s:[[50,8,0],[60,8,0],[70,8,0],[70,8,0]]},
+    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[40,8,0],[45,8,0],[50,8,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
+    {n:'Incline Bench',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0],[30,8,0]]},
+  ]}),
+  W('2026-04-07','Cardio',{cardio:{machine:'Elliptical',mi:6.28,min:30.03,cal:245,hr:143}, ex:[]}),
+  W('2026-04-13','Pull',{cardio:{machine:'Elliptical',mi:5.14,min:25.27,cal:133,hr:90}, ex:[
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[15,8,0],[20,8,0],[22.5,8,0]]},
+    {n:'Smith Rows',e:'Smith',u:'lb',s:[[35,8,0],[50,8,0],[50,8,0]]},
+    {n:'Shrugs',e:'DB',u:'lb',s:[[35,8,0],[40,8,0]]},
+    {n:'Bicep Curls',e:'Cable',u:'kg',s:[[7.5,8,0],[7.5,8,0],[7.5,8,0]]},
+  ]}),
+  W('2026-04-15','Push',{cardio:{machine:'Elliptical',mi:4.57,min:21.22,cal:198,hr:148}, ex:[
+    {n:'Bench Press',e:'Smith',u:'lb',s:[[50,8,0],[60,8,0],[75,8,0],[75,8,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[35,6,0]]},
+    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[25,8,1],[40,8,0],[45,8,0]]},
+  ]}),
+  W('2026-04-16','Arms',{ex:[
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[25,8,0],[25,8,0]]},
+    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[40,8,0],[45,8,0],[45,8,0]]},
+    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0]]},
+  ]}),
+  W('2026-04-17','Pull',{cardio:{machine:'Elliptical',mi:6.41,min:29.03,cal:303,hr:147}, ex:[
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[15,8,0],[20,8,0],[22.5,8,0]]},
+    {n:'Smith Rows',e:'Smith',u:'lb',s:[[40,8,0],[50,8,0],[60,8,0]]},
+    {n:'Shrugs',e:'DB',u:'lb',s:[[35,8,0],[40,8,0],[45,8,0]]},
+  ]}),
+  W('2026-04-19','Push',{cardio:{machine:'Elliptical',mi:4.48,min:20.25,cal:168,hr:135}, ex:[
+    {n:'Bench Press',e:'Smith',u:'lb',s:[[20,8,1],[50,8,0],[70,8,0],[80,8,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[25,8,0],[30,8,0],[35,8,0]]},
+    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[45,8,0],[50,8,0]]},
+    {n:'Incline Bench',e:'DB',u:'lb',s:[[25,8,0],[35,8,0],[35,8,0],[35,8,0]]},
+    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0],[10,12,0]]},
+  ]}),
+  W('2026-04-22','Pull',{cardio:{machine:'Elliptical',mi:2.94,min:15.10,cal:120,hr:138}, ex:[
+    {n:'Face Pulls',e:'Cable',u:'kg',s:[[5,8,0],[7.5,8,0],[7.5,8,0]]},
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[17.5,8,0],[20,8,0],[22.5,8,0]]},
+    {n:'Hammer Curls',e:'DB',u:'lb',s:[[20,8,0],[25,8,0],[25,8,0]]},
+    {n:'Smith Rows',e:'Smith',u:'lb',s:[[20,8,1],[40,8,0],[55,8,0],[65,8,0]]},
+    {n:'Shrugs',e:'DB',u:'lb',s:[[35,8,0],[45,8,0],[50,8,0]]},
+  ]}),
+  W('2026-04-28','Push',{cardio:{machine:'Elliptical',mi:4.61,min:20.05,cal:211,hr:148}, ex:[
+    {n:'Bench Press',e:'Smith',u:'lb',s:[[40,8,1],[60,8,0],[70,8,0],[80,8,0]]},
+    {n:'Incline Bench',e:'DB',u:'lb',s:[[25,8,1],[35,8,0],[40,8,0],[40,8,0]]},
+    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[40,8,0],[45,8,0]]},
+  ]}),
+  W('2026-04-30','Pull',{cardio:{machine:'Elliptical',mi:4.77,min:21.02,cal:216,hr:152}, ex:[
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[17.5,8,0],[22.5,8,0],[22.5,8,0]]},
+    {n:'DB Rows',e:'DB',u:'lb',s:[[15,8,1],[25,8,0],[25,8,0],[30,8,0]]},
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[20,8,1],[25,8,0],[30,8,0],[25,8,0]]},
+    {n:'Shrugs',e:'DB',u:'lb',s:[[35,8,0],[45,8,0],[50,8,0]]},
+  ]}),
+
+  // ---- MAY ----
+  W('2026-05-03','Push',{cardio:{machine:'Run',mi:1.0,min:30}, ex:[
+    {n:'Bench Press',e:'Smith',u:'lb',s:[[40,8,1],[65,8,0],[80,8,0],[90,8,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[25,8,0],[30,8,0],[30,8,0]]},
+    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[40,8,0],[45,8,0]]},
+    {n:'Incline Bench',e:'DB',u:'lb',s:[[25,8,1],[35,8,0],[40,8,0],[40,8,0]]},
+  ]}),
+  W('2026-05-09','Pull',{ex:[
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[17.5,8,0],[22.5,8,0],[22.5,8,0]]},
+    {n:'Smith Rows',e:'Smith',u:'lb',s:[[25,8,1],[50,8,0],[65,8,0],[65,8,0]]},
+    {n:'Shrugs',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[50,8,0],[50,8,0]]},
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[20,8,1],[25,8,0],[25,8,0],[25,8,0]]},
+  ]}),
+  W('2026-05-12','Push',{cardio:{machine:'Elliptical',min:25.40,cal:259,hr:149}, ex:[
+    {n:'Bench Press',e:'Smith',u:'lb',s:[[40,8,1],[65,8,0],[90,8,0],[95,8,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[30,8,0],[35,8,0],[35,8,0]]},
+    {n:'Incline Bench',e:'Smith',u:'lb',s:[[25,8,1],[50,8,0],[70,8,0],[70,8,0]]},
+    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[50,8,0],[50,8,0]]},
+  ]}),
+  W('2026-05-14','Pull',{cardio:{machine:'Elliptical',mi:8.02,min:39.43,cal:369,hr:149}, ex:[
+    {n:'DB Rows',e:'DB',u:'lb',s:[[15,8,1],[25,8,0],[25,8,0],[30,8,0]]},
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[20,8,0],[20,8,0],[22.5,8,0]]},
+    {n:'Shrugs',e:'DB',u:'lb',s:[[25,8,1],[50,8,0],[50,8,0],[50,8,0]]},
+  ]}),
+  W('2026-05-15','Push',{cardio:{machine:'Treadmill',mi:2.36,min:32.72,cal:224,hr:104}, ex:[
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[30,8,0],[35,8,0],[35,8,0]]},
+    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[50,8,0],[50,8,0]]},
+    {n:'Standing Cable Press',e:'Cable',u:'kg',s:[[7.5,8,0]]},
+  ]}),
+  W('2026-05-17','Pull',{ex:[
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[20,8,0],[22.5,8,0],[22.5,8,0]]},
+    {n:'Smith Rows',e:'Smith',u:'lb',s:[[25,8,1],[50,8,0],[65,8,0],[65,8,0]]},
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[20,8,1],[30,8,0],[30,8,0],[30,8,0]]},
+    {n:'Shrugs',e:'DB',u:'lb',s:[[25,8,1],[50,8,0],[50,8,0],[50,8,0]]},
+  ]}),
+  W('2026-05-19','Cardio',{cardio:{machine:'Treadmill',mi:2.73,min:37.40,cal:279,hr:107}, ex:[]}),
+  W('2026-05-22','Push',{cardio:{machine:'Treadmill',mi:2.58,min:34.22,cal:266,hr:122}, ex:[
+    {n:'Bench Press',e:'Smith',u:'lb',s:[[25,8,1],[50,8,1],[70,8,0],[95,8,0],[95,8,0]]},
+    {n:'Tricep Pulldown',e:'Cable',u:'kg',s:[[15,8,0],[20,8,0],[22.5,8,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[30,8,0],[30,8,0],[30,8,0]]},
+  ]}),
+  W('2026-05-23','Pull',{cardio:{machine:'Elliptical',mi:3.38,min:15.10,cal:124,hr:143}, ex:[
+    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[20,8,0],[22.5,8,0],[22.5,8,0]]},
+    {n:'Straight Arm Pulldown',e:'Cable',u:'kg',s:[[2.5,8,0],[5,8,0],[5,8,0],[7.5,8,0]]},
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[20,8,1],[30,6,0],[25,8,0]]},
+    {n:'Shrugs',e:'DB',u:'lb',s:[[25,8,1],[50,8,0],[50,8,0],[50,8,0]]},
+  ]}),
+  W('2026-05-25','Cardio',{cardio:{machine:'Elliptical',mi:4.82,min:20.20,cal:177,hr:149}, ex:[
+    {n:'Stair Climber',e:'Cardio',u:'lb',s:[]},
+  ]}),
+  W('2026-05-28','Cardio',{cardio:{machine:'Elliptical',mi:3.53,min:17.72,cal:127,hr:132}, ex:[]}),
+  W('2026-05-29','Cardio',{cardio:{machine:'Treadmill',mi:2.58,min:33.77,cal:274}, ex:[]}),
+  W('2026-05-30','Push',{cardio:{machine:'Elliptical',min:20.27,cal:148,hr:131}, ex:[
+    {n:'Tricep Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[20,8,0],[22.5,8,0],[22.5,8,0]]},
+    {n:'Cable Flyes',e:'Cable',u:'kg',s:[[5,8,0],[7.5,8,0],[10,8,0],[10,8,0]]},
+  ]}),
+
+  // ---- JUNE ----
+  W('2026-06-04','Push',{note:'CENTURY', ex:[
+    {n:'Bench Press',e:'Smith',u:'lb',s:[[20,8,1],[50,8,0],[70,8,0],[95,8,0],[100,8,0]]},
+    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[30,8,0],[30,8,0],[30,8,0]]},
+    {n:'Tricep Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[20,8,0],[22.5,8,0],[22.5,8,0]]},
+    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0],[10,12,0],[10,12,0]]},
+  ]}),
+  W('2026-06-07','Cardio',{cardio:{machine:'Run',mi:2.0}, ex:[
+    {n:'Bicep Curls',e:'DB',u:'lb',s:[[15,8,1]]},
+  ]}),
+  W('2026-06-08','Push',{cardio:{machine:'Run',mi:1.5}, ex:[
+    {n:'Bench Press',e:'DB',u:'lb',s:[[30,8,0],[35,8,0]]},
+  ]}),
+  W('2026-06-09','Cardio',{cardio:{machine:'Elliptical',min:20.30,cal:235,hr:152}, ex:[]}),
+];
+
+// Stair climber as second cardio entries (not distance-based) — attach notes
+const extraCardio = [
+  {date:'2026-05-25', machine:'Stairs', min:14.90, cal:133, floors:48},
+  {date:'2026-06-09', machine:'Stairs', min:10.13, cal:123, hr:157},
+];
+
+/* ============================================================
+   COLORS / THEME
+   ============================================================ */
+const TYPE_COLOR = {Push:'#ef5350', Pull:'#3b82f6', Legs:'#2e9e4f', Arms:'#f0a020', Cardio:'#9aa0c0'};
+const Chart_def = () => { Chart.defaults.color='#6b7280'; Chart.defaults.font.family="-apple-system,Segoe UI,Roboto,sans-serif"; Chart.defaults.borderColor='rgba(0,0,0,.08)'; };
+Chart_def();
+
+const fmtDate = d => new Date(d+'T00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
+const toLb = (w,u) => u==='kg' ? w*KG2LB : w;
+
+/* ---- TOP-LINE STATS ---- */
+(function(){
+  const total = workouts.length;
+  const lifting = workouts.filter(w=>w.ex.some(e=>e.s.length)).length;
+  const cardioSessions = workouts.filter(w=>w.cardio).length + extraCardio.length;
+  // total weight moved (working sets, lb)
+  let vol=0;
+  workouts.forEach(w=>w.ex.forEach(e=>e.s.forEach(([wt,r,wu])=>{ if(!wu) vol += toLb(wt,e.u)*r; })));
+  const benchPR = 100;
+  const stats = [
+    ['Sessions logged', total],
+    ['Lifting days', lifting],
+    ['Cardio sessions', cardioSessions],
+    ['Bench PR (lb)', benchPR],
+    ['Total weight moved', (vol/1000).toFixed(1)+'k lb'],
+    ['PRs set', 21],
+  ];
+  document.getElementById('statgrid').innerHTML = stats.map(([l,n])=>
+    `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+})();
+
+/* ---- STRENGTH PROGRESSION ---- */
+const STRENGTH_EX = [
+  {n:'Bench Press', e:'Smith', u:'lb', color:'#ff6b6b', on:true},
+  {n:'Smith Rows', e:'Smith', u:'lb', color:'#5b8def', on:true},
+  {n:'Single Arm Lat Pulldown', e:'Cable', u:'kg', color:'#4CAF50', on:true},
+  {n:'Shoulder Press', e:'DB', u:'lb', color:'#e0900a', on:true},
+  {n:'Bicep Curls', e:'DB', u:'lb', color:'#c98bff', on:false},
+  {n:'Shrugs', e:'DB', u:'lb', color:'#ff9b5b', on:false},
+  {n:'Incline Bench', e:'DB', u:'lb', color:'#5be0d0', on:false},
+];
+function topSet(w, name, equip){
+  let best=null;
+  w.ex.forEach(e=>{ if(e.n===name && (!equip||e.e===equip)){ e.s.forEach(([wt,r,wu])=>{ if(!wu && (best===null||wt>best)) best=wt; }); }});
+  return best;
+}
+let strengthChart;
+function buildStrength(){
+  const datasets = STRENGTH_EX.filter(x=>x.on).map(x=>{
+    const pts = workouts.map(w=>{ const v=topSet(w,x.n,x.e); return v===null?null:{x:w.date, y:v}; }).filter(Boolean);
+    const unit = x.u==='kg'?' kg':' lb';
+    return {label:x.n+(x.u==='kg'?' (kg)':''), data:pts, borderColor:x.color, backgroundColor:x.color,
+      tension:.25, spanGaps:true, pointRadius:3, pointHoverRadius:6, borderWidth:2.5,
+      yAxisID: x.u==='kg'?'yKg':'yLb'};
+  });
+  if(strengthChart) strengthChart.destroy();
+  strengthChart = new Chart(document.getElementById('strengthChart'),{
+    type:'line',
+    data:{datasets},
+    options:{
+      maintainAspectRatio:false, interaction:{mode:'nearest',intersect:false},
+      scales:{
+        x:{type:'time', time:{unit:'month'}, grid:{display:false}},
+        yLb:{position:'left', title:{display:true,text:'lb (DB / Smith)'}, grid:{color:'rgba(0,0,0,.07)'}},
+        yKg:{position:'right', title:{display:true,text:'kg (cable)'}, grid:{display:false}},
+      },
+      plugins:{legend:{labels:{usePointStyle:true,boxWidth:8}}}
+    }
+  });
+}
+function renderStrengthChips(){
+  document.getElementById('strengthChips').innerHTML = STRENGTH_EX.map((x,i)=>
+    `<span class="chip ${x.on?'on':''}" data-i="${i}">${x.n}</span>`).join('');
+  document.querySelectorAll('#strengthChips .chip').forEach(c=>c.onclick=()=>{
+    const i=+c.dataset.i; STRENGTH_EX[i].on=!STRENGTH_EX[i].on; c.classList.toggle('on'); buildStrength();
+  });
+}
+document.getElementById('strengthNote').textContent =
+  'Bench Press is the headline: 60 → 100 lb (Feb → Jun, +67%), hitting the century mark June 4. Smith Rows climbed 50 → 65 lb (+30%). The flat green line is your lat-pulldown plateau, and shoulder press has been stuck near 35.';
+
+/* ---- CARDIO TRENDS ---- */
+const cardioPts = workouts.filter(w=>w.cardio && (w.cardio.cal||w.cardio.hr||w.cardio.mi))
+  .map(w=>({date:w.date, ...w.cardio}));
+const CARDIO_SERIES = [
+  {key:'cal', label:'Calories', color:'#ff6b6b', axis:'yCal', on:true},
+  {key:'hr', label:'Avg HR', color:'#e0900a', axis:'yHr', on:true},
+  {key:'mi', label:'Distance (mi)', color:'#5be0d0', axis:'yMi', on:false},
+];
+let cardioChart;
+function buildCardio(){
+  const datasets = CARDIO_SERIES.filter(s=>s.on).map(s=>({
+    label:s.label,
+    data:cardioPts.map(p=>({x:p.date, y:p[s.key]??null})),
+    borderColor:s.color, backgroundColor:s.color, tension:.3, spanGaps:true,
+    pointRadius:3, pointHoverRadius:6, borderWidth:2.5, yAxisID:s.axis,
+  }));
+  if(cardioChart) cardioChart.destroy();
+  cardioChart = new Chart(document.getElementById('cardioChart'),{
+    type:'line', data:{datasets},
+    options:{maintainAspectRatio:false, interaction:{mode:'nearest',intersect:false},
+      scales:{
+        x:{type:'time', time:{unit:'month'}, grid:{display:false}},
+        yCal:{position:'left', title:{display:true,text:'calories'}, grid:{color:'rgba(0,0,0,.07)'}},
+        yHr:{position:'right', title:{display:true,text:'avg HR'}, grid:{display:false}, suggestedMin:80, suggestedMax:170},
+        yMi:{display:false},
+      },
+      plugins:{legend:{labels:{usePointStyle:true,boxWidth:8}}}}
+  });
+}
+document.getElementById('cardioChips').innerHTML = CARDIO_SERIES.map((s,i)=>
+  `<span class="chip ${s.on?'on':''}" data-i="${i}">${s.label}</span>`).join('');
+document.querySelectorAll('#cardioChips .chip').forEach(c=>c.onclick=()=>{
+  const i=+c.dataset.i; CARDIO_SERIES[i].on=!CARDIO_SERIES[i].on; c.classList.toggle('on'); buildCardio();
+});
+
+/* ---- PPL BALANCE ---- */
+(function(){
+  const counts={Push:0,Pull:0,Legs:0,Arms:0,Cardio:0};
+  workouts.forEach(w=>counts[w.type]++);
+  new Chart(document.getElementById('pplChart'),{
+    type:'doughnut',
+    data:{labels:Object.keys(counts), datasets:[{data:Object.values(counts),
+      backgroundColor:Object.keys(counts).map(k=>TYPE_COLOR[k]), borderColor:'#ffffff', borderWidth:3}]},
+    options:{maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{usePointStyle:true,boxWidth:8}}}}
+  });
+  document.getElementById('pplNote').innerHTML =
+    `Push & Pull are well balanced. <b style="color:#1f8a47">Legs = ${counts.Legs} sessions, all before the Feb knee injury</b> — zero since. That's the clearest gap now that the knee has recovered.`;
+})();
+
+/* ---- WEEKLY VOLUME ---- */
+(function(){
+  function weekKey(d){ const dt=new Date(d+'T00:00'); const day=(dt.getDay()+6)%7; dt.setDate(dt.getDate()-day); return dt.toISOString().slice(0,10); }
+  const byWeek={};
+  workouts.forEach(w=>{ let v=0; w.ex.forEach(e=>e.s.forEach(([wt,r,wu])=>{ if(!wu) v+=toLb(wt,e.u)*r; }));
+    const k=weekKey(w.date); byWeek[k]=(byWeek[k]||0)+v; });
+  const keys=Object.keys(byWeek).sort();
+  new Chart(document.getElementById('volChart'),{
+    type:'bar',
+    data:{labels:keys.map(fmtDate), datasets:[{label:'Volume (lb)', data:keys.map(k=>Math.round(byWeek[k])),
+      backgroundColor:'#ff6b6b'}]},
+    options:{maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{x:{grid:{display:false}, ticks:{maxRotation:60,minRotation:60,font:{size:9}}},
+        y:{grid:{color:'rgba(0,0,0,.07)'}, title:{display:true,text:'lb moved'}}}}
+  });
+})();
+
+/* ---- FREQUENCY HEATMAP ---- */
+(function(){
+  const map={}; workouts.forEach(w=>map[w.date]=w.type);
+  const months=[{y:2026,m:0,name:'Jan'},{y:2026,m:1,name:'Feb'},{y:2026,m:2,name:'Mar'},
+    {y:2026,m:3,name:'Apr'},{y:2026,m:4,name:'May'},{y:2026,m:5,name:'Jun'}];
+  let html = `<div class="hd"></div>`+['M','T','W','T','F','S','S'].map(d=>`<div class="hd">${d}</div>`).join('');
+  months.forEach(mo=>{
+    html += `<div class="mo">${mo.name}</div>`;
+    const first=new Date(mo.y,mo.m,1); const lead=(first.getDay()+6)%7;
+    const days=new Date(mo.y,mo.m+1,0).getDate();
+    let cells=[];
+    for(let i=0;i<lead;i++) cells.push('<div></div>');
+    for(let d=1; d<=days; d++){
+      const ds=`${mo.y}-${String(mo.m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const t=map[ds];
+      const bg = t?TYPE_COLOR[t]:'#eef1f8';
+      const col = t?'#0c0f1f':'#9aa6c0';
+      cells.push(`<div class="cell" style="background:${bg};color:${col}" title="${ds}${t?' · '+t:''}">${d}</div>`);
+    }
+    // pad each month row to a multiple of 7 columns by chunking weeks
+    while(cells.length%7!==0) cells.push('<div></div>');
+    // only show up to first 7 columns label row; render as flowing weeks under the month label
+    html += `<div style="grid-column:2 / span 7; display:grid; grid-template-columns:repeat(7,1fr); gap:5px">${cells.join('')}</div>`;
+  });
+  document.getElementById('heat').innerHTML = html;
+})();
+
+/* ---- PLATEAUS ---- */
+(function(){
+  const plateaus = [
+    {pi:'🔒', ex:'Single-Arm Lat Pulldown', detail:'Stuck at 22.5 kg top set since <b>Feb 9</b> — ~10 sessions.',
+      fix:'Cable tops out, so progress via reps (3×10–12), slow 3-sec negatives, or a 4th set. Add a true row variation for overload.'},
+    {pi:'🔒', ex:'Shoulder Press (DB)', detail:'PR of 35 lb set <b>Jan 27</b>; lately often only reaching 30.',
+      fix:'Try 35 for 5–6 clean reps then back-off sets, or seated for stricter form. Push-press the last set to overload the top.'},
+    {pi:'⚠️', ex:'Tricep Extensions', detail:'Bouncing 45 ↔ 50 lb without a clean break past 50.',
+      fix:'Lock in 50×8 for 3 sets before adding load; superset with the cable pulldown for volume.'},
+    {pi:'🦵', ex:'Legs — full gap', detail:'No squats / RDLs / calves since <b>Feb</b> (knee injury). Knee now recovered.',
+      fix:'Restart light: Smith squats 30–40 lb, RDLs 25–35, calves. Rebuild before chasing the old 50/55 PRs.'},
+  ];
+  document.getElementById('plateaus').innerHTML = plateaus.map(p=>
+    `<div class="plateau"><div class="pi">${p.pi}</div><div><b>${p.ex}</b><div class="fix">${p.detail}</div><div class="fix">→ ${p.fix}</div></div></div>`).join('');
+})();
+
+/* ---- PR TIMELINE ---- */
+const PRS = [
+    {d:'2026-06-04', ex:'Bench Press (Smith)', v:'100 × 8 🏆', big:true},
+    {d:'2026-05-30', ex:'Cable Flyes', v:'10 kg'},
+    {d:'2026-05-23', ex:'Straight Arm Pulldown', v:'7.5 kg'},
+    {d:'2026-05-22', ex:'Tricep Pulldown (Cable)', v:'22.5 kg'},
+    {d:'2026-05-17', ex:'Bicep Curls (DB)', v:'30 × 8'},
+    {d:'2026-05-14', ex:'Elliptical (distance)', v:'8.02 mi / 39:26'},
+    {d:'2026-05-12', ex:'Bench Press (Smith)', v:'95 × 8'},
+    {d:'2026-05-12', ex:'Incline Bench (Smith)', v:'70 × 8'},
+    {d:'2026-05-03', ex:'Bench Press (Smith)', v:'90 × 8'},
+    {d:'2026-04-28', ex:'Incline Bench (DB)', v:'40 × 8'},
+    {d:'2026-04-22', ex:'Smith Rows', v:'65 × 8'},
+    {d:'2026-04-22', ex:'Shrugs (DB)', v:'50 × 8'},
+    {d:'2026-04-22', ex:'Hammer Curls', v:'25 × 8'},
+    {d:'2026-04-22', ex:'Face Pulls', v:'7.5 kg'},
+    {d:'2026-04-19', ex:'Bench Press (Smith)', v:'80 × 8'},
+    {d:'2026-04-17', ex:'Smith Rows', v:'60 × 8'},
+    {d:'2026-04-15', ex:'Bench Press (Smith)', v:'75 × 8'},
+    {d:'2026-04-05', ex:'Bench Press (Smith)', v:'70 × 8'},
+    {d:'2026-02-10', ex:'RDLs (Smith)', v:'50 → later 55'},
+    {d:'2026-02-09', ex:'Bench Press (DB)', v:'45 × 8'},
+    {d:'2026-02-09', ex:'Single Arm Lat Pulldown', v:'22.5 kg'},
+    {d:'2026-01-27', ex:'Shoulder Press (DB)', v:'35 × 8'},
+];
+document.getElementById('prList').innerHTML = PRS.map(p=>
+  `<div class="pr ${p.big?'big':''}"><div class="date">${fmtDate(p.d)}</div><div class="ex">${p.ex}</div><div class="val">${p.v}</div></div>`).join('');
+
+renderStrengthChips(); buildStrength(); buildCardio();
+
+/* ============================================================
+   SHARED HELPERS for the engine sections
+   ============================================================ */
+const TODAY = '2026-06-10';
+const liftingDays = workouts.filter(w=>w.ex.some(e=>e.s.length));
+const daysAgo = d => Math.round((new Date(TODAY+'T00:00') - new Date(d+'T00:00'))/86400000);
+const unitFor = name => { for(let i=workouts.length-1;i>=0;i--){ const e=workouts[i].ex.find(x=>x.n===name); if(e) return e.u; } return 'lb'; };
+// most recent working top set for an exercise (optionally pinned equipment)
+function lastTopFor(name, equip){
+  for(let i=workouts.length-1;i>=0;i--){
+    const w=workouts[i]; let b=null, u='lb';
+    w.ex.forEach(e=>{ if(e.n===name && (!equip||e.e===equip)){ u=e.u; e.s.forEach(([wt,r,wu])=>{ if(!wu && (b===null||wt>b)) b=wt; }); }});
+    if(b!==null) return {w:b, u, date:w.date};
+  }
+  return null;
+}
+
+/* ============================================================
+   1. AUTO-GENERATED NEXT WORKOUT
+   ============================================================ */
+(function(){
+  const last2 = liftingDays.slice(-2).map(w=>w.type);
+  const lastLegs = [...liftingDays].reverse().find(w=>w.type==='Legs');
+  const legsGap = lastLegs ? daysAgo(lastLegs.date) : 999;
+  // rotation: if recent strength leaned Push, go Pull; else Push
+  const pushCount = last2.filter(t=>t==='Push').length;
+  const focus = pushCount >= 1 ? 'Pull (Back + Biceps)' : 'Push (Chest + Shoulders + Triceps)';
+  const isPull = focus.startsWith('Pull');
+
+  const fmtLast = l => l ? `${l.w}${l.u==='kg'?' kg':' lb'} · ${fmtDate(l.date)}` : '—';
+
+  // exercise templates with target logic
+  const pull = [
+    {n:'Single Arm Lat Pulldown', e:'Cable', tgt:l=>'22.5 kg · 3×10 (rep progression — plateau)'},
+    {n:'Smith Rows', e:'Smith', tgt:l=>`${l.w} lb top set → push for ${l.w+5}`},
+    {n:'DB Rows', e:'DB', tgt:l=>`${l.w} lb · 3×8; try ${l.w+5} if clean`},
+    {n:'Face Pulls', e:'Cable', tgt:l=>`${l.w} kg · 3×12 (rear delts)`},
+    {n:'Bicep Curls', e:'DB', tgt:l=>`${l.w} lb · 3×8; test ${l.w+5}`},
+    {n:'Shrugs', e:'DB', tgt:l=>`${l.w} lb · 3×8; test ${l.w+5}`},
+  ];
+  const push = [
+    {n:'Bench Press', e:'Smith', tgt:l=>`${l.w} lb — beat the century, aim ${l.w+5}`},
+    {n:'Incline Bench', e:'Smith', tgt:l=>l?`${l.w} lb · 3×8`:'70 lb · 3×8'},
+    {n:'Shoulder Press', e:'DB', tgt:l=>'35 lb · 3×5-6 + 30×10 back-off (plateau)'},
+    {n:'Tricep Pulldown', e:'Cable', tgt:l=>`${l.w} kg · 3×10`},
+    {n:'Lateral Raises', e:'DB', tgt:l=>'10 lb · 3×12'},
+  ];
+  const plan = isPull ? pull : push;
+
+  let html = `<div class="nw-head"><span class="nw-focus">${focus}</span>
+    <span class="hint" style="margin:0">Last 2 lifting days were ${last2.join(' + ')||'—'}, so you're due for the other side.</span></div>`;
+
+  if(legsGap > 14){
+    html += `<div class="nw-alert">🦵 <b>Legs overdue — ${legsGap} days</b> since your last leg session (${lastLegs?fmtDate(lastLegs.date):'Feb'}).
+      Your knee has recovered, so slot in a legs day this week using the <b>Re-Introduction Ramp</b> below.</div>`;
+  }
+
+  html += plan.map(x=>{
+    const l = lastTopFor(x.n, x.e);
+    return `<div class="nw-row"><div class="ex">${x.n}</div>
+      <div class="last">last: ${fmtLast(l)}</div>
+      <div class="tgt">${x.tgt(l||{w:'',u:'lb'})}</div></div>`;
+  }).join('');
+
+  html += `<p class="note">Plus 20–30 min cardio (Elliptical, effort 6) — your easy in-between days have kept HR in the 130–150 zone.</p>`;
+  document.getElementById('nextWorkout').innerHTML = html;
+})();
+
+/* ============================================================
+   2. DAY-OF-WEEK & FREQUENCY
+   ============================================================ */
+(function(){
+  const names=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const counts=[0,0,0,0,0,0,0];
+  workouts.forEach(w=>{ const idx=(new Date(w.date+'T00:00').getDay()+6)%7; counts[idx]++; });
+  // weeks spanned
+  const ds=workouts.map(w=>new Date(w.date+'T00:00'));
+  const weeks=((Math.max(...ds)-Math.min(...ds))/86400000)/7;
+  const perWeek=(workouts.length/weeks).toFixed(1);
+  // longest streak of consecutive calendar days with a session
+  const set=new Set(workouts.map(w=>w.date));
+  let streak=0,best=0; const sorted=[...set].sort();
+  let prev=null;
+  sorted.forEach(d=>{ if(prev && (new Date(d)-new Date(prev))===86400000) streak++; else streak=1; best=Math.max(best,streak); prev=d; });
+  const topDay=names[counts.indexOf(Math.max(...counts))];
+  const officeIdx=[0,2,4]; // Mon/Wed/Fri office
+  const officeShare=Math.round(100*officeIdx.reduce((s,i)=>s+counts[i],0)/workouts.length);
+  document.getElementById('freqHint').innerHTML =
+    `Averaging <b style="color:#1c2230">${perWeek} sessions/week</b>. Busiest day: <b style="color:#1c2230">${topDay}</b>. Longest streak: <b style="color:#1c2230">${best} days</b>. Only ${officeShare}% of sessions land on your Mon/Wed/Fri office days — your Tue/Thu/weekend rhythm is holding.`;
+  new Chart(document.getElementById('dowChart'),{
+    type:'bar',
+    data:{labels:names, datasets:[{label:'Sessions', data:counts,
+      backgroundColor:names.map((n,i)=>officeIdx.includes(i)?'#5b8def':'#ff6b6b')}]},
+    options:{maintainAspectRatio:false, plugins:{legend:{display:false},
+      tooltip:{callbacks:{afterLabel:(c)=>officeIdx.includes(c.dataIndex)?'(office day)':''}}},
+      scales:{x:{grid:{display:false}}, y:{grid:{color:'rgba(0,0,0,.07)'}, ticks:{precision:0}}}}
+  });
+})();
+
+/* ============================================================
+   3. STRENGTH-TO-CARDIO LOAD & FATIGUE FLAGS
+   ============================================================ */
+(function(){
+  function weekKey(d){ const dt=new Date(d+'T00:00'); const day=(dt.getDay()+6)%7; dt.setDate(dt.getDate()-day); return dt.toISOString().slice(0,10); }
+  const vol={}, cardioCal={};
+  workouts.forEach(w=>{
+    const k=weekKey(w.date);
+    let v=0; w.ex.forEach(e=>e.s.forEach(([wt,r,wu])=>{ if(!wu) v+=toLb(wt,e.u)*r; }));
+    vol[k]=(vol[k]||0)+v;
+    if(w.cardio?.cal) cardioCal[k]=(cardioCal[k]||0)+w.cardio.cal;
+  });
+  extraCardio.forEach(c=>{ const k=weekKey(c.date); if(c.cal) cardioCal[k]=(cardioCal[k]||0)+c.cal; });
+  const keys=[...new Set([...Object.keys(vol),...Object.keys(cardioCal)])].sort();
+  new Chart(document.getElementById('loadChart'),{
+    data:{labels:keys.map(fmtDate), datasets:[
+      {type:'bar', label:'Strength volume (lb)', data:keys.map(k=>Math.round(vol[k]||0)), backgroundColor:'#ff6b6b', yAxisID:'yV', order:2},
+      {type:'line', label:'Cardio calories', data:keys.map(k=>cardioCal[k]||null), borderColor:'#e0900a', backgroundColor:'#e0900a', tension:.3, spanGaps:true, pointRadius:3, borderWidth:2.5, yAxisID:'yC', order:1},
+    ]},
+    options:{maintainAspectRatio:false, interaction:{mode:'index',intersect:false},
+      plugins:{legend:{labels:{usePointStyle:true,boxWidth:8}}},
+      scales:{x:{grid:{display:false}, ticks:{maxRotation:60,minRotation:60,font:{size:9}}},
+        yV:{position:'left', title:{display:true,text:'lb moved'}, grid:{color:'rgba(0,0,0,.07)'}},
+        yC:{position:'right', title:{display:true,text:'cardio cal'}, grid:{display:false}}}}
+  });
+
+  // fatigue flags: lift below previous best on a hard-cardio day (>=180 cal same session)
+  const lastTop={};
+  const flags=[];
+  liftingDays.forEach(w=>{
+    const today={};
+    w.ex.forEach(e=>e.s.forEach(([wt,r,wu])=>{ if(!wu){ const k=e.n+'|'+e.e; if(!(k in today)||wt>today[k]) today[k]=wt; }}));
+    const cal=w.cardio?.cal||0;
+    Object.entries(today).forEach(([k,t])=>{
+      if(k in lastTop && t<lastTop[k] && cal>=180){
+        const [nm]=k.split('|');
+        flags.push({date:w.date, lift:nm, from:lastTop[k], to:t, cal});
+      }
+      lastTop[k]=t;
+    });
+  });
+  const fEl=document.getElementById('fatigueFlags');
+  if(!flags.length){ fEl.innerHTML='<div class="note">No interference flags — your strength held up even on big cardio days. 💪</div>'; return; }
+  fEl.innerHTML = `<div class="note" style="margin-bottom:8px"><b style="color:#1c2230">${flags.length} possible interference day${flags.length>1?'s':''}</b> (lift below prior best after ≥180-cal cardio). Not always bad — but if a key lift keeps dipping, lift first or split cardio to a separate session:</div>`
+    + flags.map(f=>`<div class="plateau" style="border-left-color:var(--gold)"><div class="pi">⚡</div><div><b>${fmtDate(f.date)} — ${f.lift}</b>
+      <div class="fix">Top set ${f.from} → ${f.to} the same day as ${f.cal}-cal cardio.</div></div></div>`).join('');
+})();
+
+/* ============================================================
+   4. PLATEAU-BREAKER PROTOCOLS
+   ============================================================ */
+(function(){
+  const protocols=[
+    {name:'Single-Arm Lat Pulldown', why:'Stuck at 22.5 kg since Feb 9. The cable maxes out, so overload with reps + tempo, not load.',
+     rows:[['Week 1','22.5 kg · 3 × 10','Strict, full stretch at top'],
+           ['Week 2','22.5 kg · 3 × 12','Add 3-sec negatives on every rep'],
+           ['Week 3','22.5 kg · 4 × 10','+ heavy Smith/DB rows for raw back overload']],
+     after:'Re-test: if 4×10 feels easy, the lat is stronger even though the number didn\'t move — progress shows up on rows.'},
+    {name:'Shoulder Press (DB)', why:'PR of 35 lb set Jan 27; lately stalling at 30. Break it with heavy triples + back-offs.',
+     rows:[['Week 1','35 lb · 3 × 5-6, then 30 × 10','Seated for stricter form'],
+           ['Week 2','35 lb · 3 × 6-7','Push-press the last 1-2 reps of the top set'],
+           ['Week 3','35 lb · 3 × 8 — then test 40','If 35×8 is clean, 40 for triples next block']],
+     after:'Goal: 40 × 6+. Keep lateral raises in as accessory volume.'},
+    {name:'Tricep Extensions', why:'Bouncing 45 ↔ 50 without a clean break. Lock the top, then climb.',
+     rows:[['Week 1','50 lb · 3 × 8','No 45 — start at 50 every set'],
+           ['Week 2','50 lb · 4 × 8','Superset with cable pulldown'],
+           ['Week 3','55 lb · 3 × 6-8','New top weight']],
+     after:'Once 55×8 holds, you\'ve cleanly broken the 50 ceiling.'},
+  ];
+  document.getElementById('protocols').innerHTML = protocols.map(p=>
+    `<div class="proto"><h3>${p.name}</h3><p class="why">${p.why}</p>
+      <table class="plan"><thead><tr><th>Week</th><th>Prescription</th><th>Cue</th></tr></thead>
+      <tbody>${p.rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td style="color:var(--mut)">${r[2]}</td></tr>`).join('')}</tbody></table>
+      <p class="why" style="margin-top:8px">→ ${p.after}</p></div>`).join('');
+})();
+
+/* ============================================================
+   5. LEGS RE-INTRODUCTION RAMP
+   ============================================================ */
+(function(){
+  const rows=[
+    ['Week 1','Squats 30 · RDLs 25 · Calves 20×15','Bodyweight only if 30 feels like much. 2 sets each.'],
+    ['Week 2','Squats 35 · RDLs 30 · Calves 25×15','3 sets. Add bodyweight lunges only if pain-free.'],
+    ['Week 3','Squats 40 · RDLs 40 · Calves 30×15','3 sets. This is the test week — how does the knee feel next morning?'],
+    ['Week 4','Squats 45 · RDLs 45 · Calves 35×15','Approaching old baseline.'],
+    ['Week 5','Squats 50 · RDLs 50 · Calves 35×15','Back to pre-injury baseline (old PRs: 50 / 55).'],
+  ];
+  document.getElementById('legsRamp').innerHTML =
+    `<table class="plan"><thead><tr><th>Week</th><th>Smith targets (lb, total bar)</th><th>Notes</th></tr></thead>
+     <tbody>${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td style="color:var(--mut)">${r[2]}</td></tr>`).join('')}</tbody></table>`;
+})();
+
+/* ============================================================
+   6. MONTHLY WRAPPED
+   ============================================================ */
+(function(){
+  const MON=['January','February','March','April','May','June'];
+  function monthData(m){ // m = 0..5
+    const ws=workouts.filter(w=>new Date(w.date+'T00:00').getMonth()===m);
+    const lifts=ws.filter(w=>w.ex.some(e=>e.s.length)).length;
+    const cardio=ws.filter(w=>w.cardio).length + extraCardio.filter(c=>new Date(c.date+'T00:00').getMonth()===m).length;
+    let vol=0, topW=0, topName='';
+    ws.forEach(w=>w.ex.forEach(e=>e.s.forEach(([wt,r,wu])=>{ if(!wu){ vol+=toLb(wt,e.u)*r; const lb=toLb(wt,e.u); if(lb>topW){topW=lb; topName=e.n+' '+wt+(e.u==='kg'?'kg':'lb');} }})));
+    let cal=0; ws.forEach(w=>{ if(w.cardio?.cal) cal+=w.cardio.cal; }); extraCardio.forEach(c=>{ if(new Date(c.date+'T00:00').getMonth()===m && c.cal) cal+=c.cal; });
+    const prs=PRS.filter(p=>new Date(p.d+'T00:00').getMonth()===m);
+    return {sessions:ws.length, lifts, cardio, vol:Math.round(vol), cal, topName, prs};
+  }
+  function render(m){
+    const d=monthData(m);
+    const prLine = d.prs.length
+      ? `<div class="wc-pr">🏆 <b>${d.prs.length} PR${d.prs.length>1?'s':''}:</b> ${d.prs.slice(0,3).map(p=>p.ex+' '+p.v.replace(' 🏆','')).join(' · ')}${d.prs.length>3?' …':''}</div>`
+      : `<div class="wc-pr" style="color:var(--mut)">No new PRs — base-building month.</div>`;
+    document.getElementById('wrapCard').innerHTML =
+      `<div class="wc-top"><span class="wc-brand">PELOBROSSSS 💪</span><span class="hint" style="margin:0">2026</span></div>
+       <div class="wc-mo">${MON[m]} Wrapped</div>
+       <div class="wc-grid">
+         <div class="wc-stat"><div class="n">${d.sessions}</div><div class="l">Sessions</div></div>
+         <div class="wc-stat"><div class="n">${(d.vol/1000).toFixed(1)}k</div><div class="l">Lb moved</div></div>
+         <div class="wc-stat"><div class="n">${d.cardio}</div><div class="l">Cardio days</div></div>
+         <div class="wc-stat"><div class="n">${(d.cal/1000).toFixed(1)}k</div><div class="l">Cardio cal</div></div>
+       </div>
+       ${d.topName?`<div class="wc-pr">💪 <b>Top lift:</b> ${d.topName}</div>`:''}
+       ${prLine}`;
+  }
+  const sel=document.getElementById('wrapMonth');
+  // only months with data
+  const avail=[0,1,3,4,5]; // Jan,Feb,Apr,May,Jun (Mar empty)
+  sel.innerHTML=avail.map(m=>`<option value="${m}"${m===4?' selected':''}>${MON[m]} 2026</option>`).join('');
+  sel.onchange=()=>render(+sel.value);
+  render(4); // default May
+  document.getElementById('wrapDownload').onclick=()=>{
+    if(typeof html2canvas==='undefined'){ alert('Image library not loaded (offline?). Screenshot the card instead.'); return; }
+    html2canvas(document.getElementById('wrapCard'),{backgroundColor:null,scale:2}).then(canvas=>{
+      const a=document.createElement('a'); a.download='pelobrossss-'+MON[+sel.value].toLowerCase()+'-wrapped.png';
+      a.href=canvas.toDataURL('image/png'); a.click();
+    });
+  };
+})();
+
+/* ============================================================
+   7. DATA EXPORT
+   ============================================================ */
+(function(){
+  function dl(name, text, type){
+    const blob=new Blob([text],{type}); const url=URL.createObjectURL(blob);
+    const a=document.createElement('a'); a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url);
+  }
+  document.getElementById('expJson').onclick=()=>{
+    const payload={profile:{name:'Michael',age:37,location:'Jersey City, NJ'}, exported:TODAY, prs:PRS, workouts, extraCardio};
+    dl('pelobrossss-data.json', JSON.stringify(payload,null,2), 'application/json');
+  };
+  document.getElementById('expCsv').onclick=()=>{
+    const rows=[['date','type','exercise','equipment','unit','set','weight','reps','isWarmup']];
+    workouts.forEach(w=>w.ex.forEach(e=>e.s.forEach(([wt,r,wu],i)=>{
+      rows.push([w.date,w.type,e.n,e.e,e.u,i+1,wt,r,wu?1:0]);
+    })));
+    // cardio rows
+    rows.push([]); rows.push(['date','type','machine','miles','minutes','calories','avgHR']);
+    workouts.filter(w=>w.cardio).forEach(w=>{const c=w.cardio; rows.push([w.date,'cardio',c.machine,c.mi??'',c.min??'',c.cal??'',c.hr??'']);});
+    extraCardio.forEach(c=>rows.push([c.date,'cardio',c.machine,'',c.min??'',c.cal??'',c.hr??'']));
+    const csv=rows.map(r=>r.map(v=>typeof v==='string'&&v.includes(',')?`"${v}"`:v).join(',')).join('\n');
+    dl('pelobrossss-sets.csv', csv, 'text/csv');
+  };
+  const totalSets=workouts.reduce((s,w)=>s+w.ex.reduce((a,e)=>a+e.s.length,0),0);
+  document.getElementById('expInfo').textContent=`${workouts.length} sessions · ${totalSets} sets ready to export`;
+})();
+</script>
+</body>
+</html>
