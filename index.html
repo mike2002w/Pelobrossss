@@ -166,6 +166,8 @@
   .heatwrap{display:flex; justify-content:space-around; align-items:center; gap:8px}
   .heatwrap svg{width:46%; height:auto; max-width:170px}
   .heatlbl{text-align:center; font-size:11px; color:var(--mut); margin-top:2px; font-weight:700}
+  .vcoach{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:7px 0; border-bottom:1px solid var(--line); font-size:14px}
+  .vcoach:last-child{border-bottom:none}
 </style>
 </head>
 <body>
@@ -294,6 +296,27 @@ const TEMPLATES={
 };
 const CARDIO_MACHINES=['Elliptical','Treadmill','Stair Climber','Rowing','Run'];
 const TYPE_EMOJI={Push:'🤜',Pull:'🤛',Legs:'🦵',Arms:'💪',Cardio:'🏃'};
+
+// same-muscle alternatives — for systematic variation when a lift stalls
+const ALT_POOL={
+  Chest:[['Bench Press','Smith'],['Incline Bench','Smith'],['Incline Bench','DB'],['Cable Flyes','Cable'],['Incline Flyes','DB'],['Standing Cable Press','Cable']],
+  Back:[['Single Arm Lat Pulldown','Cable'],['Smith Rows','Smith'],['DB Rows','DB'],['Straight Arm Pulldown','Cable'],['Face Pulls','Cable'],['Shrugs','DB']],
+  Shoulders:[['Shoulder Press','DB'],['Lateral Raises','DB'],['Face Pulls','Cable']],
+  Biceps:[['Bicep Curls','DB'],['Hammer Curls','DB'],['Bicep Curls','Cable']],
+  Triceps:[['Tricep Pulldown','Cable'],['Tricep Extensions','DB'],['Tricep Ext Overhead','DB']],
+  Legs:[['Squats','Smith'],['RDLs','Smith'],['Lunges','BW'],['Calf Raises','Smith']],
+};
+const PATTERNS=['Horizontal Push','Vertical Push','Horizontal Pull','Vertical Pull','Hinge','Squat'];
+function patternOf(name){
+  const s=name.toLowerCase();
+  if(/shoulder press|overhead/.test(s)) return 'Vertical Push';
+  if(/lat pulldown|pull-?up|chin|straight arm pulldown/.test(s)) return 'Vertical Pull';
+  if(/row/.test(s)) return 'Horizontal Pull';
+  if(/bench|incline|flye|chest press|cable press|dip/.test(s)) return 'Horizontal Push';
+  if(/rdl|deadlift|hinge|good ?morning/.test(s)) return 'Hinge';
+  if(/squat|lunge|leg press/.test(s)) return 'Squat';
+  return null;   // isolation: curls, triceps, lateral raises, shrugs, calves, face pulls
+}
 
 function weightOptions(unit){
   if(unit==='bw') return ['BW'];
@@ -473,7 +496,7 @@ function renderExList(){
     const tgt = targetFor(ex, ex0);
     html += `<div class="exblock">
       <div class="row sp"><h3>${ex.name} <span class="mut sm">${ex.equipment}</span></h3>
-        <div class="row" style="gap:6px">${ex.unit!=='bw'?`<button class="btn ghost sm" data-warm="${ix}">warm-up</button>`:''}
+        <div class="row" style="gap:6px"><button class="btn ghost sm" data-vary="${ix}">↺ vary</button>${ex.unit!=='bw'?`<button class="btn ghost sm" data-warm="${ix}">warm-up</button>`:''}
         <button class="btn danger sm" data-rmex="${ix}" aria-label="remove exercise">✕</button></div></div>
       <div class="exhist">${histTxt}${tgt?`<div class="target">${tgt}</div>`:''}</div>
       ${ex.sets.map((s,si)=>{
@@ -535,6 +558,7 @@ function renderExList(){
     DB.draft.exercises.splice(+b.dataset.rmex,1); editing=null; save(); renderExList();
   });
   host.querySelectorAll('[data-warm]').forEach(b=>b.onclick=()=>warmupPlan(+b.dataset.warm));
+  host.querySelectorAll('[data-vary]').forEach(b=>b.onclick=()=>variationModal(+b.dataset.vary));
   const ec=host.querySelector('[data-editcardio]'); if(ec) ec.onclick=openCardioModal;
 }
 
@@ -547,6 +571,29 @@ function targetFor(ex, ex0){
   const stuck = tops.length>=3 && tops.slice(-3).every(t=>t===lastTop);
   if(stuck) return `🎯 Plateau-buster: ${lastTop}${u} × 10–12 (rep PR) or add a 4th set`;
   return `🎯 Target: ${lastTop+inc}${u} × 8 — beat last session's ${lastTop}${u}`;
+}
+
+// same-muscle variations — non-destructive (adds a fresh angle)
+function variationModal(ix){
+  const ex=DB.draft.exercises[ix];
+  const muscle=muscleOf(ex.name);
+  const have=new Set(DB.draft.exercises.map(e=>e.name));
+  const alts=(ALT_POOL[muscle]||[]).filter(([n])=>n!==ex.name && !have.has(n));
+  const h=exerciseHistory(ex.name, ex.equipment, DB.draft.editId);
+  const tops=h.map(x=>x.top);
+  const stalled=tops.length>=3 && tops.slice(-3).every(t=>t===tops[tops.length-1]);
+  const why = stalled
+    ? `${ex.name} has been flat — a fresh ${muscle.toLowerCase()} angle is exactly how the research says to break a plateau.`
+    : `Hitting ${muscle.toLowerCase()} from another angle. Rotate accessories every few weeks, not every session.`;
+  const rows = alts.length ? alts.map(([n,eq])=>{ const pr=prFor(n,eq); return `<button class="pickrow" data-n="${n}" data-e="${eq}">
+      <span><b>${n}</b> <span class="mut sm">${eq}</span></span>
+      <span class="mut sm">${pr?('PR '+pr.weight+unitSuffix(pr.unit)):'new'}</span></button>`; }).join('')
+    : '<div class="empty">No other '+(muscle||'').toLowerCase()+' variations in the library — add one as a custom exercise.</div>';
+  modal(`<h3>↺ Vary: ${ex.name}</h3>
+    <p class="hint">${why}</p>
+    <div class="picklist">${rows}</div>`, (sheet)=>{
+    sheet.querySelectorAll('.pickrow').forEach(b=>b.onclick=()=>{ addExercise(b.dataset.n, b.dataset.e); closeModal(); toast('↺ Variation added',''); });
+  });
 }
 
 // warm-up ramp at 40/60/80% of the current stepper weight
@@ -855,7 +902,17 @@ function renderStats(){
       ${badgesHTML(ws, vol, streak)}
     </div>
     <div class="card">
-      <h2>🧭 This Week's Muscle Balance</h2>
+      <h2>🎯 Variation Coach</h2>
+      <p class="hint">Keep overloading what's working; vary what's stalled. (Systematic variation > random.)</p>
+      ${variationCoachHTML()}
+    </div>
+    <div class="card">
+      <h2>🧭 Movement-Pattern Coverage</h2>
+      <p class="hint">Last 3 weeks. Hitting every pattern beats novelty within one.</p>
+      ${patternCoverageHTML()}
+    </div>
+    <div class="card">
+      <h2>💪 This Week's Muscle Balance</h2>
       <p class="hint">Working sets per muscle group, Mon–Sun.</p>
       ${muscleBalanceHTML()}
     </div>
@@ -1001,6 +1058,51 @@ function badgesHTML(ws, vol, streak){
     ${next?`<div class="nextup">Next up: <b>${next.e} ${next.n}</b> — ${next.goal} (${Math.min(99,Math.round(next.prog*100))}%)
       <div class="bar"><i style="width:${Math.min(99,Math.round(next.prog*100))}%"></i></div></div>`:''}`;
 }
+/* ---- variation coach: keep-anchoring vs consider-varying ---- */
+function uniqueLifts(){
+  const seen={};
+  allWorkouts().forEach(w=>w.exercises.forEach(e=>{ if(e.unit==='bw') return; if(e.sets.some(s=>!s.warmup)){ const k=e.name+'|'+e.equipment; seen[k]=(seen[k]||0)+1; }}));
+  return Object.keys(seen).filter(k=>seen[k]>=3).map(k=>{ const [name,equip]=k.split('|'); return {name,equip}; });
+}
+function variationCoachHTML(){
+  const anchors=[], vary=[];
+  uniqueLifts().forEach(({name,equip})=>{
+    const h=exerciseHistory(name,equip);
+    const daysSince=Math.round((new Date(TODAY)-new Date(h[h.length-1].date))/86400000);
+    if(daysSince>42) return;                 // only judge lifts you're currently training
+    const tops=h.map(x=>x.top);
+    const last=tops[tops.length-1], u=unitSuffix(h[0].unit);
+    const stalled=tops.length>=3 && tops.slice(-3).every(t=>t===last);
+    const gained=last-Math.min(...tops.slice(-4));
+    const lbl=`${name} <span class="mut sm">${equip}</span>`;
+    if(stalled) vary.push({lbl, n:tops.slice(-3).length, last, u});
+    else if(gained>0) anchors.push({lbl, gained, last, u});
+  });
+  anchors.sort((a,b)=>b.gained-a.gained);
+  const keep = anchors.length
+    ? `<div class="hint" style="margin:0 0 4px"><b class="grn">✅ Keep anchoring</b> — progressing, don't change:</div>`
+      + anchors.slice(0,4).map(a=>`<div class="vcoach"><span>${a.lbl}</span><span class="grn b">+${Math.round(a.gained)}${a.u} → ${a.last}${a.u}</span></div>`).join('')
+    : '';
+  const chg = vary.length
+    ? `<div class="hint" style="margin:12px 0 4px"><b class="gold">🔁 Consider varying</b> — flat 3+ sessions:</div>`
+      + vary.map(v=>`<div class="vcoach"><span>${v.lbl}</span><span class="gold b">stuck ${v.last}${v.u}</span></div>`).join('')
+      + `<div class="hint" style="margin-top:6px">Open it mid-workout and tap <b>↺ vary</b> for same-muscle swaps.</div>`
+    : '<div class="hint" style="margin-top:10px">Nothing stalled — keep riding the progress. 🚀</div>';
+  return (keep||'') + chg;
+}
+/* ---- movement-pattern coverage (last 21 days) ---- */
+function patternCoverageHTML(){
+  const since=(()=>{ const dt=new Date(TODAY+'T00:00'); dt.setDate(dt.getDate()-20); return dt.toISOString().slice(0,10); })();
+  const cnt={}; PATTERNS.forEach(p=>cnt[p]=0);
+  allWorkouts().forEach(w=>{ if(w.date<since) return;
+    w.exercises.forEach(e=>{ const p=patternOf(e.name); if(p) cnt[p]+=e.sets.filter(s=>!s.warmup).length; });
+  });
+  const max=Math.max(...Object.values(cnt),1);
+  return PATTERNS.map(p=>`<div class="row" style="margin:6px 0"><div style="width:104px" class="sm">${p}</div>
+    <div style="flex:1; background:#eef1f8; border-radius:6px; overflow:hidden"><div style="width:${Math.max(3,100*cnt[p]/max)}%; background:${cnt[p]?'#2f6fed':'transparent'}; height:14px"></div></div>
+    <div style="width:58px; text-align:right" class="sm ${cnt[p]?'b':''}">${cnt[p]?cnt[p]+' sets':'<span style="color:#d12f2f">none ⚠️</span>'}</div></div>`).join('');
+}
+
 /* ---- body heatmap ---- */
 function groupLastDays(){
   const days={};

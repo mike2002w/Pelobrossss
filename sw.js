@@ -1,5 +1,5 @@
 /* Pelobrossss service worker — offline-first cache */
-const CACHE = 'pelobrossss-v7';
+const CACHE = 'pelobrossss-v8';
 const ASSETS = [
   './',
   './index.html',
