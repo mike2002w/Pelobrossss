@@ -156,6 +156,16 @@
   .nextup .bar i{display:block; height:100%; background:var(--grad)}
   /* summary modal */
   .sumbox{background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:14px; margin:10px 0; white-space:pre-line; font-size:14px; line-height:1.6}
+  /* confetti + coach + heatmap */
+  .confetti{position:fixed; inset:0; z-index:70; pointer-events:none}
+  .coach{display:flex; gap:10px; align-items:flex-start; background:linear-gradient(120deg, rgba(255,107,107,.08), rgba(255,159,28,.10));
+    border:1px solid rgba(239,124,12,.3); border-radius:14px; padding:12px 14px; margin-bottom:14px}
+  .coach .face{font-size:22px; flex:0 0 auto}
+  .coach .who{font-size:10px; font-weight:900; letter-spacing:.8px; color:var(--gold); text-transform:uppercase}
+  .coach .say{font-size:14px; font-weight:600; line-height:1.4}
+  .heatwrap{display:flex; justify-content:space-around; align-items:center; gap:8px}
+  .heatwrap svg{width:46%; height:auto; max-width:170px}
+  .heatlbl{text-align:center; font-size:11px; color:var(--mut); margin-top:2px; font-weight:700}
 </style>
 </head>
 <body>
@@ -337,8 +347,12 @@ setTopDate();
 function suggestion(){
   const lifts=allWorkouts().filter(w=>w.exercises.some(e=>e.sets.length));
   const last2=lifts.slice(-2).map(w=>w.type);
-  const pushy=last2.filter(t=>t==='Push').length;
-  const focus = pushy>=1 ? 'Pull' : 'Push';
+  const lastType=last2[last2.length-1];
+  // alternate off the most recent lifting day; Arms/Legs fall back to whichever of Push/Pull is older
+  let focus;
+  if(lastType==='Push') focus='Pull';
+  else if(lastType==='Pull') focus='Push';
+  else focus = last2.includes('Push') ? 'Pull' : 'Push';
   const lastLegs=[...lifts].reverse().find(w=>w.type==='Legs');
   const legGap = lastLegs ? Math.round((new Date(TODAY)-new Date(lastLegs.date))/86400000) : 999;
   return {focus, legGap, last2};
@@ -357,6 +371,7 @@ function renderToday(){
   const installB = (!isStandalone() && !DB.settings.hideInstall)
     ? `<div class="banner info">📲 <b>Add to Home Screen</b> to keep the app — and use <b>Back up</b> in History so iOS can't clear your data. <span class="bx" id="bClose">✕</span></div>` : '';
   el.innerHTML = installB + `
+    <div class="coach"><div class="face">🗣️</div><div><div class="who">Coach Pelobrossss</div><div class="say">${coachLine()}</div></div></div>
     <div class="card glow">
       <h2>🎯 Today's Pick: <span class="gold">${sg.focus}</span></h2>
       <p class="hint">Last 2 lifting days were ${sg.last2.join(' + ')||'—'}, so you're due for ${sg.focus}.
@@ -701,7 +716,11 @@ function showSummary(w, prs){
     prs?`🏆 ${prs} PR${prs>1?'s':''} today!!`:'',
   ].filter(Boolean);
   const txt=lines.join('\n');
+  const hype = prs
+    ? ['ABSOLUTE CINEMA, BRO. 🔥🏆','THE BAR FEARS YOU NOW 😤','PR machine goes BRRRR 🚀'][Math.floor(Math.random()*3)]
+    : ['Money in the bank 💰','Consistency is the cheat code ✅','Future you says thanks, bro 🙏'][Math.floor(Math.random()*3)];
   modal(`<h3>💥 Workout complete${prs?' — '+prs+' PR'+(prs>1?'s':'')+'! 🏆':'!'}</h3>
+    <div class="coach"><div class="face">🗣️</div><div><div class="who">Coach Pelobrossss</div><div class="say">${hype}</div></div></div>
     <div class="sumbox">${lines.join('<br>')}</div>
     <div class="row" style="gap:8px">
       <button class="btn ghost sm" id="sumClose">Done</button>
@@ -725,11 +744,57 @@ function celebratePR(name, weight, unit, prev){
   toast('🏆 NEW PR!', `${name}: <span class="big">${weight}${unitSuffix(unit)}</span>${prev?` (was ${prev.weight}${unitSuffix(prev.unit)})`:''}`);
   beep(880,0.12); setTimeout(()=>beep(1175,0.16),130);
   if(navigator.vibrate) navigator.vibrate([40,40,80]);
+  confetti();
 }
 function celebrateRepPR(name, weight, reps, unit){
   toast('🔥 REP PR!', `${name}: <span class="big">${weight}${unitSuffix(unit)} × ${reps}</span>`);
   beep(784,0.12); setTimeout(()=>beep(1047,0.16),130);
   if(navigator.vibrate) navigator.vibrate([30,30,60]);
+  confetti();
+}
+// physics confetti burst — no library, removes itself
+function confetti(){
+  const c=document.createElement('canvas'); c.className='confetti';
+  c.width=innerWidth; c.height=innerHeight; document.body.appendChild(c);
+  const ctx=c.getContext('2d');
+  const cols=['#ff6b6b','#ff9f1c','#ffd93d','#4CAF50','#2f6fed','#c084fc'];
+  const ps=Array.from({length:90},()=>({
+    x:innerWidth/2+(Math.random()-0.5)*140, y:innerHeight*0.3,
+    vx:(Math.random()-0.5)*10, vy:-(5+Math.random()*8),
+    s:5+Math.random()*5, c:cols[Math.floor(Math.random()*cols.length)], r:Math.random()*Math.PI, vr:(Math.random()-0.5)*0.3
+  }));
+  let t=0;
+  (function frame(){
+    ctx.clearRect(0,0,c.width,c.height);
+    ps.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=0.28; p.r+=p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c;
+      ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6); ctx.restore(); });
+    if(++t<100) requestAnimationFrame(frame); else c.remove();
+  })();
+}
+// ---- Coach Pelobrossss: context-aware hype ----
+function coachLine(){
+  const ws=allWorkouts();
+  const sg=suggestion();
+  const lastW=ws[ws.length-1];
+  const off=lastW?Math.round((new Date(TODAY)-new Date(lastW.date))/86400000):0;
+  const streak=weekStreak();
+  const stuck=['Single Arm Lat Pulldown','Shoulder Press'].filter(n=>{
+    const h=exerciseHistory(n); const tops=h.map(x=>x.top);
+    return tops.length>=3 && tops.slice(-3).every(t=>t===tops[tops.length-1]);
+  });
+  const picks=[];
+  if(sg.legGap>14) picks.push(`Bro… ${sg.legGap} days no legs. The squat rack filed a missing-persons report 🦵😤 Light ramp today?`);
+  if(off>6) picks.push(`HE'S BACK!! ${off} days off — shake the rust, ease in, still counts 💪`);
+  if(streak>=8) picks.push(`${streak} weeks straight. CERTIFIED MACHINE 🤖🔥 Don't break the chain.`);
+  if(stuck.length) picks.push(`${stuck[0]} has been camping at the same weight. Today it learns about rep city 📈😤`);
+  const generic=[
+    `${sg.focus} day, bro. Warm up, lock in, SEND IT 🚀`,
+    `Every rep today is a deposit. Compound interest hits different 💰`,
+    `You vs. last week's you. That guy doesn't stand a chance 😤🔥`,
+  ];
+  picks.push(generic[Math.floor(Math.random()*generic.length)]);
+  return picks[0];
 }
 let toastT;
 function toast(title, sub){
@@ -777,6 +842,15 @@ function renderStats(){
       <div class="miniStat"><div class="n">${streak}🔥</div><div class="l">Week streak</div></div>
     </div>
     <div class="card">
+      <h2>🔥 Body Heatmap</h2>
+      <p class="hint">Hot = trained recently · cold = needs love.</p>
+      ${bodyHeatmapHTML()}
+      <div class="legend" style="justify-content:center">
+        <span><i style="background:#ef5350"></i>0–2d</span><span><i style="background:#ff9f1c"></i>3–5d</span>
+        <span><i style="background:#ffd166"></i>6–9d</span><span><i style="background:#b9c2d8"></i>10d+ / never</span>
+      </div>
+    </div>
+    <div class="card">
       <h2>🏅 Badges</h2>
       ${badgesHTML(ws, vol, streak)}
     </div>
@@ -819,7 +893,33 @@ function drawStatChart(){
   const [name,equip]=statsExKey.split('|');
   const h=exerciseHistory(name,equip);
   const series=h.map(x=>({x:x.date,y:x.top}));
-  host.innerHTML=lineChart(series, equip==='Cable'?'#2f6fed':'#ff6b6b');
+  host.innerHTML=lineChart(series, equip==='Cable'?'#2f6fed':'#ff6b6b') + e1rmHTML(h);
+}
+// Epley e1RM trend + milestone forecast from the last 6 sessions
+function e1rmHTML(h){
+  const pts=h.map(x=>{
+    const working=(x.sets||[]).filter(s=>!s.warmup);
+    if(!working.length) return null;
+    return {d:(+new Date(x.date))/86400000, y:Math.max(...working.map(s=>s.weight*(1+s.reps/30))), unit:x.unit};
+  }).filter(Boolean);
+  if(pts.length<2) return '';
+  const u=unitSuffix(pts[0].unit);
+  const cur=pts[pts.length-1].y;
+  const recent=pts.slice(-6);
+  const n=recent.length, mx=recent.reduce((s,p)=>s+p.d,0)/n, my=recent.reduce((s,p)=>s+p.y,0)/n;
+  let num=0, den=0; recent.forEach(p=>{ num+=(p.d-mx)*(p.y-my); den+=(p.d-mx)*(p.d-mx); });
+  const slope=den?num/den:0;                      // units per day
+  let trend;
+  if(slope<=0.03){ trend='trend flat — run the plateau-buster 🔓'; }
+  else {
+    const step=pts[0].unit==='kg'?5:10;
+    const ms=Math.floor(cur/step)*step+step;
+    const eta=Math.round((ms-cur)/slope);
+    trend = (eta>0 && eta<180)
+      ? `+${(slope*7).toFixed(1)}${u}/wk → <b>${ms}${u} by ${fmtShort(new Date(Date.now()+eta*86400000).toISOString().slice(0,10))}</b> 🚀`
+      : `+${(slope*7).toFixed(1)}${u}/wk — keep stacking 📈`;
+  }
+  return `<div class="target" style="margin-top:10px">💪 Est. 1RM: ${cur.toFixed(0)}${u} · ${trend}</div>`;
 }
 function benchTop(){ const p=prFor('Bench Press','Smith'); return p?p.weight:'—'; }
 
@@ -901,13 +1001,66 @@ function badgesHTML(ws, vol, streak){
     ${next?`<div class="nextup">Next up: <b>${next.e} ${next.n}</b> — ${next.goal} (${Math.min(99,Math.round(next.prog*100))}%)
       <div class="bar"><i style="width:${Math.min(99,Math.round(next.prog*100))}%"></i></div></div>`:''}`;
 }
+/* ---- body heatmap ---- */
+function groupLastDays(){
+  const days={};
+  allWorkouts().forEach(w=>{
+    const d=Math.round((new Date(TODAY)-new Date(w.date))/86400000);
+    w.exercises.forEach(e=>{ if(!e.sets.some(s=>!s.warmup)) return;
+      const g=muscleOf(e.name);
+      if(days[g]==null || d<days[g]) days[g]=d;
+    });
+  });
+  return days;
+}
+function heatColor(d){ if(d==null) return '#b9c2d8'; if(d<=2) return '#ef5350'; if(d<=5) return '#ff9f1c'; if(d<=9) return '#ffd166'; return '#b9c2d8'; }
+function bodyHeatmapHTML(){
+  const days=groupLastDays();
+  const c=g=>heatColor(days[g]);
+  const t=g=>`${g}: ${days[g]==null?'not yet trained':days[g]+'d ago'}`;
+  const base='#e6e9f3', P=base;
+  const front=`<svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="13" r="9" fill="${P}"/>
+    <rect x="44" y="24" width="32" height="42" rx="8" fill="${P}"/>
+    <circle cx="40" cy="29" r="6.5" fill="${c('Shoulders')}"><title>${t('Shoulders')}</title></circle>
+    <circle cx="80" cy="29" r="6.5" fill="${c('Shoulders')}"><title>${t('Shoulders')}</title></circle>
+    <rect x="46" y="27" width="13" height="12" rx="4" fill="${c('Chest')}"><title>${t('Chest')}</title></rect>
+    <rect x="61" y="27" width="13" height="12" rx="4" fill="${c('Chest')}"><title>${t('Chest')}</title></rect>
+    <rect x="32" y="37" width="9" height="17" rx="4.5" fill="${c('Biceps')}"><title>${t('Biceps')}</title></rect>
+    <rect x="79" y="37" width="9" height="17" rx="4.5" fill="${c('Biceps')}"><title>${t('Biceps')}</title></rect>
+    <rect x="31" y="56" width="8" height="15" rx="4" fill="${P}"/><rect x="81" y="56" width="8" height="15" rx="4" fill="${P}"/>
+    <rect x="46" y="68" width="28" height="9" rx="4" fill="${P}"/>
+    <rect x="45" y="79" width="13" height="30" rx="5.5" fill="${c('Legs')}"><title>${t('Legs')}</title></rect>
+    <rect x="62" y="79" width="13" height="30" rx="5.5" fill="${c('Legs')}"><title>${t('Legs')}</title></rect>
+    <rect x="47" y="112" width="10" height="24" rx="4.5" fill="${P}"/><rect x="63" y="112" width="10" height="24" rx="4.5" fill="${P}"/>
+  </svg>`;
+  const back=`<svg viewBox="0 0 120 150" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="60" cy="13" r="9" fill="${P}"/>
+    <rect x="44" y="24" width="32" height="42" rx="8" fill="${P}"/>
+    <rect x="47" y="24" width="26" height="7" rx="3" fill="${c('Back')}"><title>${t('Back')}</title></rect>
+    <circle cx="40" cy="29" r="6.5" fill="${c('Shoulders')}"><title>${t('Shoulders')}</title></circle>
+    <circle cx="80" cy="29" r="6.5" fill="${c('Shoulders')}"><title>${t('Shoulders')}</title></circle>
+    <rect x="46" y="33" width="13" height="21" rx="5" fill="${c('Back')}"><title>${t('Back')}</title></rect>
+    <rect x="61" y="33" width="13" height="21" rx="5" fill="${c('Back')}"><title>${t('Back')}</title></rect>
+    <rect x="32" y="37" width="9" height="17" rx="4.5" fill="${c('Triceps')}"><title>${t('Triceps')}</title></rect>
+    <rect x="79" y="37" width="9" height="17" rx="4.5" fill="${c('Triceps')}"><title>${t('Triceps')}</title></rect>
+    <rect x="31" y="56" width="8" height="15" rx="4" fill="${P}"/><rect x="81" y="56" width="8" height="15" rx="4" fill="${P}"/>
+    <rect x="46" y="68" width="28" height="9" rx="4" fill="${P}"/>
+    <rect x="45" y="79" width="13" height="28" rx="5.5" fill="${c('Legs')}"><title>${t('Legs')}</title></rect>
+    <rect x="62" y="79" width="13" height="28" rx="5.5" fill="${c('Legs')}"><title>${t('Legs')}</title></rect>
+    <rect x="47" y="110" width="10" height="24" rx="4.5" fill="${c('Legs')}"><title>${t('Legs')}</title></rect>
+    <rect x="63" y="110" width="10" height="24" rx="4.5" fill="${c('Legs')}"><title>${t('Legs')}</title></rect>
+  </svg>`;
+  return `<div class="heatwrap"><div>${front}<div class="heatlbl">FRONT</div></div><div>${back}<div class="heatlbl">BACK</div></div></div>`;
+}
+
 function muscleOf(name){
   const n=name.toLowerCase();
-  if(/bench|flye|chest press|cable press|dip/.test(n)) return 'Chest';
-  if(/row|pulldown|pull-up|pull up|chin|shrug/.test(n)) return 'Back';
-  if(/shoulder|lateral|face pull/.test(n)) return 'Shoulders';
+  if(/tricep/.test(n)) return 'Triceps';            // before Back: "Tricep Pulldown"
   if(/curl/.test(n)) return 'Biceps';
-  if(/tricep/.test(n)) return 'Triceps';
+  if(/bench|flye|chest press|cable press|dip/.test(n)) return 'Chest';
+  if(/shoulder|lateral|face pull/.test(n)) return 'Shoulders';
+  if(/row|pulldown|pull-up|pull up|chin|shrug/.test(n)) return 'Back';
   if(/squat|rdl|lunge|calf|leg/.test(n)) return 'Legs';
   return 'Other';
 }
