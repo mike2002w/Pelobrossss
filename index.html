@@ -91,7 +91,7 @@
   svg.chart{width:100%; height:auto; display:block}
   .legend{display:flex; gap:14px; flex-wrap:wrap; color:var(--mut); font-size:12px; margin-top:8px}
   .legend i{display:inline-block; width:11px; height:11px; border-radius:3px; margin-right:5px; vertical-align:-1px}
-  .statrow{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px}
+  .statrow{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px}
   .miniStat{background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:11px; text-align:center}
   .miniStat .n{font-size:20px; font-weight:900; background:var(--grad); -webkit-background-clip:text; background-clip:text; color:transparent}
   .miniStat .l{font-size:10px; color:var(--mut); text-transform:uppercase; letter-spacing:.4px; margin-top:2px}
@@ -144,6 +144,18 @@
   .switch input:checked + span{background:var(--green)}
   .switch input:checked + span:before{transform:translateX(20px)}
   #gear{background:none; border:none; font-size:18px; cursor:pointer; padding:4px; line-height:1}
+  /* ghost hint + target */
+  .ghosthint{font-size:12px; color:var(--mut); margin:6px 0 0; font-style:italic}
+  .target{font-size:12px; color:var(--gold); font-weight:700; margin-top:4px}
+  /* badges */
+  .badgerow{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px}
+  .badgep{display:inline-flex; align-items:center; gap:6px; background:rgba(239,124,12,.10); border:1px solid rgba(239,124,12,.32);
+    color:#c96a00; border-radius:999px; padding:7px 12px; font-weight:800; font-size:12px}
+  .nextup{font-size:12px; color:var(--mut); margin-top:10px}
+  .nextup .bar{height:6px; background:var(--in); border-radius:4px; overflow:hidden; margin-top:4px}
+  .nextup .bar i{display:block; height:100%; background:var(--grad)}
+  /* summary modal */
+  .sumbox{background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:14px; margin:10px 0; white-space:pre-line; font-size:14px; line-height:1.6}
 </style>
 </head>
 <body>
@@ -350,9 +362,11 @@ function renderToday(){
       <p class="hint">Last 2 lifting days were ${sg.last2.join(' + ')||'—'}, so you're due for ${sg.focus}.
       ${sg.legGap>14?`<br><span class="grn b">🦵 Legs overdue — ${sg.legGap} days.</span> Slot one in this week.`:''}</p>
       <div class="typegrid">
-        ${types.map(t=>`<div class="typebtn ${t===sg.focus?'suggest':''}" data-start="${t}">
+        ${types.map(t=>{ const lw=lastOfType(t);
+          const sub = t===sg.focus ? 'recommended' : (lw?'last '+fmtShort(lw.date):'&nbsp;');
+          return `<div class="typebtn ${t===sg.focus?'suggest':''}" data-start="${t}">
           <div class="em">${TYPE_EMOJI[t]}</div><div class="nm">${t}</div>
-          <div class="sub">${t===sg.focus?'recommended':'&nbsp;'}</div></div>`).join('')}
+          <div class="sub">${sub}</div></div>`; }).join('')}
       </div>
     </div>
     <button class="btn ghost" data-start="Cardio">🏃 Log Cardio</button>
@@ -361,10 +375,15 @@ function renderToday(){
   const bc=el.querySelector('#bClose'); if(bc) bc.onclick=()=>{ DB.settings.hideInstall=true; save(); renderToday(); };
 }
 
+function lastOfType(type){
+  return [...allWorkouts()].reverse().find(w=>w.type===type && w.exercises.some(e=>e.sets.length));
+}
 function startWorkout(type){
-  DB.draft={ date:TODAY, type, cardio:null, exercises:[] };
-  // auto-add the template exercises for quick logging (empty sets)
-  if(TEMPLATES[type]) DB.draft.exercises = TEMPLATES[type].slice(0,4).map(([n,eq])=>({name:n, equipment:eq, unit:EQUNIT[eq], sets:[]}));
+  DB.draft={ date:TODAY, type, cardio:null, exercises:[], startedAt:Date.now() };
+  // repeat your last session of this type; fall back to the template for first-timers
+  const prev = type!=='Cardio' ? lastOfType(type) : null;
+  if(prev) DB.draft.exercises = prev.exercises.map(e=>({name:e.name, equipment:e.equipment, unit:e.unit, sets:[]}));
+  else if(TEMPLATES[type]) DB.draft.exercises = TEMPLATES[type].slice(0,4).map(([n,eq])=>({name:n, equipment:eq, unit:EQUNIT[eq], sets:[]}));
   save(); renderToday();
 }
 
@@ -426,13 +445,22 @@ function renderExList(){
       ? 'Last: '+hist.map(h=>`<b>${h.top}${unitSuffix(h.unit)}</b> ${fmtShort(h.date)}`).join(' · ') + (pr?` · PR <b class="gold">${pr.weight}${unitSuffix(pr.unit)}</b>`:'')
       : 'No history yet — set the first benchmark! 🔥';
     const last = ex.sets.length? ex.sets[ex.sets.length-1] : null;
-    const startW = ex.unit==='bw'?0:(last?last.weight:(hist.length?hist[hist.length-1].top:defaultStart(ex.unit)));
-    const startR = last?last.reps:8;
+    // ghost: what you did for THIS set number last session — prefills the steppers set-by-set
+    const lastSess = hist.length? hist[hist.length-1] : null;
+    const nextIdx = ex.sets.length;
+    const ghostSet = lastSess && lastSess.sets ? lastSess.sets[nextIdx] : null;
+    let startW, startR, warmDefault=false;
+    if(ex.unit==='bw'){ startW=0; startR=ghostSet?ghostSet.reps:8; }
+    else if(ghostSet){ startW=ghostSet.weight; startR=ghostSet.reps; warmDefault=!!ghostSet.warmup; }
+    else { startW=last?last.weight:(hist.length?lastSess.top:defaultStart(ex.unit)); startR=last?last.reps:8; }
     const step = ex.unit==='kg'?2.5:5;
+    const ghostTxt = ghostSet ? `Set ${nextIdx+1} last time: ${ex.unit==='bw'?'BW':ghostSet.weight+unitSuffix(ex.unit)} × ${ghostSet.reps}${ghostSet.warmup?' (warm)':''}` : '';
+    const tgt = targetFor(ex, ex0);
     html += `<div class="exblock">
       <div class="row sp"><h3>${ex.name} <span class="mut sm">${ex.equipment}</span></h3>
-        <button class="btn danger sm" data-rmex="${ix}" aria-label="remove exercise">✕</button></div>
-      <div class="exhist">${histTxt}</div>
+        <div class="row" style="gap:6px">${ex.unit!=='bw'?`<button class="btn ghost sm" data-warm="${ix}">warm-up</button>`:''}
+        <button class="btn danger sm" data-rmex="${ix}" aria-label="remove exercise">✕</button></div></div>
+      <div class="exhist">${histTxt}${tgt?`<div class="target">${tgt}</div>`:''}</div>
       ${ex.sets.map((s,si)=>{
         if(editing && editing.ix===ix && editing.si===si){
           const est = ex.unit==='kg'?2.5:5;
@@ -448,11 +476,12 @@ function renderExList(){
           ${s.warmup?'<span class="wu">warmup</span>':''}
           <button class="x" data-rmset="${ix}.${si}" aria-label="delete set">✕</button></div>`;
       }).join('')}
+      ${ghostTxt?`<div class="ghosthint">${ghostTxt}</div>`:''}
       <div class="adder">
         ${stepperHTML('w'+ix, startW, step, ex.unit)}
         <span class="mut">×</span>
         ${stepperHTML('r'+ix, startR, 1, 'rep')}
-        <label class="wutoggle"><input type="checkbox" data-wu="${ix}">warm</label>
+        <label class="wutoggle"><input type="checkbox" data-wu="${ix}" ${warmDefault?'checked':''}>warm</label>
         <button class="btn sm" data-addset="${ix}">Add</button>
       </div>
     </div>`;
@@ -490,7 +519,42 @@ function renderExList(){
   host.querySelectorAll('[data-rmex]').forEach(b=>b.onclick=()=>{
     DB.draft.exercises.splice(+b.dataset.rmex,1); editing=null; save(); renderExList();
   });
+  host.querySelectorAll('[data-warm]').forEach(b=>b.onclick=()=>warmupPlan(+b.dataset.warm));
   const ec=host.querySelector('[data-editcardio]'); if(ec) ec.onclick=openCardioModal;
+}
+
+// smart target: plateau → rep PR; otherwise nudge the next increment
+function targetFor(ex, ex0){
+  if(ex.unit==='bw') return null;
+  const h=exerciseHistory(ex.name, ex.equipment, ex0); if(!h.length) return null;
+  const tops=h.map(x=>x.top), lastTop=tops[tops.length-1];
+  const inc=ex.unit==='kg'?2.5:5, u=unitSuffix(ex.unit);
+  const stuck = tops.length>=3 && tops.slice(-3).every(t=>t===lastTop);
+  if(stuck) return `🎯 Plateau-buster: ${lastTop}${u} × 10–12 (rep PR) or add a 4th set`;
+  return `🎯 Target: ${lastTop+inc}${u} × 8 — beat last session's ${lastTop}${u}`;
+}
+
+// warm-up ramp at 40/60/80% of the current stepper weight
+function warmupPlan(ix){
+  const ex=DB.draft.exercises[ix];
+  const st=document.querySelector(`[data-stid="w${ix}"]`);
+  const target=st?parseFloat(st.dataset.val):0;
+  const inc=ex.unit==='kg'?2.5:5, u=unitSuffix(ex.unit);
+  const ramp=[[0.4,8],[0.6,5],[0.8,3]]
+    .map(([p,r])=>({w:Math.max(inc, Math.round(target*p/inc)*inc), r}))
+    .filter((x,i,arr)=>x.w<target && (i===0 || x.w>arr[i-1].w));
+  if(!ramp.length){ toast('Working weight too light','No warm-up ramp needed 💪'); return; }
+  modal(`<h3>🧮 Warm-up for ${target}${u}</h3>
+    <div class="sumbox">${ramp.map((x,i)=>`Set ${i+1}: ${x.w}${u} × ${x.r}`).join('\n')}</div>
+    <div class="row" style="gap:8px">
+      <button class="btn ghost sm" id="wuClose">Close</button>
+      <button class="btn sm" id="wuAdd" style="flex:1">Add as warm-up sets</button></div>`, (sheet)=>{
+    sheet.querySelector('#wuAdd').onclick=()=>{
+      ramp.forEach(x=>ex.sets.push({weight:x.w, reps:x.r, warmup:true}));
+      save(); closeModal(); renderExList();
+    };
+    sheet.querySelector('#wuClose').onclick=closeModal;
+  });
 }
 
 function addSet(ix, weight, reps, warmup){
@@ -603,18 +667,51 @@ function finishWorkout(){
   const d=DB.draft;
   d.exercises=d.exercises.filter(e=>e.sets.length);   // drop empty exercises
   if(!d.exercises.length && !d.cardio){ toast('Log a set or cardio first 💪',''); return; }
-  if(d.editId){
+  const wasEdit=!!d.editId;
+  // PR count vs committed history (before this workout lands)
+  let prs=0;
+  if(!wasEdit) d.exercises.forEach(e=>{
+    const working=e.sets.filter(s=>!s.warmup); if(!working.length||e.unit==='bw') return;
+    const top=Math.max(...working.map(s=>s.weight));
+    const pr=prFor(e.name, e.equipment);
+    if(!pr || top>pr.weight) prs++;
+  });
+  const durMin = (!wasEdit && d.startedAt) ? Math.max(1, Math.min(600, Math.round((Date.now()-d.startedAt)/60000))) : null;
+  let committed=null;
+  if(wasEdit){
     const w=DB.workouts.find(x=>x.id===d.editId);
     if(w){ w.date=d.date; w.type=d.type; w.cardio=d.cardio||null; w.exercises=d.exercises; }
   } else {
     const id=Math.max(0,...DB.workouts.map(w=>w.id))+1;
-    DB.workouts.push({id, date:d.date, type:d.type, cardio:d.cardio||null, exercises:d.exercises});
+    committed={id, date:d.date, type:d.type, cardio:d.cardio||null, exercises:d.exercises, durMin};
+    DB.workouts.push(committed);
   }
-  const wasEdit=!!d.editId;
   DB.draft=null; editing=null; save();
-  toast(wasEdit?'✅ Workout updated':'💥 WORKOUT LOGGED', wasEdit?'':'Nice work, bro!');
-  if(!wasEdit) backupNudge();
+  if(wasEdit){ toast('✅ Workout updated',''); }
+  else { showSummary(committed, prs); backupNudge(); }
   setView('history');
+}
+function showSummary(w, prs){
+  let sets=0, vol=0;
+  w.exercises.forEach(e=>e.sets.forEach(s=>{ if(!s.warmup){ sets++; vol+=toLb(s.weight,e.unit)*s.reps; } }));
+  const lines=[
+    `PELOBROSSSS — ${w.type} day ✅ ${fmtShort(w.date)}`,
+    `${w.exercises.length} exercise${w.exercises.length!==1?'s':''} · ${sets} working sets · ${Math.round(vol).toLocaleString()} lb moved`+(w.durMin?` · ${w.durMin} min`:''),
+    w.cardio?`🏃 ${cardioSummary(w.cardio)}`:'',
+    prs?`🏆 ${prs} PR${prs>1?'s':''} today!!`:'',
+  ].filter(Boolean);
+  const txt=lines.join('\n');
+  modal(`<h3>💥 Workout complete${prs?' — '+prs+' PR'+(prs>1?'s':'')+'! 🏆':'!'}</h3>
+    <div class="sumbox">${lines.join('<br>')}</div>
+    <div class="row" style="gap:8px">
+      <button class="btn ghost sm" id="sumClose">Done</button>
+      <button class="btn sm" id="sumShare" style="flex:1">📤 Share</button></div>`, (sheet)=>{
+    sheet.querySelector('#sumClose').onclick=closeModal;
+    sheet.querySelector('#sumShare').onclick=()=>{
+      if(navigator.share){ navigator.share({text:txt}).catch(()=>{}); }
+      else if(navigator.clipboard){ navigator.clipboard.writeText(txt); toast('📋 Copied','Paste it anywhere'); }
+    };
+  });
 }
 function backupNudge(){
   const since=DB.workouts.length-(DB.settings.lastBackupCount||0);
@@ -671,11 +768,22 @@ function renderStats(){
   let vol=0, prCount=0; ws.forEach(w=>w.exercises.forEach(e=>e.sets.forEach(s=>{ if(!s.warmup) vol+=toLb(s.weight,e.unit)*s.reps; })));
   const exs=chartableExercises();
   if(!statsExKey || !exs.find(e=>e.key===statsExKey)) statsExKey=(exs.find(e=>e.key==='Bench Press|Smith')||exs[0]||{}).key;
+  const streak=weekStreak();
   el.innerHTML=`
     <div class="statrow">
       <div class="miniStat"><div class="n">${ws.length}</div><div class="l">Sessions</div></div>
       <div class="miniStat"><div class="n">${(vol/1000).toFixed(0)}k</div><div class="l">Lb moved</div></div>
       <div class="miniStat"><div class="n">${benchTop()}</div><div class="l">Bench PR</div></div>
+      <div class="miniStat"><div class="n">${streak}🔥</div><div class="l">Week streak</div></div>
+    </div>
+    <div class="card">
+      <h2>🏅 Badges</h2>
+      ${badgesHTML(ws, vol, streak)}
+    </div>
+    <div class="card">
+      <h2>🧭 This Week's Muscle Balance</h2>
+      <p class="hint">Working sets per muscle group, Mon–Sun.</p>
+      ${muscleBalanceHTML()}
     </div>
     <div class="card">
       <div class="row sp"><h2>📈 Strength</h2>
@@ -766,6 +874,57 @@ function pplBars(){
     <div style="width:24px; text-align:right" class="b">${v}</div></div>`).join('');
 }
 
+/* ---- streaks, badges, muscle balance ---- */
+function weekMonday(dstr){ const dt=new Date(dstr+'T00:00'); const day=(dt.getDay()+6)%7; dt.setDate(dt.getDate()-day); return dt.toISOString().slice(0,10); }
+function weekStreak(){
+  const weeks=new Set(allWorkouts().map(w=>weekMonday(w.date)));
+  let wk=weekMonday(TODAY), streak=0;
+  const prev=k=>{ const dt=new Date(k+'T00:00'); dt.setDate(dt.getDate()-7); return dt.toISOString().slice(0,10); };
+  if(!weeks.has(wk)) wk=prev(wk);                 // current week not trained YET doesn't break the streak
+  while(weeks.has(wk)){ streak++; wk=prev(wk); }
+  return streak;
+}
+function badgesHTML(ws, vol, streak){
+  const bench=prFor('Bench Press','Smith');
+  const defs=[
+    {e:'🏋️', n:'Century Club', ok:!!bench&&bench.weight>=100, prog:bench?bench.weight/100:0, goal:'Bench 100 lb'},
+    {e:'💯', n:'100k Club', ok:vol>=100000, prog:vol/100000, goal:'100,000 lb moved'},
+    {e:'🚀', n:'250k Club', ok:vol>=250000, prog:vol/250000, goal:'250,000 lb moved'},
+    {e:'📅', n:'25 Sessions', ok:ws.length>=25, prog:ws.length/25, goal:'25 sessions'},
+    {e:'🗓️', n:'50 Sessions', ok:ws.length>=50, prog:ws.length/50, goal:'50 sessions'},
+    {e:'🔥', n:'4-Week Streak', ok:streak>=4, prog:streak/4, goal:'4 weeks in a row'},
+    {e:'⚡', n:'12-Week Streak', ok:streak>=12, prog:streak/12, goal:'12 weeks in a row'},
+  ];
+  const earned=defs.filter(b=>b.ok);
+  const next=defs.filter(b=>!b.ok).sort((a,b)=>b.prog-a.prog)[0];
+  return `<div class="badgerow">${earned.length?earned.map(b=>`<span class="badgep">${b.e} ${b.n}</span>`).join(''):'<span class="mut sm">First badge incoming — keep logging!</span>'}</div>
+    ${next?`<div class="nextup">Next up: <b>${next.e} ${next.n}</b> — ${next.goal} (${Math.min(99,Math.round(next.prog*100))}%)
+      <div class="bar"><i style="width:${Math.min(99,Math.round(next.prog*100))}%"></i></div></div>`:''}`;
+}
+function muscleOf(name){
+  const n=name.toLowerCase();
+  if(/bench|flye|chest press|cable press|dip/.test(n)) return 'Chest';
+  if(/row|pulldown|pull-up|pull up|chin|shrug/.test(n)) return 'Back';
+  if(/shoulder|lateral|face pull/.test(n)) return 'Shoulders';
+  if(/curl/.test(n)) return 'Biceps';
+  if(/tricep/.test(n)) return 'Triceps';
+  if(/squat|rdl|lunge|calf|leg/.test(n)) return 'Legs';
+  return 'Other';
+}
+function muscleBalanceHTML(){
+  const mon=weekMonday(TODAY);
+  const sun=(()=>{ const dt=new Date(mon+'T00:00'); dt.setDate(dt.getDate()+6); return dt.toISOString().slice(0,10); })();
+  const groups={Chest:0, Back:0, Shoulders:0, Biceps:0, Triceps:0, Legs:0};
+  allWorkouts().forEach(w=>{ if(w.date<mon||w.date>sun) return;
+    w.exercises.forEach(e=>{ const g=muscleOf(e.name); if(g in groups) groups[g]+=e.sets.filter(s=>!s.warmup).length; });
+  });
+  const max=Math.max(...Object.values(groups),1);
+  const col={Chest:'#ef5350', Back:'#3b82f6', Shoulders:'#f0a020', Biceps:'#8e6fe8', Triceps:'#e85f9e', Legs:'#2e9e4f'};
+  return Object.entries(groups).map(([k,v])=>`<div class="row" style="margin:6px 0"><div style="width:74px" class="sm">${k}</div>
+    <div style="flex:1; background:#eef1f8; border-radius:6px; overflow:hidden"><div style="width:${Math.max(3,100*v/max)}%; background:${v?col[k]:'transparent'}; height:16px"></div></div>
+    <div style="width:64px; text-align:right" class="sm ${v?'b':''}" >${v||'<span style="color:#d12f2f">none ⚠️</span>'}</div></div>`).join('');
+}
+
 /* ============================================================
    HISTORY VIEW
    ============================================================ */
@@ -799,7 +958,7 @@ function histCard(w){
     const work=e.sets.filter(s=>!s.warmup);
     return `<b>${e.name}</b> ${e.sets.map(s=>s.weight+(s.warmup?'w':'')).join('|')}`;
   }).join('<br>');
-  return `<div class="hitem"><div class="hd"><div class="row" style="gap:8px"><span class="tag t-${w.type}">${w.type}</span><b>${fmtShort(w.date)}</b></div>
+  return `<div class="hitem"><div class="hd"><div class="row" style="gap:8px"><span class="tag t-${w.type}">${w.type}</span><b>${fmtShort(w.date)}</b>${w.durMin?`<span class="mut sm">${w.durMin} min</span>`:''}</div>
     <div class="row" style="gap:6px"><button class="btn ghost sm" data-edit="${w.id}">edit</button><button class="btn danger sm" data-del="${w.id}">delete</button></div></div>
     ${w.cardio?`<div class="ex">🏃 ${cardioSummary(w.cardio)}</div>`:''}
     ${exTxt?`<div class="ex">${exTxt}</div>`:''}</div>`;
