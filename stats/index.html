@@ -239,7 +239,7 @@
   <footer>Built from the Pelobrossss handoff log · generated Jun 10, 2026 · keep stacking PRs 🔥</footer>
 </div>
 
-<script>
+<script type="module">
 /* ============================================================
    DATA  — encoded from the Pelobrossss handoff log
    sets: [weight, reps, isWarmup]  · u = unit for the exercise
@@ -249,242 +249,13 @@
 const KG2LB = 2.2046;
 const W = (date,type,opts={}) => ({date,type,...opts});
 
-const workouts = [
-  // ---- JANUARY ----
-  W('2026-01-16','Cardio',{cardio:{machine:'Treadmill',min:20}, ex:[]}),
-  W('2026-01-17','Legs',{ex:[
-    {n:'Squats',e:'Smith',u:'lb',s:[[50,8,0],[50,8,0],[50,8,0]]},
-    {n:'RDLs',e:'Smith',u:'lb',s:[[20,8,0],[20,8,0],[20,8,0]]},
-    {n:'Calf Raises',e:'Smith',u:'lb',s:[[20,15,0],[20,15,0],[20,15,0]]},
-  ]}),
-  W('2026-01-20','Push',{cardio:{machine:'Run',min:30}, ex:[
-    {n:'Bench Press',e:'DB',u:'lb',s:[[20,10,1],[35,10,0],[40,10,0],[40,10,0]]},
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,0],[15,8,0],[15,8,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0]]},
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[25,8,0]]},
-  ]}),
-  W('2026-01-22','Pull',{ex:[
-    {n:'DB Rows',e:'DB',u:'lb',s:[[15,8,1],[25,8,0],[30,8,0],[30,8,0]]},
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
-    {n:'Tricep Ext Overhead',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[50,8,0],[50,8,0]]},
-  ]}),
-  W('2026-01-23','Legs',{cardio:{machine:'Elliptical',min:10}, ex:[
-    {n:'Squats',e:'Smith',u:'lb',s:[[50,8,0],[50,8,0],[50,8,0]]},
-    {n:'RDLs',e:'Smith',u:'lb',s:[[20,8,0],[25,8,0],[30,8,0]]},
-    {n:'Calf Raises',e:'Smith',u:'lb',s:[[25,15,0],[30,15,0],[30,17,0]]},
-  ]}),
-  W('2026-01-25','Push',{cardio:{machine:'Run',mi:2.2,min:30}, ex:[
-    {n:'Bench Press',e:'DB',u:'lb',s:[[20,8,1],[35,8,0],[40,8,0],[40,8,0]]},
-    {n:'Incline Flyes',e:'DB',u:'lb',s:[[15,10,0],[20,10,0],[20,10,0]]},
-    {n:'Tricep Ext Overhead',e:'DB',u:'lb',s:[[25,8,1],[40,8,0],[50,8,0],[50,8,0]]},
-  ]}),
-  W('2026-01-27','Pull',{ex:[
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,0],[15,8,0],[17.5,8,0]]},
-    {n:'Smith Rows',e:'Smith',u:'lb',s:[[20,8,1],[40,8,0],[50,8,0],[50,8,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[30,8,0],[30,8,0],[35,8,0]]},
-    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0],[10,12,0],[10,12,0]]},
-    {n:'Shrugs',e:'DB',u:'lb',s:[[40,8,0],[40,8,0],[45,8,0]]},
-  ]}),
-  W('2026-01-29','Legs',{cardio:{machine:'Run',min:20}, ex:[
-    {n:'Squats',e:'Smith',u:'lb',s:[[25,8,0],[35,8,0],[50,8,0],[50,8,0]]},
-    {n:'RDLs',e:'Smith',u:'lb',s:[[25,8,1],[35,8,0],[45,8,0]]},
-    {n:'Calf Raises',e:'Smith',u:'lb',s:[[25,15,0],[35,15,0],[35,15,0]]},
-  ]}),
-
-  // ---- FEBRUARY ----
-  W('2026-02-07','Push',{cardio:{machine:'Run',min:20}, ex:[
-    {n:'Bench Press',e:'DB',u:'lb',s:[[20,8,1],[30,8,0]]},
-    {n:'Squats',e:'Smith',u:'lb',s:[[30,8,0],[30,8,0],[30,8,0]]},
-    {n:'Smith Rows',e:'Smith',u:'lb',s:[[30,8,0],[30,8,0],[40,8,0]]},
-  ]}),
-  W('2026-02-09','Pull',{cardio:{machine:'Run',min:20}, ex:[
-    {n:'Bench Press',e:'DB',u:'lb',s:[[30,8,0],[40,8,0],[45,8,0],[45,8,0]]},
-    {n:'Incline Flyes',e:'DB',u:'lb',s:[[15,10,0],[15,10,0],[20,10,0]]},
-    {n:'DB Rows',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[17.5,8,0],[20,8,0],[22.5,8,0]]},
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[30,6,0],[30,6,0]]},
-    {n:'Tricep Ext Overhead',e:'DB',u:'lb',s:[[45,8,0],[45,8,0],[45,8,0]]},
-  ]}),
-  W('2026-02-10','Legs',{cardio:{machine:'Run',min:20}, ex:[
-    {n:'Squats',e:'Smith',u:'lb',s:[[45,8,0],[50,8,0],[50,8,0]]},
-    {n:'RDLs',e:'Smith',u:'lb',s:[[25,8,1],[50,8,0],[50,8,0]]},
-  ]}),
-  W('2026-02-13','Push',{approx:true,ex:[
-    {n:'Chest Press (machine)',e:'Machine',u:'lb',s:[[55,8,0]]},
-    {n:'Lat Pulldown (machine)',e:'Machine',u:'lb',s:[[100,8,0]]},
-    {n:'Shoulder Press (machine)',e:'Machine',u:'lb',s:[[65,6,0]]},
-    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0]]},
-  ]}),
-  W('2026-02-16','Pull',{approx:true,ex:[
-    {n:'Assisted Pull-ups',e:'Machine',u:'lb',s:[[85,8,0],[70,8,0]]},
-    {n:'Dips',e:'Machine',u:'lb',s:[[70,8,0],[55,8,0],[40,8,0]]},
-    {n:'Chin-ups',e:'Machine',u:'lb',s:[[60,8,0]]},
-  ]}),
-  W('2026-02-18','Legs',{approx:true,ex:[
-    {n:'Squats',e:'Smith',u:'lb',s:[[40,8,0],[50,8,0],[50,8,0]]},
-    {n:'RDLs',e:'Smith',u:'lb',s:[[45,8,0],[55,8,0],[55,8,0]]},
-  ]}),
-  W('2026-02-20','Push',{approx:true,ex:[
-    {n:'Bench Press',e:'DB',u:'lb',s:[[30,8,0],[40,8,0],[45,8,0]]},
-    {n:'Incline Flyes',e:'DB',u:'lb',s:[[15,10,0],[20,10,0],[20,10,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
-  ]}),
-  W('2026-02-21','Pull',{approx:true,cardio:{machine:'Run',min:30}, ex:[
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[15,8,0],[17.5,8,0],[22.5,8,0]]},
-    {n:'DB Rows',e:'DB',u:'lb',s:[[28,8,0],[30,8,0],[30,8,0]]},
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[25,8,0]]},
-  ]}),
-  W('2026-02-23','Push',{approx:true,note:'knee injury day', ex:[
-    {n:'Bench Press',e:'Smith',u:'lb',s:[[50,8,0],[55,8,0],[60,8,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
-    {n:'Incline Flyes',e:'DB',u:'lb',s:[[15,10,0],[15,10,0],[15,10,0]]},
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[25,8,0]]},
-    {n:'Tricep Ext Overhead',e:'DB',u:'lb',s:[[40,8,0],[45,8,0],[45,8,0]]},
-  ]}),
-  W('2026-02-27','Pull',{approx:true,ex:[
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[17.5,8,0],[22.5,8,0],[22.5,8,0]]},
-    {n:'DB Rows',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
-    {n:'Shrugs',e:'DB',u:'lb',s:[[35,8,0],[35,8,0],[35,8,0]]},
-    {n:'Bench Press',e:'DB',u:'lb',s:[[30,8,1],[35,8,0],[40,8,0],[45,8,0]]},
-    {n:'Incline Flyes',e:'DB',u:'lb',s:[[15,10,0],[20,10,0],[20,10,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[35,8,0]]},
-    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0],[10,12,0],[10,12,0]]},
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[25,8,0],[30,6,0]]},
-  ]}),
-
-  // ---- APRIL (knee layoff through March) ----
-  W('2026-04-05','Push',{cardio:{machine:'Elliptical',mi:3.32,min:19.62,cal:136,hr:118}, ex:[
-    {n:'Bench Press',e:'Smith',u:'lb',s:[[50,8,0],[60,8,0],[70,8,0],[70,8,0]]},
-    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[40,8,0],[45,8,0],[50,8,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0]]},
-    {n:'Incline Bench',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[30,8,0],[30,8,0]]},
-  ]}),
-  W('2026-04-07','Cardio',{cardio:{machine:'Elliptical',mi:6.28,min:30.03,cal:245,hr:143}, ex:[]}),
-  W('2026-04-13','Pull',{cardio:{machine:'Elliptical',mi:5.14,min:25.27,cal:133,hr:90}, ex:[
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[15,8,0],[20,8,0],[22.5,8,0]]},
-    {n:'Smith Rows',e:'Smith',u:'lb',s:[[35,8,0],[50,8,0],[50,8,0]]},
-    {n:'Shrugs',e:'DB',u:'lb',s:[[35,8,0],[40,8,0]]},
-    {n:'Bicep Curls',e:'Cable',u:'kg',s:[[7.5,8,0],[7.5,8,0],[7.5,8,0]]},
-  ]}),
-  W('2026-04-15','Push',{cardio:{machine:'Elliptical',mi:4.57,min:21.22,cal:198,hr:148}, ex:[
-    {n:'Bench Press',e:'Smith',u:'lb',s:[[50,8,0],[60,8,0],[75,8,0],[75,8,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[25,8,0],[30,8,0],[35,6,0]]},
-    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[25,8,1],[40,8,0],[45,8,0]]},
-  ]}),
-  W('2026-04-16','Arms',{ex:[
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[25,8,0],[25,8,0],[25,8,0]]},
-    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[40,8,0],[45,8,0],[45,8,0]]},
-    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0]]},
-  ]}),
-  W('2026-04-17','Pull',{cardio:{machine:'Elliptical',mi:6.41,min:29.03,cal:303,hr:147}, ex:[
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[15,8,0],[20,8,0],[22.5,8,0]]},
-    {n:'Smith Rows',e:'Smith',u:'lb',s:[[40,8,0],[50,8,0],[60,8,0]]},
-    {n:'Shrugs',e:'DB',u:'lb',s:[[35,8,0],[40,8,0],[45,8,0]]},
-  ]}),
-  W('2026-04-19','Push',{cardio:{machine:'Elliptical',mi:4.48,min:20.25,cal:168,hr:135}, ex:[
-    {n:'Bench Press',e:'Smith',u:'lb',s:[[20,8,1],[50,8,0],[70,8,0],[80,8,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[25,8,0],[30,8,0],[35,8,0]]},
-    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[45,8,0],[50,8,0]]},
-    {n:'Incline Bench',e:'DB',u:'lb',s:[[25,8,0],[35,8,0],[35,8,0],[35,8,0]]},
-    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0],[10,12,0]]},
-  ]}),
-  W('2026-04-22','Pull',{cardio:{machine:'Elliptical',mi:2.94,min:15.10,cal:120,hr:138}, ex:[
-    {n:'Face Pulls',e:'Cable',u:'kg',s:[[5,8,0],[7.5,8,0],[7.5,8,0]]},
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[17.5,8,0],[20,8,0],[22.5,8,0]]},
-    {n:'Hammer Curls',e:'DB',u:'lb',s:[[20,8,0],[25,8,0],[25,8,0]]},
-    {n:'Smith Rows',e:'Smith',u:'lb',s:[[20,8,1],[40,8,0],[55,8,0],[65,8,0]]},
-    {n:'Shrugs',e:'DB',u:'lb',s:[[35,8,0],[45,8,0],[50,8,0]]},
-  ]}),
-  W('2026-04-28','Push',{cardio:{machine:'Elliptical',mi:4.61,min:20.05,cal:211,hr:148}, ex:[
-    {n:'Bench Press',e:'Smith',u:'lb',s:[[40,8,1],[60,8,0],[70,8,0],[80,8,0]]},
-    {n:'Incline Bench',e:'DB',u:'lb',s:[[25,8,1],[35,8,0],[40,8,0],[40,8,0]]},
-    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[40,8,0],[45,8,0]]},
-  ]}),
-  W('2026-04-30','Pull',{cardio:{machine:'Elliptical',mi:4.77,min:21.02,cal:216,hr:152}, ex:[
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[17.5,8,0],[22.5,8,0],[22.5,8,0]]},
-    {n:'DB Rows',e:'DB',u:'lb',s:[[15,8,1],[25,8,0],[25,8,0],[30,8,0]]},
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[20,8,1],[25,8,0],[30,8,0],[25,8,0]]},
-    {n:'Shrugs',e:'DB',u:'lb',s:[[35,8,0],[45,8,0],[50,8,0]]},
-  ]}),
-
-  // ---- MAY ----
-  W('2026-05-03','Push',{cardio:{machine:'Run',mi:1.0,min:30}, ex:[
-    {n:'Bench Press',e:'Smith',u:'lb',s:[[40,8,1],[65,8,0],[80,8,0],[90,8,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[25,8,0],[30,8,0],[30,8,0]]},
-    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[40,8,0],[45,8,0]]},
-    {n:'Incline Bench',e:'DB',u:'lb',s:[[25,8,1],[35,8,0],[40,8,0],[40,8,0]]},
-  ]}),
-  W('2026-05-09','Pull',{ex:[
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[17.5,8,0],[22.5,8,0],[22.5,8,0]]},
-    {n:'Smith Rows',e:'Smith',u:'lb',s:[[25,8,1],[50,8,0],[65,8,0],[65,8,0]]},
-    {n:'Shrugs',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[50,8,0],[50,8,0]]},
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[20,8,1],[25,8,0],[25,8,0],[25,8,0]]},
-  ]}),
-  W('2026-05-12','Push',{cardio:{machine:'Elliptical',min:25.40,cal:259,hr:149}, ex:[
-    {n:'Bench Press',e:'Smith',u:'lb',s:[[40,8,1],[65,8,0],[90,8,0],[95,8,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[30,8,0],[35,8,0],[35,8,0]]},
-    {n:'Incline Bench',e:'Smith',u:'lb',s:[[25,8,1],[50,8,0],[70,8,0],[70,8,0]]},
-    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[50,8,0],[50,8,0]]},
-  ]}),
-  W('2026-05-14','Pull',{cardio:{machine:'Elliptical',mi:8.02,min:39.43,cal:369,hr:149}, ex:[
-    {n:'DB Rows',e:'DB',u:'lb',s:[[15,8,1],[25,8,0],[25,8,0],[30,8,0]]},
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[20,8,0],[20,8,0],[22.5,8,0]]},
-    {n:'Shrugs',e:'DB',u:'lb',s:[[25,8,1],[50,8,0],[50,8,0],[50,8,0]]},
-  ]}),
-  W('2026-05-15','Push',{cardio:{machine:'Treadmill',mi:2.36,min:32.72,cal:224,hr:104}, ex:[
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[30,8,0],[35,8,0],[35,8,0]]},
-    {n:'Tricep Extensions',e:'DB',u:'lb',s:[[20,8,1],[40,8,0],[50,8,0],[50,8,0]]},
-    {n:'Standing Cable Press',e:'Cable',u:'kg',s:[[7.5,8,0]]},
-  ]}),
-  W('2026-05-17','Pull',{ex:[
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[20,8,0],[22.5,8,0],[22.5,8,0]]},
-    {n:'Smith Rows',e:'Smith',u:'lb',s:[[25,8,1],[50,8,0],[65,8,0],[65,8,0]]},
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[20,8,1],[30,8,0],[30,8,0],[30,8,0]]},
-    {n:'Shrugs',e:'DB',u:'lb',s:[[25,8,1],[50,8,0],[50,8,0],[50,8,0]]},
-  ]}),
-  W('2026-05-19','Cardio',{cardio:{machine:'Treadmill',mi:2.73,min:37.40,cal:279,hr:107}, ex:[]}),
-  W('2026-05-22','Push',{cardio:{machine:'Treadmill',mi:2.58,min:34.22,cal:266,hr:122}, ex:[
-    {n:'Bench Press',e:'Smith',u:'lb',s:[[25,8,1],[50,8,1],[70,8,0],[95,8,0],[95,8,0]]},
-    {n:'Tricep Pulldown',e:'Cable',u:'kg',s:[[15,8,0],[20,8,0],[22.5,8,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[30,8,0],[30,8,0],[30,8,0]]},
-  ]}),
-  W('2026-05-23','Pull',{cardio:{machine:'Elliptical',mi:3.38,min:15.10,cal:124,hr:143}, ex:[
-    {n:'Single Arm Lat Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[20,8,0],[22.5,8,0],[22.5,8,0]]},
-    {n:'Straight Arm Pulldown',e:'Cable',u:'kg',s:[[2.5,8,0],[5,8,0],[5,8,0],[7.5,8,0]]},
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[20,8,1],[30,6,0],[25,8,0]]},
-    {n:'Shrugs',e:'DB',u:'lb',s:[[25,8,1],[50,8,0],[50,8,0],[50,8,0]]},
-  ]}),
-  W('2026-05-25','Cardio',{cardio:{machine:'Elliptical',mi:4.82,min:20.20,cal:177,hr:149}, ex:[
-    {n:'Stair Climber',e:'Cardio',u:'lb',s:[]},
-  ]}),
-  W('2026-05-28','Cardio',{cardio:{machine:'Elliptical',mi:3.53,min:17.72,cal:127,hr:132}, ex:[]}),
-  W('2026-05-29','Cardio',{cardio:{machine:'Treadmill',mi:2.58,min:33.77,cal:274}, ex:[]}),
-  W('2026-05-30','Push',{cardio:{machine:'Elliptical',min:20.27,cal:148,hr:131}, ex:[
-    {n:'Tricep Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[20,8,0],[22.5,8,0],[22.5,8,0]]},
-    {n:'Cable Flyes',e:'Cable',u:'kg',s:[[5,8,0],[7.5,8,0],[10,8,0],[10,8,0]]},
-  ]}),
-
-  // ---- JUNE ----
-  W('2026-06-04','Push',{note:'CENTURY', ex:[
-    {n:'Bench Press',e:'Smith',u:'lb',s:[[20,8,1],[50,8,0],[70,8,0],[95,8,0],[100,8,0]]},
-    {n:'Shoulder Press',e:'DB',u:'lb',s:[[15,8,1],[30,8,0],[30,8,0],[30,8,0]]},
-    {n:'Tricep Pulldown',e:'Cable',u:'kg',s:[[12.5,8,1],[20,8,0],[22.5,8,0],[22.5,8,0]]},
-    {n:'Lateral Raises',e:'DB',u:'lb',s:[[10,12,0],[10,12,0],[10,12,0]]},
-  ]}),
-  W('2026-06-07','Cardio',{cardio:{machine:'Run',mi:2.0}, ex:[
-    {n:'Bicep Curls',e:'DB',u:'lb',s:[[15,8,1]]},
-  ]}),
-  W('2026-06-08','Push',{cardio:{machine:'Run',mi:1.5}, ex:[
-    {n:'Bench Press',e:'DB',u:'lb',s:[[30,8,0],[35,8,0]]},
-  ]}),
-  W('2026-06-09','Cardio',{cardio:{machine:'Elliptical',min:20.30,cal:235,hr:152}, ex:[]}),
-];
-
-// Stair climber as second cardio entries (not distance-based) — attach notes
-const extraCardio = [
-  {date:'2026-05-25', machine:'Stairs', min:14.90, cal:133, floors:48},
-  {date:'2026-06-09', machine:'Stairs', min:10.13, cal:123, hr:157},
-];
+const RAW = await fetch('../workouts.json', {cache:'no-store'}).then(r=>r.json());
+const workouts = RAW.workouts.map(w=>({
+  date:w.date, type:w.type, typeLabel:w.typeLabel||w.type, cardio:w.cardio||null,
+  ex:(w.exercises||[]).map(e=>({n:e.name, e:e.equipment, u:e.unit, assist:!!e.assist,
+    s:(e.sets||[]).map(s=>[s.weight, s.reps, s.warmup?1:0])}))
+}));
+const extraCardio = RAW.extraCardio || [];
 
 /* ============================================================
    COLORS / THEME
@@ -496,6 +267,31 @@ Chart_def();
 const fmtDate = d => new Date(d+'T00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'});
 const toLb = (w,u) => u==='kg' ? w*KG2LB : w;
 
+const PRS = (()=>{
+  // A PR is a new best working set for an exercise. Assist machines are
+  // inverted: less assistance is the better performance, so they compare the
+  // other way around. An exercise's debut is not a PR.
+  const best = new Map(), out = [];
+  for(const w of workouts){
+    for(const e of w.ex){
+      const key = e.n + ' (' + e.e + ')';
+      for(const [wt, reps, warm] of e.s){
+        if(warm) continue;
+        const prev = best.get(key);
+        const better = prev === undefined || (e.assist ? wt < prev : wt > prev);
+        if(!better) continue;
+        best.set(key, wt);
+        if(prev === undefined) continue;
+        const val = e.u === 'kg' ? wt + ' kg' : wt + ' \u00d7 ' + reps;
+        out.push({d:w.date, ex:key, v: e.assist ? val + ' assist' : val});
+      }
+    }
+  }
+  out.sort((a,b)=> a.d < b.d ? 1 : a.d > b.d ? -1 : 0);
+  if(out[0]) { out[0].big = true; out[0].v += ' \ud83c\udfc6'; }
+  return out.slice(0, 26);
+})();
+
 /* ---- TOP-LINE STATS ---- */
 (function(){
   const total = workouts.length;
@@ -504,14 +300,16 @@ const toLb = (w,u) => u==='kg' ? w*KG2LB : w;
   // total weight moved (working sets, lb)
   let vol=0;
   workouts.forEach(w=>w.ex.forEach(e=>e.s.forEach(([wt,r,wu])=>{ if(!wu) vol += toLb(wt,e.u)*r; })));
-  const benchPR = 100;
+  const benchPR = Math.round(Math.max(0, ...workouts.flatMap(w =>
+    w.ex.filter(e => e.n === 'Bench Press')
+        .flatMap(e => e.s.filter(([,,wu]) => !wu).map(([wt]) => toLb(wt, e.u))))));
   const stats = [
     ['Sessions logged', total],
     ['Lifting days', lifting],
     ['Cardio sessions', cardioSessions],
     ['Bench PR (lb)', benchPR],
     ['Total weight moved', (vol/1000).toFixed(1)+'k lb'],
-    ['PRs set', 21],
+    ['PRs set', PRS.length],
   ];
   document.getElementById('statgrid').innerHTML = stats.map(([l,n])=>
     `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
@@ -563,8 +361,26 @@ function renderStrengthChips(){
     const i=+c.dataset.i; STRENGTH_EX[i].on=!STRENGTH_EX[i].on; c.classList.toggle('on'); buildStrength();
   });
 }
-document.getElementById('strengthNote').textContent =
-  'Bench Press is the headline: 60 → 100 lb (Feb → Jun, +67%), hitting the century mark June 4. Smith Rows climbed 50 → 65 lb (+30%). The flat green line is your lat-pulldown plateau, and shoulder press has been stuck near 35.';
+(function(){
+  const topSets = (name, equip) => {
+    const pts = [];
+    workouts.forEach(w => w.ex.filter(e => e.n === name && (!equip || e.e === equip)).forEach(e => {
+      const working = e.s.filter(([,,wu]) => !wu).map(([wt]) => wt);
+      if(working.length) pts.push({d:w.date, v:Math.max(...working), u:e.u});
+    }));
+    return pts;
+  };
+  const line = ([name, equip]) => {
+    const p = topSets(name, equip);
+    if(p.length < 2) return null;
+    const best = p.reduce((a,b) => b.v > a.v ? b : a);
+    const gain = Math.round(100 * (best.v - p[0].v) / p[0].v);
+    return `${name} ${p[0].v} \u2192 ${best.v} ${best.u} (${fmtDate(p[0].d)} \u2192 ${fmtDate(best.d)}${gain > 0 ? ', +' + gain + '%' : ''})`;
+  };
+  document.getElementById('strengthNote').textContent =
+    [['Bench Press','Smith'],['Smith Rows','Smith'],['Shoulder Press','DB']].map(line).filter(Boolean).join(' \u00b7 ') +
+    '. Top working set per session, warm-ups excluded.';
+})();
 
 /* ---- CARDIO TRENDS ---- */
 const cardioPts = workouts.filter(w=>w.cardio && (w.cardio.cal||w.cardio.hr||w.cardio.mi))
@@ -611,8 +427,21 @@ document.querySelectorAll('#cardioChips .chip').forEach(c=>c.onclick=()=>{
       backgroundColor:Object.keys(counts).map(k=>TYPE_COLOR[k]), borderColor:'#ffffff', borderWidth:3}]},
     options:{maintainAspectRatio:false, plugins:{legend:{position:'right',labels:{usePointStyle:true,boxWidth:8}}}}
   });
+  // was hardcoded to "zero legs since February", which stopped being true in July
+  // TODAY / daysAgo are declared further down the file, so compute locally here
+  const nowISO = new Date(Date.now() - new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+  const lastLegs = [...workouts].reverse().find(w => w.type === 'Legs');
+  const legsGap = lastLegs
+    ? Math.round((new Date(nowISO+'T00:00') - new Date(lastLegs.date+'T00:00'))/86400000)
+    : null;
+  const legsLine = lastLegs
+    ? `<b style="color:#1f8a47">Legs = ${counts.Legs} sessions</b>, most recently ${fmtDate(lastLegs.date)}` +
+      (legsGap > 14 ? ` — ${legsGap} days ago, and due.` : `.`)
+    : `<b style="color:#1f8a47">No leg sessions logged yet.</b>`;
+  const lifts = ['Push','Pull'].map(k => counts[k] || 0);
+  const balanced = Math.abs(lifts[0] - lifts[1]) <= Math.max(2, Math.round(0.2 * Math.max(...lifts)));
   document.getElementById('pplNote').innerHTML =
-    `Push & Pull are well balanced. <b style="color:#1f8a47">Legs = ${counts.Legs} sessions, all before the Feb knee injury</b> — zero since. That's the clearest gap now that the knee has recovered.`;
+    `Push ${lifts[0]} vs Pull ${lifts[1]} — ${balanced ? 'well balanced' : 'skewed'}. ${legsLine}`;
 })();
 
 /* ---- WEEKLY VOLUME ---- */
@@ -676,30 +505,6 @@ document.querySelectorAll('#cardioChips .chip').forEach(c=>c.onclick=()=>{
 })();
 
 /* ---- PR TIMELINE ---- */
-const PRS = [
-    {d:'2026-06-04', ex:'Bench Press (Smith)', v:'100 × 8 🏆', big:true},
-    {d:'2026-05-30', ex:'Cable Flyes', v:'10 kg'},
-    {d:'2026-05-23', ex:'Straight Arm Pulldown', v:'7.5 kg'},
-    {d:'2026-05-22', ex:'Tricep Pulldown (Cable)', v:'22.5 kg'},
-    {d:'2026-05-17', ex:'Bicep Curls (DB)', v:'30 × 8'},
-    {d:'2026-05-14', ex:'Elliptical (distance)', v:'8.02 mi / 39:26'},
-    {d:'2026-05-12', ex:'Bench Press (Smith)', v:'95 × 8'},
-    {d:'2026-05-12', ex:'Incline Bench (Smith)', v:'70 × 8'},
-    {d:'2026-05-03', ex:'Bench Press (Smith)', v:'90 × 8'},
-    {d:'2026-04-28', ex:'Incline Bench (DB)', v:'40 × 8'},
-    {d:'2026-04-22', ex:'Smith Rows', v:'65 × 8'},
-    {d:'2026-04-22', ex:'Shrugs (DB)', v:'50 × 8'},
-    {d:'2026-04-22', ex:'Hammer Curls', v:'25 × 8'},
-    {d:'2026-04-22', ex:'Face Pulls', v:'7.5 kg'},
-    {d:'2026-04-19', ex:'Bench Press (Smith)', v:'80 × 8'},
-    {d:'2026-04-17', ex:'Smith Rows', v:'60 × 8'},
-    {d:'2026-04-15', ex:'Bench Press (Smith)', v:'75 × 8'},
-    {d:'2026-04-05', ex:'Bench Press (Smith)', v:'70 × 8'},
-    {d:'2026-02-10', ex:'RDLs (Smith)', v:'50 → later 55'},
-    {d:'2026-02-09', ex:'Bench Press (DB)', v:'45 × 8'},
-    {d:'2026-02-09', ex:'Single Arm Lat Pulldown', v:'22.5 kg'},
-    {d:'2026-01-27', ex:'Shoulder Press (DB)', v:'35 × 8'},
-];
 document.getElementById('prList').innerHTML = PRS.map(p=>
   `<div class="pr ${p.big?'big':''}"><div class="date">${fmtDate(p.d)}</div><div class="ex">${p.ex}</div><div class="val">${p.v}</div></div>`).join('');
 
@@ -708,7 +513,8 @@ renderStrengthChips(); buildStrength(); buildCardio();
 /* ============================================================
    SHARED HELPERS for the engine sections
    ============================================================ */
-const TODAY = '2026-06-10';
+const TODAY = new Date(Date.now() - new Date().getTimezoneOffset()*60000)
+  .toISOString().slice(0,10);
 const liftingDays = workouts.filter(w=>w.ex.some(e=>e.s.length));
 const daysAgo = d => Math.round((new Date(TODAY+'T00:00') - new Date(d+'T00:00'))/86400000);
 const unitFor = name => { for(let i=workouts.length-1;i>=0;i--){ const e=workouts[i].ex.find(x=>x.n===name); if(e) return e.u; } return 'lb'; };
@@ -969,6 +775,19 @@ function lastTopFor(name, equip){
   };
   const totalSets=workouts.reduce((s,w)=>s+w.ex.reduce((a,e)=>a+e.s.length,0),0);
   document.getElementById('expInfo').textContent=`${workouts.length} sessions · ${totalSets} sets ready to export`;
+})();
+
+/* ---- date-stamped chrome (was hardcoded to Jun 2026) ---- */
+(function(){
+  const dates = workouts.map(w => w.date).sort();
+  const monthYear = d => new Date(d+'T00:00').toLocaleDateString('en-US',{month:'long', year:'numeric'});
+  const first = dates[0], last = dates[dates.length-1];
+  document.querySelector('.hero .sub').textContent =
+    `Workout Analytics \u00b7 ${monthYear(first)} \u2013 ${monthYear(last)} \u00b7 Michael, Jersey City`;
+  document.querySelector('#nextWorkoutSec .hint').textContent =
+    `Auto-picked from your recent sessions and last weights logged. Today is ${fmtDate(TODAY)}.`;
+  document.querySelector('footer').textContent =
+    `Generated from workouts.json \u00b7 ${dates.length} sessions through ${fmtDate(last)} \u00b7 keep stacking PRs \ud83d\udd25`;
 })();
 </script>
 </body>

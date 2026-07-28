@@ -284,6 +284,43 @@ function load(){
 }
 function save(m){ DB=m||DB; try{ localStorage.setItem(KEY, JSON.stringify(DB)); }catch(e){} }
 
+/* ------------------------------------------------------------
+   BASE HISTORY SYNC
+   workouts.json is generated from the Pelobrossss coaching chat and is the
+   source of truth for everything logged there. The device may also hold
+   workouts logged in this app that the file has never seen, so those are kept.
+   Matching is by date: if the file has that day, the file wins.
+   Runs after first paint, so an offline launch still shows what is on device.
+   ------------------------------------------------------------ */
+async function syncBase(){
+  let base;
+  try{
+    const res = await fetch('workouts.json', {cache:'no-store'});
+    if(!res.ok) return;
+    base = await res.json();
+  }catch(e){ return; }                    // offline: keep the device copy
+  if(!base || !Array.isArray(base.workouts) || !base.workouts.length) return;
+
+  const baseDates = new Set(base.workouts.map(w=>w.date));
+  const deviceOnly = DB.workouts.filter(w=>!baseDates.has(w.date));
+  const merged = base.workouts
+    .map(w=>({...w, cardio:w.cardio||null, exercises:w.exercises||[]}))
+    .concat(deviceOnly)
+    .sort((a,b)=> a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
+  merged.forEach((w,i)=>{ w.id = i+1; });
+
+  const baseCardio = base.extraCardio || [];
+  const seen = new Set(baseCardio.map(c=>c.date+'|'+c.machine));
+  const changed = merged.length !== DB.workouts.length;
+
+  DB.workouts = merged;
+  DB.extraCardio = baseCardio.concat(
+    (DB.extraCardio||[]).filter(c=>!seen.has(c.date+'|'+c.machine)));
+  DB.settings.lastBackupCount = DB.workouts.length;   // synced data is not unsaved work
+  save();
+  if(changed && !DB.draft) setView(curView);          // never clobber a workout in progress
+}
+
 /* ============================================================
    EXERCISE LIBRARY + helpers
    ============================================================ */
@@ -1270,6 +1307,7 @@ function openSettings(){
    ============================================================ */
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(()=>{}); }
 setView('today');
+syncBase();
 </script>
 </body>
 </html>
