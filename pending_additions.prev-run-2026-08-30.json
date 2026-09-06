@@ -1227,19 +1227,6 @@
           ]
         }
       ]
-    },
-    {
-      "date": "2026-08-25",
-      "type": "Cardio",
-      "typeLabel": "Cardio",
-      "cardio": {
-        "machine": "Stairs",
-        "min": 15.85,
-        "cal": 170,
-        "hr": 156,
-        "notes": "15:51, 50 floors, 199 total cal, peaked 163 bpm. Cardio only, no lifting reported"
-      },
-      "exercises": []
     }
   ],
   "extraCardio": [
@@ -1267,10 +1254,7 @@
     }
   ],
   "flaggedForReview": [
-    "*** NEW THIS RUN (Aug 30): AUG 25 ONLY. *** Everything from Jul 28 through Aug 23 below was staged by earlier runs and is unchanged; Aug 23 was re-verified against the transcript this run and is correct. workouts.json is still at watermark 2026-07-27, so all 17 sessions here are unmerged.",
-    "Aug 25 is cardio only: stairs 15:51 / 50 floors / 170 active cal (199 total) / 156 avg / 163 peak. He wrote only \"It's Tuesday I'm done\", so there is no strength work and no core to record. Recorded as type Cardio with zero exercises, same pattern as Aug 18/20/21 under the shoulder injury.",
-    "No sessions in the chat for Aug 24, or for Aug 26 through Aug 30. The conversation's last message is Aug 25 17:39 UTC, so he has not logged anything in the five days before this run.",
-    "STALE FLAGS: items further down that say \"the conversation ends Aug 21\" or \"Aug 11 is the last message in the whole conversation\" were written by earlier runs and were true then. The transcript now runs through Aug 25. Ignore those end-of-chat claims; the coverage statements about specific dates still hold.",
+    "*** NEW THIS RUN: AUG 23 ONLY. *** Everything from Jul 28 through Aug 21 below was staged by the previous run on Aug 23 and is unchanged. workouts.json is still at watermark 2026-07-27, so all 16 sessions here are unmerged.",
     "Aug 23 goblet squats: he typed '10x8,25x8,25x8,25x8' with no 'w', so all four are recorded as working sets. This matches how Aug 16 and Aug 4 were staged (his lead-in 10 and 20 were left as working sets). Flip the 10 to warmup if you want it out of the working-set stats.",
     "Aug 23 RDLs: he wrote '10w,40,60,60' then '70'. The 10 is his only marked warmup. The 70 matches his existing PR rather than beating it, and it was done a week into the shoulder injury.",
     "Aug 23 order note: he skipped RDLs when first offered, did goblet squats, then came back and did RDLs. Exercises are stored in the order actually performed (goblet squats first), which differs from the Aug 4 and Aug 16 order.",
