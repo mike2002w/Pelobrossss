@@ -5680,6 +5680,2199 @@
     }
    ],
    "id": 63
+  },
+  {
+   "id": 64,
+   "date": "2026-07-28",
+   "type": "Cardio",
+   "typeLabel": "Cardio",
+   "cardio": {
+    "machine": "Treadmill",
+    "min": 28.37,
+    "mi": 2.05,
+    "cal": 224,
+    "hr": 148,
+    "notes": "28:22, 4.3 mph, 0.5% incline; traveling, hotel gym"
+   },
+   "exercises": []
+  },
+  {
+   "id": 65,
+   "date": "2026-07-30",
+   "type": "Legs",
+   "typeLabel": "Cardio + Legs",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 32.02,
+    "mi": 2.16,
+    "cal": 216,
+    "notes": "32:01, 4.0 mph, home machine; displayed avg HR 206 discarded as sensor glitch. Core: 3 rounds"
+   },
+   "exercises": [
+    {
+     "name": "RDLs",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "RDLs",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 55,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 55,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bodyweight Squats",
+     "equipment": "BW",
+     "unit": "bw",
+     "sheetName": "Bodyweight Squats",
+     "sets": [
+      {
+       "weight": 0,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 0,
+       "reps": 10,
+       "warmup": false
+      },
+      {
+       "weight": 0,
+       "reps": 10,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Calf Raises",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Calf Raises (DB)",
+     "sets": [
+      {
+       "weight": 25,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 15,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 66,
+   "date": "2026-07-31",
+   "type": "Push",
+   "typeLabel": "Cardio + Push",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 30.35,
+    "cal": 284,
+    "hr": 144,
+    "notes": "30:21, 339 total cal, peak 162 bpm"
+   },
+   "exercises": [
+    {
+     "name": "Bench Press",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Bench Press (Smith)",
+     "sets": [
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 110,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Shoulder Press",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Shoulder Press",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Tricep Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Tricep Pulldown",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 22.5,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Incline Bench",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Incline Bench (Smith)",
+     "sets": [
+      {
+       "weight": 80,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 80,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 67,
+   "date": "2026-08-01",
+   "type": "Pull",
+   "typeLabel": "Cardio + Pull",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 15.08,
+    "mi": 2.99,
+    "cal": 123,
+    "hr": 126,
+    "notes": "15:05, 150 total cal, Jersey City. Core: 2 rounds"
+   },
+   "exercises": [
+    {
+     "name": "Single Arm Lat Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Single Arm Lat Pulldown",
+     "sets": [
+      {
+       "weight": 12.5,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 22.5,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Smith Rows",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Smith Rows",
+     "sets": [
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Shrugs",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Shrugs",
+     "sets": [
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 68,
+   "date": "2026-08-04",
+   "type": "Legs",
+   "typeLabel": "Cardio + Legs",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 10.15,
+    "mi": 1.87,
+    "cal": 85,
+    "hr": 132,
+    "notes": "10:09, 103 total cal, home. Warm-up spin before hinging"
+   },
+   "exercises": [
+    {
+     "name": "RDLs",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "RDLs",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 65,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Goblet Squats",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Goblet Squats",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Calf Raises",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Calf Raises (DB)",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 15,
+       "warmup": true
+      },
+      {
+       "weight": 25,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 15,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 69,
+   "date": "2026-08-06",
+   "type": "Push",
+   "typeLabel": "Cardio + Push",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 15.08,
+    "mi": 3.07,
+    "cal": 141,
+    "hr": 138,
+    "notes": "15:05, 168 total cal, effort 6, Jersey City. DISPUTED SESSION - see flaggedForReview"
+   },
+   "exercises": [
+    {
+     "name": "Bench Press",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Bench Press (Smith)",
+     "sets": [
+      {
+       "weight": 35,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 110,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Shoulder Press",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Shoulder Press",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 35,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 35,
+       "reps": 5,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Tricep Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Tricep Pulldown",
+     "sets": [
+      {
+       "weight": 12.5,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 22.5,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 22.5,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 22.5,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 70,
+   "date": "2026-08-08",
+   "type": "Push",
+   "typeLabel": "Push + Pull (hotel)",
+   "cardio": null,
+   "exercises": [
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Incline Bench",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Incline Bench (DB)",
+     "sets": [
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 35,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bench Press",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bench Press (DB)",
+     "sets": [
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "DB Rows",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "DB Rows",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 71,
+   "date": "2026-08-09",
+   "type": "Legs",
+   "typeLabel": "Legs + Pull (cruise ship)",
+   "cardio": null,
+   "exercises": [
+    {
+     "name": "Hip Abduction",
+     "equipment": "Machine",
+     "unit": "lb",
+     "sheetName": "Hip Abduction",
+     "sets": [
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 95,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 95,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Hip Adduction",
+     "equipment": "Machine",
+     "unit": "lb",
+     "sheetName": "Hip Adduction",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 55,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 65,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Lat Pulldown",
+     "equipment": "Machine",
+     "unit": "lb",
+     "sheetName": "Lat Pulldown Machine",
+     "sets": [
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 72,
+   "date": "2026-08-10",
+   "type": "Pull",
+   "typeLabel": "Push + Pull (cruise ship)",
+   "cardio": {
+    "machine": "Bike",
+    "min": 25,
+    "notes": "Cruise ship gym. He wrote 'bike'; the coach's recap called it Elliptical. Recorded as Bike"
+   },
+   "exercises": [
+    {
+     "name": "Dips",
+     "equipment": "Machine",
+     "unit": "lb",
+     "sheetName": "Dips",
+     "assist": true,
+     "sets": [
+      {
+       "weight": 90,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Assisted Tricep Dips",
+     "equipment": "Machine",
+     "unit": "lb",
+     "sheetName": "Assisted Tricep Dips",
+     "assist": true,
+     "sets": [
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Lat Pulldown",
+     "equipment": "Machine",
+     "unit": "lb",
+     "sheetName": "Lat Pulldown Machine",
+     "sets": [
+      {
+       "weight": 80,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Smith Rows",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Smith Rows",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 73,
+   "date": "2026-08-11",
+   "type": "Push",
+   "typeLabel": "Cardio + Push (cruise ship)",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 25,
+    "notes": "Cruise ship gym. No distance, calories or HR reported"
+   },
+   "exercises": [
+    {
+     "name": "Bench Press",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Bench Press (Smith)",
+     "sets": [
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 90,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Shoulder Press",
+     "equipment": "Machine",
+     "unit": "lb",
+     "sheetName": "Shoulder Press Machine",
+     "sets": [
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 80,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 74,
+   "date": "2026-08-14",
+   "type": "Push",
+   "typeLabel": "Cardio + Push (cruise ship)",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 30.18,
+    "cal": 278,
+    "hr": 137,
+    "notes": "Cruise ship gym. 30:11, no distance reported"
+   },
+   "exercises": [
+    {
+     "name": "Lat Pulldown",
+     "equipment": "Machine",
+     "unit": "lb",
+     "sheetName": "Lat Pulldown Machine",
+     "sets": [
+      {
+       "weight": 80,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 110,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Shoulder Press",
+     "equipment": "Machine",
+     "unit": "lb",
+     "sheetName": "Shoulder Press Machine",
+     "sets": [
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 80,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 90,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 75,
+   "date": "2026-08-16",
+   "type": "Legs",
+   "typeLabel": "Cardio + Legs + Core",
+   "cardio": {
+    "machine": "Run",
+    "min": 30,
+    "mi": 2.38,
+    "cal": 407,
+    "notes": "Back home. Core circuit also done, not itemized in the chat"
+   },
+   "exercises": [
+    {
+     "name": "RDLs",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "RDLs",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 65,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Goblet Squats",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Goblet Squats",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Calf Raises",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Calf Raises (DB)",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 15,
+       "warmup": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 76,
+   "date": "2026-08-18",
+   "type": "Cardio",
+   "typeLabel": "Cardio + Core",
+   "cardio": {
+    "machine": "Treadmill",
+    "min": 33.32,
+    "mi": 2.62,
+    "cal": 310,
+    "notes": "33:19, 0.7% incline, 4.7 mph. Core circuit also done. First session after the Aug 17 shoulder injury"
+   },
+   "exercises": []
+  },
+  {
+   "id": 77,
+   "date": "2026-08-20",
+   "type": "Cardio",
+   "typeLabel": "Cardio + Core",
+   "cardio": {
+    "machine": "Treadmill",
+    "min": 30.38,
+    "mi": 2.14,
+    "cal": 232,
+    "notes": "30:23, 1.0% incline, 4.2 mph. Core: 3 rounds of 10 crunches"
+   },
+   "exercises": []
+  },
+  {
+   "id": 78,
+   "date": "2026-08-21",
+   "type": "Cardio",
+   "typeLabel": "Cardio",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 11.08,
+    "mi": 2.58,
+    "cal": 109,
+    "hr": 148,
+    "notes": "11:05, 63 rpm"
+   },
+   "exercises": []
+  },
+  {
+   "id": 79,
+   "date": "2026-08-23",
+   "type": "Legs",
+   "typeLabel": "Cardio + Legs",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 30.5,
+    "cal": 256,
+    "hr": 138,
+    "notes": "30:30, 311 total cal, peaked 159 bpm. Shoulder PT prescribed after lifting but he never reported which moves he did"
+   },
+   "exercises": [
+    {
+     "name": "Goblet Squats",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Goblet Squats",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "RDLs",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "RDLs",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Calf Raises",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Calf Raises (DB)",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 15,
+       "warmup": true
+      },
+      {
+       "weight": 25,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 15,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 80,
+   "date": "2026-08-25",
+   "type": "Cardio",
+   "typeLabel": "Cardio",
+   "cardio": {
+    "machine": "Stairs",
+    "min": 15.85,
+    "cal": 170,
+    "hr": 156,
+    "notes": "15:51, 50 floors, 199 total cal, peaked 163 bpm. Cardio only, no lifting reported"
+   },
+   "exercises": []
+  },
+  {
+   "id": 81,
+   "date": "2026-09-05",
+   "type": "Legs",
+   "typeLabel": "Lower + Light Upper",
+   "cardio": {
+    "machine": "Run",
+    "min": 20.6,
+    "mi": 1.48,
+    "cal": 187,
+    "hr": 142,
+    "notes": "20:36, effort 6. First session back after ~11 days off sick; shoulder improving"
+   },
+   "exercises": [
+    {
+     "name": "Bodyweight Squats",
+     "equipment": "BW",
+     "unit": "bw",
+     "sheetName": "Bodyweight Squats",
+     "sets": [
+      {
+       "weight": 0,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Goblet Squats",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Goblet Squats",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 82,
+   "date": "2026-09-06",
+   "type": "Arms",
+   "typeLabel": "Light Upper",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 29.53,
+    "cal": 316,
+    "hr": 150,
+    "notes": "29:32, 369 total cal, peaked 175 bpm"
+   },
+   "exercises": [
+    {
+     "name": "Tricep Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Tricep Pulldown",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 12,
+       "warmup": false
+      },
+      {
+       "weight": 10,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 12.5,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 12.5,
+       "reps": 12,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Hammer Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Hammer Curls",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 83,
+   "date": "2026-09-08",
+   "type": "Legs",
+   "typeLabel": "Cardio + Legs",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 20.18,
+    "mi": 4.25,
+    "cal": 207,
+    "hr": 147,
+    "notes": "20:11, 244 total cal, 62 rpm"
+   },
+   "exercises": [
+    {
+     "name": "Goblet Squats",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Goblet Squats",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Lunges",
+     "equipment": "BW",
+     "unit": "bw",
+     "sheetName": "Lunges",
+     "sets": [
+      {
+       "weight": 0,
+       "reps": 10,
+       "warmup": false
+      },
+      {
+       "weight": 0,
+       "reps": 10,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 84,
+   "date": "2026-09-09",
+   "type": "Cardio",
+   "typeLabel": "Cardio",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 15.68,
+    "mi": 3.59,
+    "cal": 136,
+    "hr": 150,
+    "notes": "15:41, 164 total cal, 71 rpm. Cardio only, he wrote 'It's Wednesday. Done'"
+   },
+   "exercises": []
+  },
+  {
+   "id": 85,
+   "date": "2026-09-12",
+   "type": "Arms",
+   "typeLabel": "Light Upper",
+   "cardio": null,
+   "exercises": [
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 12,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Shrugs",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Shrugs",
+     "sets": [
+      {
+       "weight": 12,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 12,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Tricep Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Tricep Pulldown",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 12,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Chest-Supported DB Rows",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Chest-Supported DB Rows",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 86,
+   "date": "2026-09-13",
+   "type": "Cardio",
+   "typeLabel": "Cardio",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 26.2,
+    "mi": 5.55,
+    "cal": 257,
+    "hr": 137,
+    "notes": "26:12, 66 rpm avg, 305 total cal. Stairs bout also done, see extraCardio"
+   },
+   "exercises": []
+  },
+  {
+   "id": 87,
+   "date": "2026-09-14",
+   "type": "Legs",
+   "typeLabel": "Cardio + Legs",
+   "cardio": {
+    "machine": "Run",
+    "min": 21.08,
+    "mi": 1.64,
+    "cal": 261,
+    "hr": 145,
+    "notes": "Peloton run, 21:05, 12:49 pace, peak HR 169"
+   },
+   "exercises": [
+    {
+     "name": "Goblet Squats",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Goblet Squats",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 88,
+   "date": "2026-09-17",
+   "type": "Arms",
+   "typeLabel": "Light Upper + Legs",
+   "cardio": {
+    "machine": "Run",
+    "min": 15,
+    "mi": 1.21,
+    "cal": 208,
+    "notes": "Peloton 15 min 2000s Pop Run (Jon Hosking), 12:03 pace, 5 mph. No HR on the console readout"
+   },
+   "exercises": [
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bodyweight Squats",
+     "equipment": "BW",
+     "unit": "bw",
+     "sheetName": "Bodyweight Squats",
+     "sets": [
+      {
+       "weight": 0,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 0,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 0,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Tricep Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Tricep Pulldown",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 17.5,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Chest-Supported DB Rows",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Chest-Supported DB Rows",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Shrugs",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Shrugs",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 12,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 35,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 35,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 89,
+   "date": "2026-09-18",
+   "type": "Cardio",
+   "typeLabel": "Cardio + Core",
+   "cardio": {
+    "machine": "Run",
+    "min": 30,
+    "mi": 2.51,
+    "cal": 408,
+    "notes": "Peloton 30 min Tropical House Run (Adrian Williams), 11:42 pace, 5.1 mph. Core: 2 rounds (crunches, bicycle crunches, leg raises, dead bugs), not itemized. No HR on the console readout"
+   },
+   "exercises": []
+  },
+  {
+   "id": 90,
+   "date": "2026-09-20",
+   "type": "Push",
+   "typeLabel": "Upper + Legs",
+   "cardio": null,
+   "exercises": [
+    {
+     "name": "Incline Bench",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Incline Bench (DB)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 35,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bench Press",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bench Press (DB)",
+     "sets": [
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 35,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 35,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 35,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Lateral Raises",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Lateral Raises",
+     "sets": [
+      {
+       "weight": 5,
+       "reps": 10,
+       "warmup": true
+      },
+      {
+       "weight": 8,
+       "reps": 10,
+       "warmup": false
+      },
+      {
+       "weight": 8,
+       "reps": 10,
+       "warmup": false
+      },
+      {
+       "weight": 8,
+       "reps": 10,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Squats",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Squats",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Goblet Squats",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Goblet Squats",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Calf Raises",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Calf Raises (Smith)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 15,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 91,
+   "date": "2026-09-22",
+   "type": "Pull",
+   "typeLabel": "Cardio + Pull",
+   "cardio": {
+    "machine": "Run",
+    "min": 30,
+    "mi": 2.38,
+    "cal": 437,
+    "notes": "Peloton 30 min Pop Punk Run (Jermaine Johnson), 11:30 pace, 5.2 mph. Morning run; pull session in the afternoon. First back work since the Aug 17 shoulder injury"
+   },
+   "exercises": [
+    {
+     "name": "Single Arm Lat Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Single Arm Lat Pulldown",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 17.5,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 17.5,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Smith Rows",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Smith Rows",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Face Pulls",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Face Pulls",
+     "sets": [
+      {
+       "weight": 5,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 7.5,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 7.5,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Shrugs",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Shrugs",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 35,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Hammer Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Hammer Curls",
+     "sets": [
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
   }
  ],
  "extraCardio": [
@@ -5754,6 +7947,43 @@
    "cal": 59,
    "hr": 137,
    "notes": "78 total cal, Oxon Hill hotel gym"
+  },
+  {
+   "date": "2026-08-06",
+   "machine": "Stairs",
+   "min": 15.12,
+   "cal": 166,
+   "hr": 152,
+   "notes": "15:07, 50 floors, 193 total cal, peak 163. Part of the DISPUTED Aug 6 session"
+  },
+  {
+   "date": "2026-08-10",
+   "machine": "Walk/Run",
+   "min": 10,
+   "notes": "Cruise ship gym, after the 25 min bike"
+  },
+  {
+   "date": "2026-08-21",
+   "machine": "Stairs",
+   "min": 11,
+   "cal": 117,
+   "hr": 158,
+   "notes": "Peaked 166 bpm. Second bout after the elliptical"
+  },
+  {
+   "date": "2026-09-09",
+   "machine": "Stairs",
+   "min": 10.75,
+   "cal": 124,
+   "hr": 162,
+   "notes": "10:45, 144 total cal. Second bout after the elliptical"
+  },
+  {
+   "date": "2026-09-13",
+   "machine": "Stairs",
+   "min": 16.08,
+   "cal": 114,
+   "hr": 123
   }
  ]
 }
