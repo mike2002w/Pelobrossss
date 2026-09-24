@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Each household's log lives under a 64-character id derived from its PIN.
+    // Nobody can list the ids, so without the PIN the data cannot be found.
+    match /ledgers/{ledger}/{document=**} {
+      allow read, write: if ledger.size() == 64;
+    }
+  }
+}

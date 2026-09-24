@@ -1,5 +1,5 @@
 /* Pelobrossss service worker — offline-first cache */
-const CACHE = 'pelobrossss-v10';
+const CACHE = 'pelobrossss-v11';
 const ASSETS = [
   './',
   './index.html',
@@ -30,6 +30,8 @@ self.addEventListener('activate', e => {
 // index for navigations.
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  // /nanny/ is a separate app with its own files; never cache or intercept it.
+  if (new URL(e.request.url).pathname.includes('/nanny/')) return;
 
   if (FRESH.test(new URL(e.request.url).pathname)) {
     e.respondWith(
