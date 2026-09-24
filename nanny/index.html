@@ -176,7 +176,7 @@ h2.sec{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--
 </style>
 </head>
 <body>
-<div class="gate" id="gate" hidden><form class="card" id="gateform"><h1>Nanny Ledger</h1><p>Enter the household PIN. Both phones use the same PIN, and it decides which shared log you see.</p><input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" aria-label="Household PIN"><div class="err" id="pinerr"></div><button class="btn primary wide" type="submit">Open ledger</button><p>Pick any PIN of 4 or more digits the first time. Anyone who enters the same PIN later sees the same log, so keep it between the two of you.</p></form></div>
+<div class="gate" id="gate" hidden><form class="card" id="gateform" onsubmit="return false" action="#"><h1>Nanny Ledger</h1><p>Enter the household PIN. Both phones use the same PIN, and it decides which shared log you see.</p><input id="pin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN" aria-label="Household PIN"><div class="err" id="pinerr"></div><button class="btn primary wide" type="button" id="pinbtn">Open ledger</button><p>Pick any PIN of 4 or more digits the first time. Anyone who enters the same PIN later sees the same log, so keep it between the two of you.</p></form></div>
 
 <div class="app">
   <header class="top">
@@ -552,23 +552,38 @@ function connect(ledgerId){
     if(snap.exists){ state.settings=Object.assign(clone(DEFAULT_SETTINGS), clone(snap.data())); }
     saveLocal(); render();
   }, err=>{ setSync('error','Sync error'); flash('Sync stopped: '+(err&&err.message?err.message:'unknown')); });
+  let first=true;
   db.collection('weeks').onSnapshot(snap=>{
     const w={}; snap.docs.forEach(d=>{ w[d.id]=clone(d.data()); });
     state.weeks=w; setSync('shared','Shared'); saveLocal(); render();
+    if(first && !snap.metadata.fromCache){ first=false; if(snap.empty) seedIfEmpty(); }
   }, err=>{ setSync('error','Sync error'); flash('Sync stopped: '+(err&&err.message?err.message:'unknown')); });
+}
+// One-time carry-over of the weeks logged in the earlier claude.ai version: runs only when the shared log is empty.
+async function seedIfEmpty(){
+  try{
+    const r=await fetch('seed.json',{cache:'no-store'}); if(!r.ok) return;
+    const seed=await r.json(); const weeks=(seed&&seed.weeks)||{}; const keys=Object.keys(weeks); if(!keys.length) return;
+    let n=0; for(const k of keys){ const cur=await db.doc('weeks/'+k).get(); if(cur.exists) continue; await db.doc('weeks/'+k).set(clone(weeks[k])); n++; }
+    if(!n) return; const count=n;
+    flash('Carried over '+count+' earlier week'+(count>1?'s':''));
+  }catch(e){}
 }
 function showGate(){
   const g=document.getElementById('gate'); g.hidden=false; setSync('','Locked');
   const form=document.getElementById('gateform'), input=document.getElementById('pin'), err=document.getElementById('pinerr');
   setTimeout(()=>input.focus(),50);
-  form.addEventListener('submit', async e=>{
-    e.preventDefault(); const pin=input.value.trim();
+  const go=async ()=>{
+    const pin=input.value.trim();
     if(!/^\d{4,}$/.test(pin)){ err.textContent='Use at least 4 digits.'; return; }
     if(!window.crypto || !crypto.subtle){ err.textContent='This browser cannot secure the PIN. Open the page over https.'; return; }
     const hash=await sha256('nanny-ledger:'+pin);
     try{ localStorage.setItem(PIN_KEY, hash); }catch(e){}
     g.hidden=true; connect(hash);
-  });
+  };
+  document.getElementById('pinbtn').addEventListener('click', go);
+  form.addEventListener('submit', e=>{ e.preventDefault(); go(); });
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); go(); } });
 }
 loadLocal();
 ui.weekKey=weekKeyOf(today());

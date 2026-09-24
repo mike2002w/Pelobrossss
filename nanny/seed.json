@@ -1,0 +1,27 @@
+{
+ "weeks": {
+  "2026-09-14": {
+   "createdAt": "2026-09-20T11:29:38.028Z",
+   "days": {
+    "2026-09-15": {
+     "extraMin": 40,
+     "note": "",
+     "overnight": false,
+     "status": "worked"
+    },
+    "2026-09-18": {
+     "extraMin": 40,
+     "note": "",
+     "overnight": false,
+     "status": "worked"
+    }
+   },
+   "extras": [],
+   "paid": true,
+   "paidOn": "2026-09-20",
+   "stipend": true,
+   "updatedAt": "2026-09-20T11:38:00.097Z",
+   "weekStart": "2026-09-14"
+  }
+ }
+}

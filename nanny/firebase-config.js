@@ -1,10 +1,10 @@
-// Firebase project settings for Nanny Ledger.
-// Paste the values from Firebase console > Project settings > Your apps > SDK setup and configuration (Config).
+// Firebase project settings for Nanny Ledger (project: nanny-ledger).
+// These identify the project; they are not secrets. Access is controlled by Firestore rules.
 window.NANNY_FIREBASE_CONFIG = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE_PROJECT_ID.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  storageBucket: "PASTE_PROJECT_ID.appspot.com",
-  messagingSenderId: "PASTE_SENDER_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyBRrxT2shgoEC5CLB2z-MHFpRYZZOMjKno",
+  authDomain: "nanny-ledger.firebaseapp.com",
+  projectId: "nanny-ledger",
+  storageBucket: "nanny-ledger.firebasestorage.app",
+  messagingSenderId: "137723939932",
+  appId: "1:137723939932:web:1b7369db39c3eec1662a99"
 };
