@@ -333,9 +333,9 @@ function summaryText(t){
   if(t.paid) lines.push('Paid '+fmtDate(fromIso(t.paidOn||t.key),true));
   return lines.join('\n');
 }
-// Short overtime note for the payment memo (140-character limit): "T 40 min, Th 1 hour".
+// Short overtime note for the payment memo (140-character limit): "Tues 40 min, Thurs 1 hour".
 const NOTE_LIMIT=140;
-const DAY_SHORT=['Su','M','T','W','Th','F','Sa'];
+const DAY_SHORT=['Sun','Mon','Tues','Wed','Thurs','Fri','Sat'];
 function durLong(min){ const m=Math.abs(Math.round(min)); if(m<60) return m+' min'; if(m%60===0) return (m/60)+(m===60?' hour':' hours'); return Math.floor(m/60)+' hr '+(m%60)+' min'; }
 function durShort(min){ const m=Math.abs(Math.round(min)); if(m<60) return m+'m'; if(m%60===0) return (m/60)+'h'; if(m%30===0) return (m/60)+'h'; return Math.floor(m/60)+'h'+pad(m%60)+'m'; }
 function paymentNote(t){
