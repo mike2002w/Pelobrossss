@@ -203,6 +203,7 @@ const DEFAULT_SETTINGS = {
   rate: 32,
   overnightFee: 150,
   stipend: 40,
+  weeklyBase: 1719,
   weekStart: 1,
   schedule: {
     '0': null,
@@ -277,11 +278,14 @@ function weekTotals(key){
   const includeStipend = week ? week.stipend!==false : true;
   const extras=(week&&Array.isArray(week.extras))?week.extras:[];
   const extrasTotal=extras.reduce((a,x)=>a+(Number(x.amount)||0),0);
-  const basePay=hours*(Number(s.rate)||0), overnightPay=overnights*(Number(s.overnightFee)||0), stipend=includeStipend?(Number(s.stipend)||0):0;
-  const pay=basePay+overnightPay+stipend+extrasTotal;
-  return {key, week, days, hours, ot, overnights, schedHours, basePay, overnightPay, stipend, includeStipend, extras, extrasTotal, pay, logged:!!week, paid:!!(week&&week.paid), paidOn:week?week.paidOn:null};
+  const rate=Number(s.rate)||0, base=weeklyBase(), regHours=regularWeek().hours;
+  const netExtraMin=Math.round((hours-regHours)*60); const netExtraPay=netExtraMin/60*rate;
+  const overnightPay=overnights*(Number(s.overnightFee)||0), stipend=Number(s.stipend)||0, stipendCut=includeStipend?0:stipend;
+  const pay=base+netExtraPay+overnightPay+extrasTotal-stipendCut;
+  return {key, week, days, hours, ot, overnights, schedHours, regHours, base, rate, netExtraMin, netExtraPay, overnightPay, stipend, stipendCut, includeStipend, extras, extrasTotal, pay, logged:!!week, paid:!!(week&&week.paid), paidOn:week?week.paidOn:null};
 }
-function regularWeek(){ let h=0; for(let i=0;i<7;i++){ const sc=state.settings.schedule[String(i)]; if(sc) h+=spanHours(sc.start,sc.end); } const s=state.settings; return {hours:h, pay:h*(Number(s.rate)||0)+(Number(s.stipend)||0)}; }
+function regularWeek(){ let h=0; for(let i=0;i<7;i++){ const sc=state.settings.schedule[String(i)]; if(sc) h+=spanHours(sc.start,sc.end); } const s=state.settings; return {hours:h, computed:h*(Number(s.rate)||0)+(Number(s.stipend)||0)}; }
+function weeklyBase(){ const b=Number(state.settings.weeklyBase); return b>0 ? b : regularWeek().computed; }
 
 // ---------- storage ----------
 function loadLocal(){ try{ const j=JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(j){ if(j.settings) state.settings=Object.assign(clone(DEFAULT_SETTINGS), j.settings); if(j.weeks) state.weeks=j.weeks; } }catch(e){} }
@@ -315,20 +319,17 @@ function removeWeek(key){ if(!confirm('Remove this week\'s log? The regular sche
 function summaryText(t){
   const s=state.settings; const lines=[];
   lines.push('Week of '+fmtRange(t.key,true)+(s.nannyName?' · '+s.nannyName:''));
-  t.days.forEach(e=>{ const d=fromIso(e.date); let l=DOW[d.getDay()]+' '+fmtDate(d)+': ';
-    if(e.status==='worked') l+= e.sched ? ('regular '+fmtH(e.schedH)+' h'+(e.extraMin?' '+(e.extraMin>0?'+ ':'- ')+fmtDur(e.extraMin):'')+' = '+fmtH(e.hours)+' h') : ('extra day · '+fmtH(e.hours)+' h');
-    else if(e.status==='paidoff') l+='paid day off · '+fmtH(e.hours)+' h';
-    else l+= e.sched ? 'off (unpaid)' : 'off';
-    if(e.overnight) l+=' · overnight';
-    if(e.note) l+=' · '+e.note;
-    lines.push(l); });
-  lines.push('');
-  lines.push('Hours: '+fmtH(t.hours)+(t.ot>0?' (overtime '+fmtH(t.ot)+')':''));
-  lines.push(fmtH(t.hours)+' h × '+fmtMoney(s.rate)+' = '+fmtMoney(t.basePay));
-  if(t.overnights) lines.push(t.overnights+' overnight'+(t.overnights>1?'s':'')+' × '+fmtMoney(s.overnightFee)+' = '+fmtMoney(t.overnightPay));
-  if(t.includeStipend && t.stipend) lines.push('Transportation stipend: '+fmtMoney(t.stipend));
-  t.extras.forEach(x=>{ if(x.label||x.amount) lines.push((x.label||'Extra')+': '+fmtMoney(Number(x.amount)||0)); });
-  lines.push('Total: '+fmtMoney(t.pay));
+  const dayBits=[]; t.days.forEach(e=>{ const name=DOWL[fromIso(e.date).getDay()];
+    if(e.status==='worked'){ if(e.extraMin>0) dayBits.push(name+' '+durLong(e.extraMin)+' extra'); else if(e.extraMin<0) dayBits.push(name+' '+durLong(e.extraMin)+' short'); if(e.sched===null && e.hours===0 && e.overnight) dayBits.push(name+' overnight'); }
+    else if(e.status==='off' && e.sched) dayBits.push(name+' off, unpaid ('+fmtH(e.schedH)+' hr)'); });
+  const terms=[];
+  if(t.netExtraMin!==0) terms.push((dayBits.length?dayBits.join(', ')+' = ':'')+(t.netExtraMin<0?'-':'')+durLong(t.netExtraMin)+' x '+fmtMoney(t.rate)+'/hr');
+  else terms.push(dayBits.length?dayBits.join(', '):'No extra time');
+  terms.push(fmtMoney(t.base)+' base');
+  if(t.overnights) terms.push(t.overnights+' overnight'+(t.overnights>1?'s':'')+' '+fmtMoney(t.overnightPay));
+  t.extras.forEach(x=>{ if(x.label||x.amount) terms.push((x.label||'extra')+' '+fmtMoney(Number(x.amount)||0)); });
+  if(t.stipendCut) terms.push('no stipend -'+fmtMoney(t.stipendCut));
+  lines.push(terms.join(' + ')+' = '+fmtMoney(t.pay));
   if(t.paid) lines.push('Paid '+fmtDate(fromIso(t.paidOn||t.key),true));
   return lines.join('\n');
 }
@@ -394,9 +395,10 @@ function renderWeek(){
   h+='<div class="pay-line"><span class="lbl">Pay for the week</span><span class="big">'+fmtMoney(t.pay)+'</span></div>';
   h+='<div class="stat-row"><div class="stat"><div class="k">Hours</div><div class="v">'+fmtH(t.hours)+'</div></div><div class="stat"><div class="k">Overtime</div><div class="v">'+fmtH(t.ot)+'</div></div><div class="stat"><div class="k">Overnights</div><div class="v">'+t.overnights+'</div></div></div>';
   h+='<div class="breakdown">';
-  h+='<div class="row"><span>'+fmtH(t.hours)+' h × '+fmtMoney(s.rate)+'/h</span><span>'+fmtMoney(t.basePay)+'</span></div>';
+  h+='<div class="row"><span>Base week ('+fmtH(t.regHours)+' h + stipend)</span><span>'+fmtMoney(t.base)+'</span></div>';
+  if(t.netExtraMin) h+='<div class="row"><span>'+(t.netExtraMin>0?'+':'-')+durLong(t.netExtraMin)+' × '+fmtMoney(s.rate)+'/h</span><span>'+fmtMoney(t.netExtraPay)+'</span></div>';
   if(t.overnights) h+='<div class="row"><span>'+t.overnights+' overnight'+(t.overnights>1?'s':'')+' × '+fmtMoney(s.overnightFee)+'</span><span>'+fmtMoney(t.overnightPay)+'</span></div>';
-  if(t.includeStipend) h+='<div class="row"><span>Transportation stipend</span><span>'+fmtMoney(t.stipend)+'</span></div>';
+  if(t.stipendCut) h+='<div class="row"><span>Stipend removed</span><span>-'+fmtMoney(t.stipendCut)+'</span></div>';
   t.extras.forEach(x=>{ h+='<div class="row"><span>'+esc(x.label||'Extra')+'</span><span>'+fmtMoney(Number(x.amount)||0)+'</span></div>'; });
   h+='<div class="row total"><span>Total</span><span>'+fmtMoney(t.pay)+'</span></div>';
   h+='</div>';
@@ -491,12 +493,13 @@ function renderSettings(){
   h+='<div class="hint">Changes apply to every week, including ones already logged, so the totals always reflect the current rates.</div>';
   h+='<div class="field"><label>Nanny\'s name (optional)</label><input type="text" id="s-name" value="'+esc(s.nannyName)+'" placeholder="Shown on summaries"></div>';
   h+='<div class="grid2"><div class="field"><label>Hourly rate ($)</label><input type="number" inputmode="decimal" step="0.01" id="s-rate" value="'+esc(s.rate)+'"></div><div class="field"><label>Overnight stay ($)</label><input type="number" inputmode="decimal" step="1" id="s-overnight" value="'+esc(s.overnightFee)+'"></div></div>';
-  h+='<div class="grid2"><div class="field"><label>Weekly transportation stipend ($)</label><input type="number" inputmode="decimal" step="1" id="s-stipend" value="'+esc(s.stipend)+'"></div><div class="field"><label>Pay week starts on</label><select id="s-weekstart">'+DOWL.map((n,i)=>'<option value="'+i+'"'+(Number(s.weekStart)===i?' selected':'')+'>'+n+'</option>').join('')+'</select></div></div>';
+  h+='<div class="grid2"><div class="field"><label>Weekly transportation stipend ($)</label><input type="number" inputmode="decimal" step="1" id="s-stipend" value="'+esc(s.stipend)+'"></div><div class="field"><label>Base pay for a regular week ($)</label><input type="number" inputmode="decimal" step="1" id="s-base" value="'+esc(s.weeklyBase||'')+'" placeholder="'+esc(reg.computed)+'"></div></div>';
+  h+='<div class="grid2"><div class="field"><label>Pay week starts on</label><select id="s-weekstart">'+DOWL.map((n,i)=>'<option value="'+i+'"'+(Number(s.weekStart)===i?' selected':'')+'>'+n+'</option>').join('')+'</select></div></div>';
   h+='<div><h2 class="sec" style="margin-top:4px">Regular schedule</h2><div class="sched">';
   for(let i=0;i<7;i++){ const dow=(Number(s.weekStart)+i)%7; const sc=s.schedule[String(dow)]; const on=!!sc;
     h+='<div class="srow" data-dow="'+dow+'"><label class="d"><input type="checkbox" class="s-on" '+(on?'checked':'')+'>'+DOW[dow]+'</label><input type="time" class="s-start" value="'+(sc?esc(sc.start):'07:15')+'" '+(on?'':'disabled')+'><input type="time" class="s-end" value="'+(sc?esc(sc.end):'17:45')+'" '+(on?'':'disabled')+'></div>'; }
   h+='</div></div>';
-  h+='<div class="preview">Regular week: <b>'+fmtH(reg.hours)+' h</b> = <b>'+fmtMoney(reg.pay)+'</b> including the stipend.</div>';
+  h+='<div class="preview">Regular week is <b>'+fmtH(reg.hours)+' h</b>. Base pay used: <b>'+fmtMoney(weeklyBase())+'</b>'+(Number(s.weeklyBase)>0 && Math.abs(Number(s.weeklyBase)-reg.computed)>0.005 ? ' (schedule × rate + stipend would be '+fmtMoney(reg.computed)+')' : '')+'. Extra time is paid on top at the hourly rate.</div>';
   h+='<button class="btn primary wide" data-act="savesettings">Save settings</button>';
   h+='<div class="hint">When the badge at the top says <b>Shared</b>, both phones are writing to the same log. <b>This phone only</b> means this device is not connected and its entries stay here until it is.</div>';
   h+='<div class="right"><button class="linkbtn" data-act="changepin">Switch PIN / sign out on this device</button></div>';
@@ -510,6 +513,7 @@ function readSettingsForm(){
   s.rate=Number(document.getElementById('s-rate').value)||0;
   s.overnightFee=Number(document.getElementById('s-overnight').value)||0;
   s.stipend=Number(document.getElementById('s-stipend').value)||0;
+  s.weeklyBase=Number(document.getElementById('s-base').value)||0;
   s.weekStart=Number(document.getElementById('s-weekstart').value)||0;
   const sched={};
   document.querySelectorAll('.srow').forEach(r=>{ const dow=r.dataset.dow; const on=r.querySelector('.s-on').checked; sched[dow]= on ? {start:r.querySelector('.s-start').value||'07:15', end:r.querySelector('.s-end').value||'17:45'} : null; });
