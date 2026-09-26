@@ -163,6 +163,8 @@ h2.sec{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--
 .toast.show{opacity:1}
 .sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:7}
 .sheet .box{background:var(--surface);border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));width:100%;max-width:540px;display:grid;gap:12px}
+.sheet-k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between}
+.notebox{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:10px;padding:8px 8px 8px 12px;font-size:17px;font-weight:600;color:var(--accent)}
 .sheet pre{font-family:var(--mono);font-size:12.5px;white-space:pre-wrap;background:var(--surface-2);border-radius:10px;padding:12px;margin:0;max-height:50vh;overflow:auto}
 @media (prefers-reduced-motion: reduce){.toast{transition:none}}
 
@@ -330,16 +332,42 @@ function summaryText(t){
   if(t.paid) lines.push('Paid '+fmtDate(fromIso(t.paidOn||t.key),true));
   return lines.join('\n');
 }
-async function shareSummary(key){
-  const text=summaryText(weekTotals(key));
-  if(navigator.share){ try{ await navigator.share({text}); return; }catch(e){ if(e && e.name==='AbortError') return; } }
-  if(navigator.clipboard && navigator.clipboard.writeText){ try{ await navigator.clipboard.writeText(text); flash('Summary copied'); return; }catch(e){} }
-  showSheet(text);
+// Short overtime note for the payment memo (140-character limit): "T 40 min, Th 1 hour".
+const NOTE_LIMIT=140;
+const DAY_SHORT=['Su','M','T','W','Th','F','Sa'];
+function durLong(min){ const m=Math.abs(Math.round(min)); if(m<60) return m+' min'; if(m%60===0) return (m/60)+(m===60?' hour':' hours'); return Math.floor(m/60)+' hr '+(m%60)+' min'; }
+function durShort(min){ const m=Math.abs(Math.round(min)); if(m<60) return m+'m'; if(m%60===0) return (m/60)+'h'; if(m%30===0) return (m/60)+'h'; return Math.floor(m/60)+'h'+pad(m%60)+'m'; }
+function paymentNote(t){
+  const items=t.days.filter(e=>e.status==='worked' && (e.extraMin>0 || e.overnight)).map(e=>{ const d=DAY_SHORT[fromIso(e.date).getDay()]; return {d, min:e.extraMin, on:e.overnight}; });
+  if(!items.length) return 'No OT';
+  const fmt=(f, sep, onWord)=>items.map(i=>{ const parts=[]; if(i.min>0) parts.push(f(i.min)); if(i.on) parts.push(onWord); return i.d+' '+parts.join(' + '); }).join(sep);
+  const totalMin=items.reduce((a,i)=>a+Math.max(0,i.min),0), nights=items.filter(i=>i.on).length;
+  const candidates=[
+    fmt(durLong, ', ', 'overnight'),
+    fmt(durShort, ', ', 'night'),
+    fmt(durShort, ', ', 'ON'),
+    fmt(durShort, ' ', 'ON').replace(/ \+ /g,'+'),
+    items.map(i=>i.d+(i.min>0?durShort(i.min):'')+(i.on?'ON':'')).join(' '),
+    'OT '+durShort(totalMin)+(nights?' '+nights+'ON':'')
+  ];
+  return candidates.find(c=>c.length<=NOTE_LIMIT) || candidates[candidates.length-1].slice(0,NOTE_LIMIT);
 }
-function showSheet(text){
+async function copyText(text, okMsg){ if(navigator.clipboard && navigator.clipboard.writeText){ try{ await navigator.clipboard.writeText(text); flash(okMsg||'Copied'); return true; }catch(e){} } return false; }
+async function shareSummary(key){
+  const t=weekTotals(key); showSheet(paymentNote(t), summaryText(t));
+}
+function showSheet(note, text){
   const el=document.createElement('div'); el.className='sheet';
-  el.innerHTML='<div class="box"><div style="font-weight:600">Week summary</div><pre>'+esc(text)+'</pre><button class="btn ghost wide" data-close>Close</button></div>';
-  el.addEventListener('click', e=>{ if(e.target===el || e.target.hasAttribute('data-close')) el.remove(); });
+  el.innerHTML='<div class="box">'
+    +'<div><div class="sheet-k">Payment note <span class="num">'+note.length+'/'+NOTE_LIMIT+'</span></div><div class="notebox"><span class="num" id="notetext">'+esc(note)+'</span><button class="btn primary small" data-copy="note">Copy</button></div></div>'
+    +'<div><div class="sheet-k">Full summary</div><pre>'+esc(text)+'</pre></div>'
+    +'<div class="actions"><button class="btn ghost small" data-copy="full">Copy summary</button>'+(navigator.share?'<button class="btn ghost small" data-share>Share…</button>':'')+'<button class="btn ghost small" data-close style="margin-left:auto">Close</button></div>'
+    +'</div>';
+  el.addEventListener('click', async e=>{
+    if(e.target===el || e.target.hasAttribute('data-close')){ el.remove(); return; }
+    const c=e.target.closest('[data-copy]'); if(c){ const ok=await copyText(c.dataset.copy==='note'?note:text, c.dataset.copy==='note'?'Note copied':'Summary copied'); if(!ok){ const r=document.createRange(); r.selectNodeContents(c.dataset.copy==='note'?el.querySelector('#notetext'):el.querySelector('pre')); const sel=getSelection(); sel.removeAllRanges(); sel.addRange(r); flash('Selected. Copy it by hand'); } return; }
+    if(e.target.closest('[data-share]')){ try{ await navigator.share({text}); }catch(err){} return; }
+  });
   document.body.appendChild(el);
 }
 
