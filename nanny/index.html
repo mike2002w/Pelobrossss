@@ -163,7 +163,7 @@ h2.sec{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--
 .toast.show{opacity:1}
 .sheet{position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;align-items:flex-end;justify-content:center;z-index:7}
 .sheet .box{background:var(--surface);border-radius:16px 16px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));width:100%;max-width:540px;display:grid;gap:12px}
-.sheet-k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between}
+.sheet-k{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;min-height:34px}
 .notebox{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:10px;padding:8px 8px 8px 12px;font-size:17px;font-weight:600;color:var(--accent)}
 .sheet pre{font-family:var(--mono);font-size:12.5px;white-space:pre-wrap;background:var(--surface-2);border-radius:10px;padding:12px;margin:0;max-height:50vh;overflow:auto}
 @media (prefers-reduced-motion: reduce){.toast{transition:none}}
@@ -361,8 +361,8 @@ function showSheet(note, text){
   const el=document.createElement('div'); el.className='sheet';
   el.innerHTML='<div class="box">'
     +'<div><div class="sheet-k">Payment note <span class="num">'+note.length+'/'+NOTE_LIMIT+'</span></div><div class="notebox"><span class="num" id="notetext">'+esc(note)+'</span><button class="btn primary small" data-copy="note">Copy</button></div></div>'
-    +'<div><div class="sheet-k">Full summary</div><pre>'+esc(text)+'</pre></div>'
-    +'<div class="actions"><button class="btn ghost small" data-copy="full">Copy summary</button>'+(navigator.share?'<button class="btn ghost small" data-share>Share…</button>':'')+'<button class="btn ghost small" data-close style="margin-left:auto">Close</button></div>'
+    +'<div><div class="sheet-k">Full summary <button class="btn primary small" data-copy="full">Copy</button></div><pre>'+esc(text)+'</pre></div>'
+    +'<div class="actions">'+(navigator.share?'<button class="btn ghost small" data-share>Share…</button>':'')+'<button class="btn ghost small" data-close style="margin-left:auto">Close</button></div>'
     +'</div>';
   el.addEventListener('click', async e=>{
     if(e.target===el || e.target.hasAttribute('data-close')){ el.remove(); return; }
