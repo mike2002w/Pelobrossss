@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Pelobrossss Quest</title>
+<meta name="theme-color" content="#bfe3ff">
+<link rel="icon" href="../icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#bfe3ff; --sky2:#e9f5ff; --grass:#7ccf5b; --grass2:#5fb548;
+    --paper:#fff7e0; --paper2:#f7e9c4; --ink:#2b2b2b; --mut:#6d6455; --line:#d8c48f;
+    --gold:#f2b632; --hot:#ff6b6b; --hot2:#ff9f1c; --green:#2e9e4f; --blue:#2f6fed; --purple:#7f77dd; --red:#d9382f;
+    --grad:linear-gradient(90deg,#ff6b6b,#ff9f1c);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent}
+  html,body{margin:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); -webkit-font-smoothing:antialiased;
+    background:linear-gradient(180deg,var(--sky) 0,var(--sky2) 260px,var(--grass) 260px,var(--grass2) 100%);
+    background-attachment:fixed; min-height:100vh;
+    padding-bottom:calc(30px + env(safe-area-inset-bottom));
+  }
+  .px{font-family:'Press Start 2P',ui-monospace,Menlo,monospace; letter-spacing:.3px; line-height:1.6}
+  .app{max-width:560px; margin:0 auto; padding:12px 12px 0}
+  .top{display:flex; align-items:center; justify-content:space-between; padding:calc(10px + env(safe-area-inset-top)) 2px 10px}
+  .brand{font-size:13px; color:var(--ink); text-shadow:2px 2px 0 #fff}
+  .brand small{display:block; font-size:8px; color:var(--mut); margin-top:6px; text-shadow:none}
+  .iconbtn{background:var(--paper); border:3px solid var(--ink); border-radius:6px; box-shadow:3px 3px 0 rgba(0,0,0,.25); padding:6px 10px; font-size:14px; cursor:pointer; font-family:inherit}
+  .iconbtn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 rgba(0,0,0,.25)}
+  #scene{display:block; width:100%; height:auto; image-rendering:pixelated; margin:0 0 -6px}
+
+  .panel{background:var(--paper); border:3px solid var(--ink); border-radius:6px; box-shadow:4px 4px 0 rgba(0,0,0,.28); padding:14px; margin:0 0 16px; position:relative}
+  .panel h2{margin:0 0 10px; font-size:11px; color:var(--ink)}
+  .panel h2 .tag{float:right; font-size:8px; color:var(--mut); font-family:inherit}
+  .hint{color:var(--mut); font-size:13px; margin:0 0 10px; line-height:1.45}
+  .row{display:flex; align-items:center; gap:12px} .sp{justify-content:space-between}
+  .mut{color:var(--mut)} .sm{font-size:12px} .b{font-weight:800}
+  .bar{height:16px; border:2px solid var(--ink); background:#fff; border-radius:3px; overflow:hidden; position:relative}
+  .bar>i{display:block; height:100%; background:var(--gold); transition:width .8s cubic-bezier(.2,.8,.2,1)}
+  .bar.hp>i{background:var(--red)}
+  .bar.xp>i{background:var(--grad)}
+  .bar.grn>i{background:var(--green)}
+  .bar.blu>i{background:var(--blue)}
+  .bar.pur>i{background:var(--purple)}
+  .bar .lbl{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:9px; text-shadow:0 0 2px #fff,0 0 2px #fff}
+
+  /* hero */
+  .hero{display:grid; grid-template-columns:110px 1fr; gap:12px; align-items:center}
+  .hero canvas{width:96px; height:144px; image-rendering:pixelated; display:block; margin:0 auto}
+  .hero .name{font-size:12px; margin:0 0 6px}
+  .hero .title{font-size:9px; color:var(--hot); margin:0 0 10px}
+  .lvl{display:inline-block; background:var(--ink); color:#fff; padding:6px 8px; border-radius:4px; font-size:9px; margin-right:6px}
+  .attrs{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:10px 14px; margin-top:14px}
+  .attr .k{display:flex; justify-content:space-between; font-size:8px; margin-bottom:5px}
+  .attr .k b{color:var(--mut); font-weight:400}
+  .speech{background:#fff; border:3px solid var(--ink); border-radius:8px; padding:10px 12px; margin-top:14px; font-size:14px; line-height:1.45; position:relative}
+  .speech:before{content:""; position:absolute; left:34px; top:-13px; border:6px solid transparent; border-bottom-color:var(--ink); border-top:0}
+  .speech:after{content:""; position:absolute; left:36px; top:-7px; border:4px solid transparent; border-bottom-color:#fff; border-top:0}
+  .speech .who{font-size:8px; color:var(--mut); margin-bottom:4px}
+
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px}
+  .stat{background:#fff; border:2px solid var(--ink); border-radius:4px; padding:8px 4px; text-align:center}
+  .stat .n{font-size:12px} .stat .l{font-size:7px; color:var(--mut); margin-top:6px}
+
+  /* bosses */
+  .boss{display:grid; grid-template-columns:84px 1fr; gap:10px; align-items:start; background:#fff; border:2px solid var(--ink); border-radius:6px; padding:10px; margin-bottom:10px; cursor:pointer}
+  .boss canvas{width:80px; height:80px; image-rendering:pixelated; display:block}
+  .boss .nm{font-size:10px; margin:0 0 6px}
+  .boss .kind{display:inline-block; font-size:7px; padding:4px 6px; border-radius:3px; background:var(--paper2); border:1px solid var(--line); margin-left:6px; vertical-align:middle}
+  .boss .kind.ghost{background:#ebe9ff; border-color:var(--purple)}
+  .boss .guard{font-size:13px; margin:0 0 8px}
+  .boss .slay{font-size:12px; color:var(--red); font-weight:800; margin-top:8px}
+  .attempts{display:flex; align-items:flex-end; gap:4px; height:42px; margin-top:8px; border-bottom:2px solid var(--ink); padding-bottom:2px; position:relative}
+  .attempts i{display:block; width:14px; background:var(--purple); border:1px solid var(--ink); border-bottom:0; border-radius:2px 2px 0 0}
+  .attempts i.best{background:var(--gold)}
+  .attempts i.last{background:var(--hot)}
+  .attempts .target{position:absolute; left:0; right:0; border-top:2px dashed var(--red)}
+  .attempts .target span{position:absolute; right:0; top:-14px; font-size:10px; color:var(--red); font-weight:800}
+  .boss .detail{display:none; margin-top:8px; font-size:12px; color:var(--mut); line-height:1.5}
+  .boss.open .detail{display:block}
+  .more{font-size:9px; text-align:center; padding:8px; cursor:pointer; color:var(--mut)}
+
+  /* quests */
+  .quest{display:grid; grid-template-columns:30px 1fr 64px; gap:10px; align-items:center; padding:9px 0; border-bottom:1px dashed var(--line)}
+  .quest:last-child{border-bottom:0}
+  .quest .ic{font-size:20px; text-align:center}
+  .quest .t{font-size:14px; font-weight:700} .quest .s{font-size:12px; color:var(--mut)}
+  .quest .done{color:var(--green); font-size:9px; text-align:right}
+  .quest .todo{color:var(--mut); font-size:9px; text-align:right}
+
+  /* trophies + log */
+  .trophy{display:flex; gap:10px; align-items:center; padding:8px 0; border-bottom:1px dashed var(--line); font-size:13px}
+  .trophy:last-child{border-bottom:0}
+  .trophy .ic{font-size:20px}
+  .trophy .kill{font-size:7px; background:var(--red); color:#fff; padding:3px 5px; border-radius:3px; margin-left:6px; vertical-align:middle}
+  .chap{border:2px solid var(--ink); border-radius:6px; background:#fff; padding:10px 12px; margin-bottom:10px}
+  .chap .h{font-size:9px; margin-bottom:6px}
+  .chap .h span{color:var(--mut); font-family:inherit; font-size:8px; float:right}
+  .chap .badges{display:flex; flex-wrap:wrap; gap:6px; margin:6px 0}
+  .badge{font-size:11px; background:var(--paper2); border:1px solid var(--line); border-radius:999px; padding:3px 8px}
+  .chap .note{font-size:12px; color:var(--mut); margin-top:6px; line-height:1.45}
+  .loot{display:flex; justify-content:space-between; font-size:13px; padding:7px 0; border-bottom:1px dashed var(--line)}
+  .loot:last-child{border-bottom:0}
+  .loot .xp{color:var(--hot); font-weight:800}
+  details summary{cursor:pointer; font-size:9px; color:var(--mut); font-family:'Press Start 2P',monospace; padding:4px 0}
+  details .body{font-size:13px; line-height:1.55; margin-top:8px}
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px; background:var(--grad); color:#1a1a2e; border:3px solid var(--ink); border-radius:6px; box-shadow:3px 3px 0 rgba(0,0,0,.25); padding:11px 14px; font-weight:800; font-size:14px; cursor:pointer; width:100%; font-family:inherit; text-decoration:none}
+  .btn.ghost{background:#fff; color:var(--ink)}
+  .btn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 rgba(0,0,0,.25)}
+  .foot{text-align:center; font-size:11px; color:#1f3d1a; padding:8px 0 20px; line-height:1.6}
+  .foot a{color:#1f3d1a}
+
+  /* splash */
+  #splash{position:fixed; inset:0; background:rgba(20,25,40,.82); display:none; align-items:center; justify-content:center; z-index:50; padding:20px}
+  #splash.show{display:flex}
+  #splash .box{background:var(--paper); border:4px solid var(--ink); border-radius:8px; box-shadow:6px 6px 0 rgba(0,0,0,.4); padding:22px 18px; text-align:center; max-width:360px; width:100%; animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+  #splash .big{font-size:16px; color:var(--hot); margin-bottom:12px}
+  #splash .sub{font-size:14px; line-height:1.5; margin-bottom:16px}
+  @keyframes pop{from{transform:scale(.6); opacity:0} to{transform:scale(1); opacity:1}}
+  .bounce{animation:bob 1.6s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)}}
+  .empty{font-size:13px; color:var(--mut); padding:6px 0}
+  .err{background:#fff0f0; border:3px solid var(--red); border-radius:6px; padding:12px; font-size:13px; margin-bottom:14px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand px">PELOBROSSSS QUEST<small id="through">loading the save file...</small></div>
+    <button class="iconbtn" id="soundBtn" title="Sound">🔊</button>
+  </div>
+  <canvas id="scene" width="280" height="60" aria-hidden="true"></canvas>
+
+  <div id="err"></div>
+
+  <div class="panel" id="heroPanel">
+    <div class="hero">
+      <div><canvas id="heroCv" width="16" height="24" class="bounce"></canvas></div>
+      <div>
+        <div class="name px" id="heroName">MIKE</div>
+        <div class="title px" id="heroTitle"></div>
+        <div class="row sp" style="margin-bottom:6px"><span class="lvl px" id="lvlBadge">LV 1</span><span class="sm mut" id="xpText"></span></div>
+        <div class="bar xp"><i id="xpBar" style="width:0%"></i></div>
+        <div class="sm mut" style="margin-top:6px" id="nextText"></div>
+      </div>
+    </div>
+    <div class="attrs" id="attrs"></div>
+    <div class="stats" id="stats"></div>
+    <div class="speech"><div class="who px">COACH PELOBROSSSS, QUEST GIVER</div><div id="coach"></div></div>
+  </div>
+
+  <div class="panel" id="lootPanel" style="display:none">
+    <h2 class="px">UNCLAIMED LOOT</h2>
+    <div id="loot"></div>
+  </div>
+
+  <div class="panel">
+    <h2 class="px">BOSSES <span class="tag" id="bossTag"></span></h2>
+    <p class="hint">A boss spawns when a lift camps at the same top weight for 3 sessions, or when your best has gone unbeaten for 3 or more sessions. Log the slay weight and it dies.</p>
+    <div id="bosses"></div>
+  </div>
+
+  <div class="panel">
+    <h2 class="px">WEEKLY QUESTS <span class="tag" id="questWeek"></span></h2>
+    <div id="quests"></div>
+  </div>
+
+  <div class="panel">
+    <h2 class="px">TROPHY ROOM <span class="tag" id="trophyTag"></span></h2>
+    <div id="trophies"></div>
+  </div>
+
+  <div class="panel">
+    <h2 class="px">RECENT LOOT</h2>
+    <div id="recent"></div>
+    <details style="margin-top:10px"><summary>HOW XP WORKS</summary>
+      <div class="body">
+        Every logged session pays <b>100 XP</b>. Each working set adds <b>8</b>. Every 100 lb moved (weight times reps, kg converted) adds <b>1</b>. Cardio pays <b>3 per minute</b> and <b>20 per mile</b>. A new top working weight on any lift is a <b>PR: 200 XP</b>. Assist machines count sets but not tonnage, since a lower number is the harder set. Bodyweight work counts sets only. Warm-ups are free.
+      </div>
+    </details>
+  </div>
+
+  <div class="panel">
+    <h2 class="px">ADVENTURE LOG</h2>
+    <div id="log"></div>
+  </div>
+
+  <button class="btn" id="copyBtn">📋 Copy quest report</button>
+  <div style="height:10px"></div>
+  <a class="btn ghost" href="../">🏋️ Back to the tracker</a>
+  <div class="foot" id="foot"></div>
+</div>
+
+<div id="splash"><div class="box"><div class="big px" id="spBig">LEVEL UP!</div><div class="sub" id="spSub"></div><button class="btn" id="spOk">LET'S GO 💪</button></div></div>
+
+<script>
+/* ============================================================
+   DATA
+   workouts.json (one level up) is the single source of truth.
+   This page never writes anything; it only reads and scores.
+   ============================================================ */
+const LBK = 2.20462;
+const TITLES = [[1,'Newbie'],[3,'Gym Goer'],[6,'Regular'],[10,'Gym Rat'],[14,'Beast'],[18,'Machine'],[22,'Certified Machine'],[26,'Legend'],[30,'Myth'],[35,'Final Boss']];
+const MONSTERS = {
+  goblin:{body:'#5fbf4a', dark:'#2f7a25', eye:'#fff', pupil:'#2b2b2b', horn:false, legs:true},
+  ogre:{body:'#b07a52', dark:'#7a4f2f', eye:'#fff', pupil:'#2b2b2b', horn:true, legs:true},
+  dragon:{body:'#e0483f', dark:'#8e2620', eye:'#ffe066', pupil:'#2b2b2b', horn:true, legs:true},
+  golem:{body:'#9a9a9a', dark:'#5c5c5c', eye:'#8fe3ff', pupil:'#2b2b2b', horn:false, legs:true},
+  wraith:{body:'#9d95f0', dark:'#5a4fc2', eye:'#fff', pupil:'#2b2b2b', horn:false, legs:false}
+};
+const BOSS_NAMES = {
+  'Bicep Curls':'Curl Goblin', 'Hammer Curls':'Hammer Hobgoblin', 'Tricep Pulldown':'Tricep Troll', 'Tricep Ext Overhead':'Overhead Troll',
+  'Single Arm Lat Pulldown':'The Lat Lord', 'Lat Pulldown':'Lat Lord Prime', 'Shrugs':'Shrug Ogre', 'Smith Rows':'Row Wraith', 'DB Rows':'Row Goblin',
+  'Chest-Supported DB Rows':'Bench Row Brute', 'Face Pulls':'Face Pull Phantom',
+  'Shoulder Press':'Overhead Ogre', 'Bench Press':'Bench Dragon', 'Incline Bench':'Incline Drake', 'Lateral Raises':'Lateral Lizard', 'Incline Flyes':'Fly Fiend',
+  'RDLs':'Deadlift Drake', 'Squats':'Squat Golem', 'Goblet Squats':'Goblet Golem', 'Calf Raises':'Calf Crab', 'Lunges':'Lunge Lurker'
+};
+function monsterType(name){
+  if(isLegs(name)) return 'golem';
+  if(/press|bench|flye|raise/i.test(name)) return 'dragon';
+  if(/row|pulldown|shrug|pull/i.test(name)) return 'ogre';
+  return 'goblin';
+}
+function isLegs(name){ return /squat|rdl|deadlift|lunge|calf|hip |hip$|leg|glute|hamstring/i.test(name); }
+function fmtDate(d){ return new Date(d+'T00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+function fmtDateY(d){ return new Date(d+'T00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}); }
+function unit(u){ return u==='kg'?'kg':(u==='bw'?'':'lb'); }
+function n(x){ return Math.round(x).toLocaleString('en-US'); }
+function daysBetween(a,b){ return Math.round((new Date(b+'T00:00')-new Date(a+'T00:00'))/86400000); }
+function mondayOf(d){ const dt=new Date(d+'T00:00'); const day=(dt.getDay()+6)%7; dt.setDate(dt.getDate()-day); return dt.toISOString().slice(0,10); }
+function addDays(d,k){ const dt=new Date(d+'T00:00'); dt.setDate(dt.getDate()+k); return dt.toISOString().slice(0,10); }
+function levelFor(xp){ let L=1; while(xpFor(L+1)<=xp) L++; return L; }
+function xpFor(L){ return Math.round(300*Math.pow(L-1,1.5)); }
+function titleFor(L){ let t=TITLES[0][1]; for(const [lv,name] of TITLES){ if(L>=lv) t=name; } return t; }
+function attrLevel(xp){ const L=Math.floor(Math.sqrt(Math.max(0,xp)/60))+1; const cur=60*(L-1)*(L-1), next=60*L*L; return {L, pct:Math.min(100,Math.round((xp-cur)/(next-cur)*100)), next:next-xp}; }
+
+function analyze(data){
+  const ws=[...(data.workouts||[])].sort((a,b)=>a.date.localeCompare(b.date));
+  const extra=data.extraCardio||[];
+  const ex={}; const sessions=[]; const prs=[];
+  const T={xp:0,sessions:0,sets:0,tonnage:0,upperTon:0,legTon:0,cardioMin:0,miles:0,cal:0,prs:0,upperPRs:0,legPRs:0};
+  const sessionDates=new Set(ws.map(w=>w.date));
+  for(const w of ws){
+    const s={date:w.date,type:w.type,label:w.typeLabel||w.type,xp:0,sets:0,ton:0,cmin:0,mi:0,prs:[],exNames:[],
+             notes:[(w.cardio&&w.cardio.notes)||'', w.notes||''].filter(Boolean).join(' · ')};
+    for(const e of (w.exercises||[])){
+      const working=(e.sets||[]).filter(x=>!x.warmup && x.weight!=null);
+      s.exNames.push(e.name);
+      s.sets+=working.length;
+      const assist=!!e.assist || /assisted/i.test(e.name);
+      const legs=isLegs(e.name)||w.type==='Legs';
+      let ton=0;
+      if(!assist && e.unit!=='bw'){ for(const st of working){ ton+=(e.unit==='kg'?st.weight*LBK:st.weight)*(st.reps||0); } }
+      s.ton+=ton; if(legs) T.legTon+=ton; else T.upperTon+=ton;
+      if(working.length){
+        const top=assist?Math.min(...working.map(x=>x.weight)):Math.max(...working.map(x=>x.weight));
+        const k=e.name+'|'+(e.equipment||'')+'|'+(e.unit||'');
+        const r=ex[k]||(ex[k]={key:k,name:e.name,equip:e.equipment||'',unit:e.unit||'lb',assist,legs,hist:[],best:null,bestDate:null,stood:0});
+        const better=r.best==null||(assist?top<r.best:top>r.best);
+        if(better&&r.best!=null){ const pr={date:w.date,name:e.name,equip:r.equip,unit:r.unit,from:r.best,to:top,stood:r.stood,legs}; prs.push(pr); s.prs.push(pr); if(legs) T.legPRs++; else T.upperPRs++; }
+        if(better){ r.best=top; r.bestDate=w.date; r.stood=0; } else r.stood++;
+        r.hist.push({date:w.date,top,sets:working.length});
+      }
+    }
+    const c=w.cardio; if(c){ s.cmin+=c.min||0; s.mi+=c.mi||0; T.cal+=c.cal||0; }
+    for(const ec of extra.filter(x=>x.date===w.date)){ s.cmin+=ec.min||0; s.mi+=ec.mi||0; T.cal+=ec.cal||0; }
+    s.xp=100 + s.sets*8 + Math.round(s.ton/100) + Math.round(s.cmin*3) + Math.round(s.mi*20) + s.prs.length*200;
+    sessions.push(s);
+    T.sessions++; T.sets+=s.sets; T.tonnage+=s.ton; T.cardioMin+=s.cmin; T.miles+=s.mi; T.prs+=s.prs.length; T.xp+=s.xp;
+  }
+  for(const ec of extra){ if(!sessionDates.has(ec.date)){ T.xp+=Math.round((ec.min||0)*3+(ec.mi||0)*20); T.cardioMin+=ec.min||0; T.miles+=ec.mi||0; T.cal+=ec.cal||0; } }
+
+  // comebacks: a session after 10+ days away
+  let comebacks=[]; for(let i=1;i<sessions.length;i++){ const g=daysBetween(sessions[i-1].date,sessions[i].date); if(g>=10) comebacks.push({date:sessions[i].date,gap:g}); }
+  // weekly streak, counted back from the latest data week (partial week needs 1 session, full weeks need 2)
+  const last=sessions[sessions.length-1]; const weekOf=last?mondayOf(last.date):null;
+  const perWeek={}; for(const s of sessions){ const m=mondayOf(s.date); perWeek[m]=(perWeek[m]||0)+1; }
+  let streak=0; if(weekOf){ let m=weekOf; if((perWeek[m]||0)>=1){ streak=1; m=addDays(m,-7); while((perWeek[m]||0)>=2){ streak++; m=addDays(m,-7); } } }
+  const attrs={
+    STR: T.upperTon/40 + T.upperPRs*150,
+    LEGS: T.legTon/40 + T.legPRs*150,
+    END: T.cardioMin*3 + T.miles*25,
+    GRIT: T.sessions*25 + streak*80 + comebacks.length*300
+  };
+  return {sessions,ex,prs,T,comebacks,streak,weekOf,perWeek,attrs,last};
+}
+
+/* A boss needs a lift you still do (logged in the last 60 days, 5+ sessions, not bodyweight).
+   Camper: the last session hit your best and at least 3 of the last 5 did too. Slay = best + one plate.
+   Ghost of PR past: your best has stood 3+ sessions and the last session was below it. Slay = reclaim the best. */
+function findBosses(ex, through){
+  const out=[]; const cutoff=addDays(through,-60);
+  for(const k in ex){
+    const r=ex[k]; if(r.hist.length<5 || r.unit==='bw' || !r.best) continue;
+    if(r.hist[r.hist.length-1].date<cutoff) continue;
+    const tops=r.hist.map(h=>h.top); const nn=tops.length; const last=tops[nn-1];
+    const atBest=t=>t===r.best;
+    let campLen=0; for(let i=nn-1;i>=0&&atBest(tops[i]);i--) campLen++;
+    const last5=tops.slice(-5).filter(atBest).length;
+    const inc=r.unit==='kg'?2.5:5;
+    let kind=null, target=null;
+    if(atBest(last) && (campLen>=3 || last5>=3)){ kind='camper'; target=r.assist?r.best-inc:r.best+inc; }
+    else if(!atBest(last) && r.stood>=3){ kind='ghost'; target=r.best; }
+    else if(atBest(last) && r.stood>=8){ kind='camper'; target=r.assist?r.best-inc:r.best+inc; }
+    if(!kind) continue;
+    out.push({...r,kind,target,inc,last,campLen,type:monsterType(r.name),
+      bossName:BOSS_NAMES[r.name]||(r.name+' Gremlin'),
+      menace:r.hist.length+r.stood*2+campLen*3});
+  }
+  out.sort((a,b)=>b.menace-a.menace);
+  const seen={}; for(const b of out){ if(seen[b.bossName]) b.bossName+=' ('+(b.equip||'BW')+')'; seen[b.bossName]=true; }
+  return out.slice(0,10);
+}
+
+/* ============================================================
+   SPRITES (string maps, one char per pixel)
+   ============================================================ */
+const HERO=[
+'......kkkk......','.....khhhhk.....','....khhhhhhk....','....khhhhhhk....','....kssssssk....','....ksessesk....','....kssssssk....','.....kssssk.....','......kssk......',
+'....kkkttkkk....','..kssktttttkssk.','.ksssktttttksssk','.kssk.ktttk.kssk','..kk..ktttk..kk.','......kpppk.....','......kpppk.....','.....kpp.ppk....','.....kss.ssk....','.....kss.ssk....','.....kww.wwk....','....kbbk.kbbk...','....kkkk.kkkk...'];
+const HERO_COL={k:'#2b2b2b',h:'#3b2a1a',s:'#f1c27d',e:'#2b2b2b',t:'#ff6b6b',p:'#2f6fed',w:'#ffffff',b:'#444444',r:'#e03131',g:'#f2b632'};
+const MON=[
+'....HH....HH....','...KHHK..KHHK...','..KBBBBKKBBBBK..','.KBBBBBBBBBBBBK.','.KBBEEBBBBEEBBK.','.KBBEPBBBBEPBBK.','.KBBBBBBBBBBBBK.','.KBMMMMMMMMMMBK.','.KBMWMWMWMWMWBK.','.KBBBBBBBBBBBBK.',
+'..KBBBBBBBBBBK..','..KBBBKKKKBBBK..','...KBBK..KBBK...','...KBBK..KBBK...','..KKKKK..KKKKK..','................'];
+const MON_WISP=['..KBBBBBBBBBBK..','...KBK.KBK.KBK..','....K...K...K...','................'];
+
+function px(ctx,x,y,c){ ctx.fillStyle=c; ctx.fillRect(x,y,1,1); }
+function drawHero(cv,level){
+  const ctx=cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height);
+  const oy=2;
+  if(level>=20){ ctx.fillStyle='#7f77dd'; ctx.fillRect(3,9+oy,10,9); ctx.fillStyle='#5a4fc2'; ctx.fillRect(3,17+oy,10,1); }
+  HERO.forEach((row,y)=>{ for(let x=0;x<row.length;x++){ let ch=row[x]; if(ch==='.') continue;
+    if(level>=5 && y===3 && ch==='h') ch='r';
+    if(level>=15 && y===14 && ch==='p') ch='g';
+    px(ctx,x,y+oy,HERO_COL[ch]); } });
+  if(level>=10){ ctx.fillStyle='#8a8a8a'; ctx.fillRect(0,11+oy,2,4); ctx.fillRect(14,11+oy,2,4); ctx.fillStyle='#2b2b2b'; ctx.fillRect(0,12+oy,2,1); ctx.fillRect(14,12+oy,2,1); ctx.fillRect(0,14+oy,2,1); ctx.fillRect(14,14+oy,2,1); }
+  if(level>=26){ const crown=['.....g.gg.g.....','.....gggggg.....']; crown.forEach((row,y)=>{ for(let x=0;x<row.length;x++){ if(row[x]==='g') px(ctx,x,y,'#f2b632'); } }); }
+}
+function drawMonster(cv,type,ghost){
+  const m=MONSTERS[type]||MONSTERS.goblin; const ctx=cv.getContext('2d'); ctx.clearRect(0,0,16,16);
+  ctx.globalAlpha=ghost?0.7:1;
+  const rows=(m.legs&&!ghost)?MON:MON.slice(0,12).concat(MON_WISP);
+  rows.forEach((row,y)=>{ for(let x=0;x<16;x++){ const ch=row[x]; if(ch==='.') continue;
+    let c=null;
+    if(ch==='K') c='#2b2b2b'; else if(ch==='B') c=m.body; else if(ch==='E') c=m.eye; else if(ch==='P') c=m.pupil;
+    else if(ch==='M') c=m.dark; else if(ch==='W') c='#ffffff'; else if(ch==='H'){ if(!m.horn) continue; c=y===0?'#fff1c1':m.dark; }
+    if(c) px(ctx,x,y,c); } });
+}
+function drawScene(){
+  const cv=document.getElementById('scene'); const ctx=cv.getContext('2d'); ctx.clearRect(0,0,cv.width,cv.height);
+  ctx.fillStyle='#ffe066'; ctx.fillRect(236,8,14,14); ctx.fillStyle='#ffd23f'; ctx.fillRect(238,10,10,10);
+  const cloud=(x,y,w)=>{ ctx.fillStyle='#ffffff'; ctx.fillRect(x,y+3,w,5); ctx.fillRect(x+3,y,w-8,4); ctx.fillRect(x+w-9,y+1,5,3); };
+  cloud(18,10,40); cloud(96,22,52); cloud(180,6,34);
+  ctx.fillStyle='#2b2b2b'; ctx.fillRect(20,44,60,3); ctx.fillStyle='#ff6b6b'; ctx.fillRect(14,40,8,11); ctx.fillRect(78,40,8,11); ctx.fillStyle='#2b2b2b'; ctx.fillRect(11,42,3,7); ctx.fillRect(86,42,3,7);
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+let SOUND=true; try{ SOUND=localStorage.getItem('pq_sound')!=='off'; }catch(e){}
+function tone(seq){ if(!SOUND) return; try{ const a=new (window.AudioContext||window.webkitAudioContext)(); seq.forEach(([f,t,d])=>{ const o=a.createOscillator(),g=a.createGain(); o.type='square'; o.frequency.value=f; g.gain.value=0.05; o.connect(g); g.connect(a.destination); o.start(a.currentTime+t); o.stop(a.currentTime+t+d); }); }catch(e){} }
+const JINGLE=[[523,0,.12],[659,.12,.12],[784,.24,.12],[1047,.36,.3]];
+const BLIP=[[440,0,.06],[660,.06,.08]];
+
+function coachLine(A,bosses,quests){
+  const L=levelFor(A.T.xp); const t=titleFor(L);
+  const off=A.last?daysBetween(A.last.date,new Date().toISOString().slice(0,10)):0;
+  const picks=[];
+  const b0=bosses[0]; const verb=b0&&b0.kind==='ghost'?'reclaim':'log';
+  if(bosses.length>=3) picks.push(`Level ${L}. ${t.toUpperCase()}. But ${bosses.length} bosses are camping in your gym, bro. ${b0.bossName} first: ${verb} ${b0.target} ${unit(b0.unit)} on ${b0.name} and watch it crumble 😤🗡️`);
+  if(bosses.length>0 && bosses.length<3) picks.push(`${b0.bossName} has been guarding ${b0.name} long enough. ${verb} ${b0.target} ${unit(b0.unit)} and it is over 🗡️`);
+  if(A.streak>=4) picks.push(`${A.streak} weeks in a row. The chain is the real boss and you are winning 🔥`);
+  const open=quests.filter(q=>!q.done); if(open.length) picks.push(`Weekly quest board: ${open.length} left. ${open[0].t} is the quick win 📜`);
+  picks.push(`${n(A.T.tonnage)} lb moved this year. That is ${Math.round(A.T.tonnage/4000)} cars, bro. CERTIFIED 🚗💪`);
+  return picks[0];
+}
+
+function render(A,pending){
+  const L=levelFor(A.T.xp), cur=xpFor(L), next=xpFor(L+1);
+  const pct=Math.min(100,Math.round((A.T.xp-cur)/(next-cur)*100));
+  document.getElementById('through').textContent='save file through '+fmtDateY(A.last?A.last.date:'2026-01-01');
+  document.getElementById('heroTitle').textContent=titleFor(L).toUpperCase();
+  document.getElementById('lvlBadge').textContent='LV '+L;
+  document.getElementById('xpText').textContent=n(A.T.xp)+' XP';
+  document.getElementById('nextText').textContent=n(next-A.T.xp)+' XP to level '+(L+1)+' ('+titleFor(L+1)+')';
+  setTimeout(()=>{ document.getElementById('xpBar').style.width=pct+'%'; },80);
+  drawHero(document.getElementById('heroCv'),L);
+
+  const AT=[['STR','Upper tonnage + upper PRs','xp'],['LEGS','Leg tonnage + leg PRs','grn'],['END','Cardio minutes + miles','blu'],['GRIT','Sessions, streaks, comebacks','pur']];
+  document.getElementById('attrs').innerHTML=AT.map(([k,d,cls])=>{ const a=attrLevel(A.attrs[k]); return `<div class="attr" title="${d}"><div class="k px"><span>${k} ${a.L}</span><b>${Math.ceil(a.next)} to next</b></div><div class="bar ${cls}"><i style="width:${a.pct}%"></i></div></div>`; }).join('');
+  const bossesAll=findBosses(A.ex, A.last?A.last.date:'2026-01-01');
+  document.getElementById('stats').innerHTML=[[A.T.sessions,'SESSIONS'],[A.T.prs,'PRS'],[n(A.T.tonnage/2000)+'t','MOVED'],[A.streak+'w','STREAK']].map(([v,l])=>`<div class="stat"><div class="n px">${v}</div><div class="l px">${l}</div></div>`).join('');
+
+  // unclaimed loot (staged, not yet approved)
+  const pw=(pending&&pending.workouts)||[];
+  if(pw.length){ const est=pw.length*100+pw.reduce((a,w)=>a+(w.exercises||[]).reduce((b,e)=>b+(e.sets||[]).filter(s=>!s.warmup).length,0),0)*8;
+    document.getElementById('lootPanel').style.display='block';
+    document.getElementById('loot').innerHTML=`<div class="hint">${pw.length} session${pw.length>1?'s':''} staged by the Sunday sync and not yet approved (${pw.map(w=>fmtDate(w.date)).join(', ')}). Approve them into workouts.json to bank roughly <b>${n(est)}+ XP</b>.</div>`; }
+
+  // bosses
+  const show=bossesAll.slice(0,4), rest=bossesAll.slice(4);
+  document.getElementById('bossTag').textContent=bossesAll.length+' ACTIVE';
+  const bossHtml=b=>{ const u=unit(b.unit); const hist=b.hist.slice(-8); const lo=Math.min(...hist.map(h=>h.top),b.target,b.best), hi=Math.max(...hist.map(h=>h.top),b.target,b.best);
+    const H=x=>{ const span=(hi-lo)||1; return 6+Math.round((b.assist?(hi-x):(x-lo))/span*30); };
+    const bars=hist.map((h,i)=>`<i class="${h.top===b.best?'best':''} ${i===hist.length-1?'last':''}" style="height:${H(h.top)}px" title="${fmtDate(h.date)}: ${h.top} ${u}"></i>`).join('');
+    const tgt=`<div class="target" style="bottom:${H(b.target)}px"><span>${b.target} ${u}</span></div>`;
+    const since=b.kind==='ghost'?`Best ${b.best} ${u} on ${fmtDate(b.bestDate)}, unbeaten for ${b.stood} sessions. Last time: ${b.last} ${u}.`:`Camping at ${b.best} ${u}: ${b.campLen} sessions in a row at the same top weight.`;
+    return `<div class="boss" data-k="${b.key}"><canvas width="16" height="16" data-type="${b.type}" data-ghost="${b.kind==='ghost'?1:''}"></canvas><div>
+      <div class="nm px">${b.bossName}<span class="kind px ${b.kind}">${b.kind==='ghost'?'GHOST OF PR PAST':'CAMPER'}</span></div>
+      <div class="guard">Guards <b>${b.name}</b> <span class="mut sm">(${b.equip||'BW'})</span></div>
+      <div class="attempts">${tgt}${bars}</div>
+      <div class="slay">⚔️ ${b.kind==='ghost'?'Reclaim it':'Slay it'}: log ${b.target} ${u}${b.assist?' assist or less':''}</div>
+      <div class="detail">${since}<br>${b.hist.length} sessions logged on this lift. Gold bar = your best, red bar = last session, dashed line = the slay weight.</div>
+    </div></div>`; };
+  document.getElementById('bosses').innerHTML=(bossesAll.length?show.map(bossHtml).join(''):'<div class="empty">No bosses. Every lift is moving. Suspicious, but okay 👀</div>')+(rest.length?`<div class="more px" id="moreBoss">+ ${rest.length} MORE LURKING</div><div id="restBoss" style="display:none">${rest.map(bossHtml).join('')}</div>`:'');
+  document.querySelectorAll('.boss canvas').forEach(c=>drawMonster(c,c.dataset.type,!!c.dataset.ghost));
+  document.querySelectorAll('.boss').forEach(el=>el.addEventListener('click',()=>{ el.classList.toggle('open'); tone(BLIP); }));
+  const mb=document.getElementById('moreBoss'); if(mb) mb.onclick=()=>{ document.getElementById('restBoss').style.display='block'; mb.style.display='none'; };
+
+  // weekly quests, scored on the latest week in the save file
+  const wk=A.weekOf; const wkEnd=addDays(wk,6);
+  const inWeek=A.sessions.filter(s=>s.date>=wk&&s.date<=wkEnd);
+  const bossNames=new Set(bossesAll.map(b=>b.name));
+  const quests=[
+    {ic:'🏋️',t:'Show up 3 times',v:inWeek.length,g:3,u:'sessions'},
+    {ic:'🦵',t:'One leg day',v:inWeek.filter(s=>s.type==='Legs'||/legs|lower/i.test(s.label)).length,g:1,u:'leg day'},
+    {ic:'🏃',t:'60 cardio minutes',v:Math.round(inWeek.reduce((a,s)=>a+s.cmin,0)),g:60,u:'min'},
+    {ic:'🗡️',t:'Attack a boss',v:inWeek.filter(s=>s.exNames.some(x=>bossNames.has(x))).length,g:1,u:'attempt'},
+    {ic:'🏆',t:'Set a PR (bonus)',v:inWeek.reduce((a,s)=>a+s.prs.length,0),g:1,u:'PR'}
+  ].map(q=>({...q,done:q.v>=q.g}));
+  document.getElementById('questWeek').textContent='WEEK OF '+fmtDate(wk).toUpperCase();
+  document.getElementById('quests').innerHTML=quests.map(q=>`<div class="quest"><div class="ic">${q.ic}</div><div><div class="t">${q.t}</div><div class="s">${Math.min(q.v,q.g)} / ${q.g} ${q.u}${q.done?'':' so far'}</div></div><div class="${q.done?'done':'todo'} px">${q.done?'DONE ✓':'OPEN'}</div></div>`).join('');
+
+  // trophies
+  const kills=A.prs.filter(p=>p.stood>=3).length;
+  document.getElementById('trophyTag').textContent=A.prs.length+' PRS · '+kills+' KILLS';
+  const recentPRs=A.prs.slice(-8).reverse();
+  document.getElementById('trophies').innerHTML=recentPRs.length?recentPRs.map(p=>`<div class="trophy"><div class="ic">${p.stood>=3?'💀':'🏆'}</div><div><b>${p.name}</b> <span class="mut sm">(${p.equip||'BW'})</span> ${p.from} → <b>${p.to} ${unit(p.unit)}</b>${p.stood>=3?`<span class="kill px">BOSS SLAIN</span>`:''}<div class="sm mut">${fmtDate(p.date)}${p.stood>=3?` · stood ${p.stood} sessions`:''}</div></div></div>`).join(''):'<div class="empty">No PRs yet.</div>';
+
+  // recent loot
+  document.getElementById('recent').innerHTML=A.sessions.slice(-6).reverse().map(s=>`<div class="loot"><span><b>${fmtDate(s.date)}</b> <span class="mut">${s.label}</span>${s.prs.length?' 🏆':''}</span><span class="xp">+${n(s.xp)} XP</span></div>`).join('');
+
+  // adventure log: one chapter per month
+  const months={}; for(const s of A.sessions){ const m=s.date.slice(0,7); (months[m]=months[m]||[]).push(s); }
+  const keys=Object.keys(months).sort().reverse();
+  document.getElementById('log').innerHTML=keys.map((m,i)=>{ const ss=months[m]; const prsN=ss.reduce((a,s)=>a+s.prs.length,0); const cmin=Math.round(ss.reduce((a,s)=>a+s.cmin,0)); const xp=ss.reduce((a,s)=>a+s.xp,0);
+    const notes=ss.map(s=>s.notes).filter(t=>/injur|pain|knee|shoulder|comeback|back after|sick|hotel|travel|cruise|conference|first/i.test(t));
+    const cb=A.comebacks.filter(c=>c.date.startsWith(m));
+    let sub='';
+    if(cb.length) sub='THE RETURN'; else if(prsN>=6) sub='PR SEASON'; else if(notes.some(t=>/hotel|travel|cruise|conference/i.test(t))) sub='ROAD TRIP'; else if(notes.some(t=>/injur|pain|sick/i.test(t))) sub='WOUNDED'; else if(ss.length>=12) sub='GRIND MODE'; else sub='STEADY';
+    const title=new Date(m+'-01T00:00').toLocaleDateString('en-US',{month:'long',year:'numeric'});
+    return `<div class="chap"><div class="h px">CH.${keys.length-i} ${title.toUpperCase()}<span>${sub}</span></div><div class="badges"><span class="badge">${ss.length} sessions</span><span class="badge">${prsN} PRs</span><span class="badge">${cmin} cardio min</span><span class="badge">+${n(xp)} XP</span>${cb.map(c=>`<span class="badge">comeback after ${c.gap} days</span>`).join('')}</div>${notes.slice(0,2).map(t=>`<div class="note">"${t.length>140?t.slice(0,140)+'...':t}"</div>`).join('')}</div>`; }).join('');
+
+  document.getElementById('coach').textContent=coachLine(A,bossesAll,quests);
+  document.getElementById('foot').innerHTML=`Scored from <b>workouts.json</b> (${A.T.sessions} sessions, ${A.T.sets} working sets, ${n(A.T.cardioMin)} cardio min). New sessions land after the Sunday sync is approved.`;
+
+  // level-up splash when the save file leveled since last visit
+  let prev=null; try{ prev=parseInt(localStorage.getItem('pq_level')||'',10); }catch(e){}
+  if(/nosplash/.test(location.search)){ prev=L; }
+  if(!prev||isNaN(prev)){ splash('WELCOME, HERO', `Level ${L} ${titleFor(L)} with ${n(A.T.xp)} XP banked from ${A.T.sessions} sessions. ${bossesAll.length} bosses are waiting.`); }
+  else if(L>prev){ splash('LEVEL UP!', `Level ${prev} → <b>Level ${L}</b>. You are now a <b>${titleFor(L)}</b>.`); tone(JINGLE); }
+  try{ localStorage.setItem('pq_level',String(L)); }catch(e){}
+
+  document.getElementById('copyBtn').onclick=()=>{ const txt=[`PELOBROSSSS QUEST · ${fmtDateY(A.last.date)}`,`Lv ${L} ${titleFor(L)} · ${n(A.T.xp)} XP (${n(next-A.T.xp)} to Lv ${L+1})`,`STR ${attrLevel(A.attrs.STR).L} · LEGS ${attrLevel(A.attrs.LEGS).L} · END ${attrLevel(A.attrs.END).L} · GRIT ${attrLevel(A.attrs.GRIT).L}`,`Bosses: ${bossesAll.map(b=>`${b.bossName} (${b.name}: slay at ${b.target} ${unit(b.unit)})`).join('; ')||'none'}`,`Quests: ${quests.map(q=>`${q.t} ${q.done?'✓':q.v+'/'+q.g}`).join(' · ')}`].join('\n');
+    (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>{ document.getElementById('copyBtn').textContent='📋 Copied. Paste it to the coach.'; tone(BLIP); }).catch(()=>{ prompt('Copy your quest report:',txt); }); };
+}
+function splash(big,sub){ document.getElementById('spBig').textContent=big; document.getElementById('spSub').innerHTML=sub; document.getElementById('splash').classList.add('show'); }
+document.getElementById('spOk').onclick=()=>{ document.getElementById('splash').classList.remove('show'); tone(BLIP); };
+document.getElementById('soundBtn').onclick=e=>{ SOUND=!SOUND; e.target.textContent=SOUND?'🔊':'🔇'; try{ localStorage.setItem('pq_sound',SOUND?'on':'off'); }catch(x){} if(SOUND) tone(BLIP); };
+document.getElementById('soundBtn').textContent=SOUND?'🔊':'🔇';
+
+async function main(){
+  drawScene();
+  try{
+    const data=await fetch('../workouts.json',{cache:'no-store'}).then(r=>{ if(!r.ok) throw new Error('workouts.json '+r.status); return r.json(); });
+    let pending=null; try{ const r=await fetch('../pending_additions.json',{cache:'no-store'}); if(r.ok) pending=await r.json(); }catch(e){}
+    const A=analyze(data);
+    window.__quest={A,levelFor,findBosses};
+    render(A,pending);
+  }catch(e){
+    document.getElementById('err').innerHTML=`<div class="err">Could not load the save file (${e.message}). The quest reads workouts.json from the tracker; open it from the tracker's site and try again.</div>`;
+    document.getElementById('through').textContent='no save file';
+  }
+}
+main();
+</script>
+</body>
+</html>
