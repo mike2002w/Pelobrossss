@@ -1,7 +1,322 @@
 {
-  "workouts": [],
+  "workouts": [
+    {
+      "date": "2026-09-25",
+      "type": "Arms",
+      "typeLabel": "Upper + Legs",
+      "cardio": null,
+      "exercises": [
+        {
+          "name": "Bicep Curls",
+          "equipment": "DB",
+          "unit": "lb",
+          "sheetName": "Bicep Curls (DB)",
+          "sets": [
+            {
+              "weight": 15,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 25,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 25,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 25,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Goblet Squats",
+          "equipment": "DB",
+          "unit": "lb",
+          "sheetName": "Goblet Squats",
+          "sets": [
+            {
+              "weight": 15,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 25,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 25,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 25,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Smith Rows",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Smith Rows",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Tricep Pulldown",
+          "equipment": "Cable",
+          "unit": "kg",
+          "sheetName": "Tricep Pulldown",
+          "sets": [
+            {
+              "weight": 10,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 17.5,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 22.5,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 22.5,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-09-26",
+      "type": "Legs",
+      "typeLabel": "Cardio + Legs",
+      "cardio": {
+        "machine": "Run",
+        "min": 20,
+        "mi": 1.71,
+        "cal": 273,
+        "hr": null,
+        "notes": "Peloton 20 min 90s Rock Run (Jon Hosking), 11:35 pace, 5.2 mph. No HR on the console readout"
+      },
+      "exercises": [
+        {
+          "name": "Squats",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Squats",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Calf Raises",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Calf Raises (Smith)",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 15,
+              "warmup": false
+            },
+            {
+              "weight": 30,
+              "reps": 15,
+              "warmup": false
+            },
+            {
+              "weight": 30,
+              "reps": 15,
+              "warmup": false
+            },
+            {
+              "weight": 30,
+              "reps": 15,
+              "warmup": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "date": "2026-09-27",
+      "type": "Pull",
+      "typeLabel": "Pull + Legs",
+      "cardio": {
+        "machine": "Run",
+        "min": 30,
+        "mi": 1.8,
+        "cal": 306,
+        "hr": null,
+        "notes": "Peloton 30 min 2010s Run (Alex Toussaint), 12:06 pace, 5 mph. No HR on the console readout"
+      },
+      "exercises": [
+        {
+          "name": "Smith Rows",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Smith Rows",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 55,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 60,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 60,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "RDLs",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "RDLs",
+          "sets": [
+            {
+              "weight": 30,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 55,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 60,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Cable Chest Press",
+          "equipment": "Cable",
+          "unit": "kg",
+          "sheetName": "Cable Chest Press",
+          "sets": [
+            {
+              "weight": 10,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 15,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 15,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 15,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Tricep Pulldown",
+          "equipment": "Cable",
+          "unit": "kg",
+          "sheetName": "Tricep Pulldown",
+          "sets": [
+            {
+              "weight": 12.5,
+              "reps": 8,
+              "warmup": true
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "extraCardio": [],
   "flaggedForReview": [
-    "Nothing staged. On 2026-09-23 all 28 sessions (Jul 28 through Sep 22) were merged into workouts.json, which now runs through 2026-09-22. The full merged staging file, flags included, is kept as pending_additions.merged-2026-09-23.json."
+    "2026-09-27 is TODAY and looked unfinished at sync time (last message 12:09 PM ET, coach asking 'Next set?'). Tricep Pulldown has only the 12.5kg warmup so far. Re-run the sync or add the remaining sets before merging.",
+    "2026-09-27 Cable Chest Press: new exercise, coach says first time. Given new sheetName 'Cable Chest Press'. workouts.json already has 'Standing Cable Press' (Cable, 1 entry). If that is the same movement, change sheetName to 'Standing Cable Press' so the PR/Progress formulas don't split it.",
+    "2026-09-26 Calf Raises: you typed '20,30,30,30' with no reps; coach wrote 20x15 then bare 30s. Recorded all four sets at 15 reps to match your Sep 20 calf work. Change to 8 if that's wrong.",
+    "2026-09-25 Tricep Pulldown first set 10kg recorded as a working set (not warmup), matching how Sep 17 was stored. Coach recap shows '10kg' without a 'w'.",
+    "2026-09-25 Smith Rows: only 20w | 40 | 50 (one warmup, two working sets). Looks short but that's all that was logged.",
+    "Day types: Sep 25 'Upper + Legs' (curls, goblet squats, rows, triceps) typed Arms, same as Sep 17's Light Upper + Legs. Sep 26 typed Legs. Sep 27 typed Pull.",
+    "No Friday Sep 25 cardio found in the chat. Sep 23 and Sep 24 had no messages."
   ]
 }
