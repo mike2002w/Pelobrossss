@@ -69,8 +69,11 @@
 
   /* body */
   .figs{display:flex; justify-content:center; padding:6px 0 10px}
-  .figs svg{width:100%; max-width:340px; height:auto}
-  .m{fill:#454545}
+  .figs svg{width:100%; max-width:390px; height:auto}
+  .m{fill:url(#gOff); stroke:#141414; stroke-width:1.3; stroke-linejoin:round; transition:opacity .6s ease, fill .3s ease}
+  .m.on{fill:url(#gOn)}
+  .m.hot{filter:url(#glow)}
+  .figLab{fill:#6f6f6f; font-size:11px; font-weight:600; letter-spacing:1.5px; text-anchor:middle; font-family:inherit}
   .coachNote{background:var(--card2); border-radius:12px; padding:12px 14px; font-size:14px; line-height:1.5; margin-top:8px}
   .coachNote b{color:var(--acc2); font-weight:600}
   .empty{font-size:14px; color:var(--mut); padding:8px 0}
@@ -126,7 +129,7 @@
   <div class="card">
     <h2>Body activity <span class="chips" id="periodChips"><button class="chip" data-p="7">7D</button><button class="chip on" data-p="30">30D</button><button class="chip" data-p="0">ALL</button></span></h2>
     <p class="sub" id="bodySub"></p>
-    <div class="figs"><svg id="bodySvg" viewBox="0 0 250 268" xmlns="http://www.w3.org/2000/svg" aria-label="Front and back muscle map"></svg></div>
+    <div class="figs"><svg id="bodySvg" viewBox="0 0 420 444" xmlns="http://www.w3.org/2000/svg" aria-label="Front and back muscle map"></svg></div>
     <div id="muscles"></div>
   </div>
 
@@ -290,48 +293,75 @@ function findBosses(ex, through){
 }
 
 /* ============================================================
-   BODY MAP (front + back figure, muscle groups as data-m shapes)
+   BODY MAP: anatomical front + back figure. Each muscle is its own path
+   (right side authored, left side mirrored), carrying data-m (group) and
+   data-k (share of the group's intensity). Groups are lit from the log.
    ============================================================ */
+const DEFS=`<defs>
+  <linearGradient id="gBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3e3e3e"/><stop offset="1" stop-color="#2c2c2c"/></linearGradient>
+  <radialGradient id="gOff" cx="38%" cy="28%" r="85%"><stop offset="0" stop-color="#606060"/><stop offset="1" stop-color="#3d3d3d"/></radialGradient>
+  <radialGradient id="gOn" cx="38%" cy="28%" r="85%"><stop offset="0" stop-color="#c4bbff"/><stop offset="0.55" stop-color="#8273ff"/><stop offset="1" stop-color="#4f3fd6"/></radialGradient>
+  <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>`;
+const SIL=[
+  'M100 86 C118 86 140 90 152 97 C162 103 166 114 162 124 L152 134 C147 160 141 182 139 204 C138 214 141 224 146 232 C138 250 120 262 100 266 C80 262 62 250 54 232 C59 224 62 214 61 204 C59 182 53 160 48 134 L38 124 C34 114 38 103 48 97 C60 90 82 86 100 86 Z',
+  'M89 58 L111 58 L114 90 L86 90 Z'
+];
+const SIL_R=[
+  'M150 108 C160 104 172 110 174 122 L184 196 C186 208 176 216 166 212 C160 210 157 204 156 198 L146 136 C144 124 144 112 150 108 Z',
+  'M166 206 C176 202 186 208 188 220 L196 282 C197 292 190 298 184 296 C178 294 176 290 175 284 L166 224 Z',
+  'M104 262 C118 258 134 258 144 266 L142 332 C140 342 128 346 120 342 L106 338 C100 336 100 330 100 322 Z',
+  'M108 340 C118 338 134 340 138 348 L134 404 C132 412 120 414 114 410 L108 406 C104 402 104 396 104 390 Z'
+];
+const FRONT=[
+  ['traps',1,'M103 84 C118 86 136 90 150 96 C146 100 142 102 138 104 C126 100 114 94 103 90 Z'],
+  ['shoulders',1,'M144 100 C156 96 168 106 164 122 C160 134 150 136 144 130 C140 122 140 108 144 100 Z'],
+  ['chest',1,'M102 98 C120 96 138 102 146 116 C148 130 136 146 118 150 C110 152 103 150 102 146 Z'],
+  ['core',1,'M102 152 L117 152 C120 152 121 154 121 157 L121 166 C121 169 120 170 117 170 L102 170 Z'],
+  ['core',1,'M102 173 L117 173 C120 173 121 175 121 178 L121 187 C121 190 120 191 117 191 L102 191 Z'],
+  ['core',1,'M102 194 L117 194 C120 194 121 196 121 199 L121 208 C121 211 120 212 117 212 L102 212 Z'],
+  ['core',.9,'M102 215 C110 215 117 220 115 232 C113 242 104 246 102 244 Z'],
+  ['core',.7,'M120 154 C131 160 137 176 136 200 C135 210 127 215 121 215 Z'],
+  ['biceps',1,'M152 118 C162 112 172 120 174 132 L180 180 C181 190 174 196 167 194 C161 192 158 186 157 178 L152 132 Z'],
+  ['forearms',1,'M170 210 C180 206 188 214 189 226 L194 272 C194 282 188 288 182 286 C176 284 174 278 174 272 L170 230 Z'],
+  ['quads',1,'M116 266 C128 262 136 270 136 286 L134 318 C132 330 124 336 118 332 C112 328 110 318 110 306 L110 280 Z'],
+  ['quads',.85,'M138 274 C146 278 146 296 144 312 L140 332 C138 340 132 340 132 332 L136 300 Z'],
+  ['quads',.85,'M104 300 C112 296 116 310 115 322 C113 334 106 340 102 332 C100 326 100 310 104 300 Z'],
+  ['quads',.5,'M103 266 C108 264 112 272 111 286 C110 296 104 298 102 294 Z'],
+  ['calves',.6,'M110 348 C120 344 126 352 126 364 L124 398 C122 406 112 406 110 398 Z'],
+  ['calves',1,'M130 350 C138 352 140 372 136 388 C132 394 128 392 128 380 Z']
+];
+const BACK=[
+  ['traps',1,'M100 84 C124 86 148 96 154 100 L146 110 C132 128 114 146 100 158 Z'],
+  ['shoulders',1,'M144 100 C156 96 168 106 164 122 C160 134 150 136 144 130 C140 122 140 108 144 100 Z'],
+  ['back',.7,'M108 118 C120 114 134 118 140 126 C140 134 132 142 120 142 C112 142 108 136 108 128 Z'],
+  ['back',1,'M104 140 C118 140 134 146 146 156 C144 178 136 196 124 208 C116 214 106 214 103 208 Z'],
+  ['lowerback',1,'M101 180 C106 180 110 188 110 204 L110 230 C108 238 102 240 101 234 Z'],
+  ['triceps',1,'M152 118 C162 112 172 120 174 132 L180 180 C181 190 174 196 167 194 C161 192 158 186 157 178 L152 132 Z'],
+  ['forearms',1,'M170 210 C180 206 188 214 189 226 L194 272 C194 282 188 288 182 286 C176 284 174 278 174 272 L170 230 Z'],
+  ['glutes',1,'M102 226 C118 222 138 230 142 250 C142 266 128 276 114 274 C104 272 100 262 100 254 Z'],
+  ['hamstrings',1,'M110 274 C124 270 138 276 138 294 L136 326 C134 336 122 338 116 332 C110 324 108 300 110 274 Z'],
+  ['calves',1,'M110 344 C122 338 136 346 136 364 C136 382 126 394 118 392 C110 390 108 376 108 364 Z']
+];
 function figure(side){
-  const SIL='#3a3a3a';
-  const L=(x1,y1,x2,y2,w)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${SIL}" stroke-width="${w}" stroke-linecap="round"/>`;
-  const X=(s,x)=>60+s*(x-60);
-  const E=(cx,cy,rx,ry,rot)=>`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}"${rot?` transform="rotate(${rot} ${cx} ${cy})"`:''}/>`;
-  const both=fn=>fn(1)+fn(-1);
-  const M=(key,shape)=>`<g class="m" data-m="${key}">${shape}</g>`;
-  let o='';
-  o+=`<circle cx="60" cy="22" r="16" fill="${SIL}"/><rect x="52" y="34" width="16" height="14" rx="4" fill="${SIL}"/>`;
-  o+=`<path d="M30 48 Q60 40 90 48 L84 100 Q82 122 78 136 L42 136 Q38 122 36 100 Z" fill="${SIL}"/><path d="M40 132 L80 132 L84 152 L36 152 Z" fill="${SIL}"/>`;
-  for(const s of [1,-1]){
-    o+=L(X(s,30),56,X(s,18),104,15)+L(X(s,18),104,X(s,12),150,13)+`<circle cx="${X(s,11)}" cy="158" r="7" fill="${SIL}"/>`;
-    o+=L(X(s,48),148,X(s,44),204,22)+L(X(s,44),204,X(s,42),250,15)+`<ellipse cx="${X(s,42)}" cy="257" rx="10" ry="5" fill="${SIL}"/>`;
-  }
-  if(side==='front'){
-    o+=M('shoulders',both(s=>E(X(s,29),60,9,8)));
-    o+=M('chest',both(s=>E(X(s,46),72,13,9,s*-8)));
-    o+=M('core',[86,99,112].map(y=>`<rect x="50" y="${y}" width="20" height="11" rx="4"/>`).join(''));
-    o+=M('biceps',both(s=>E(X(s,22),82,6,14,s*10)));
-    o+=M('forearms',both(s=>E(X(s,14),128,5,15,s*6)));
-    o+=M('quads',both(s=>E(X(s,47),176,10,26)));
-    o+=M('calves',both(s=>E(X(s,42),227,6,17)));
-  } else {
-    o+=M('traps',`<path d="M60 44 L86 62 L60 84 L34 62 Z"/>`);
-    o+=M('shoulders',both(s=>E(X(s,29),60,9,8)));
-    o+=M('back',both(s=>E(X(s,46),98,11,22,s*-8)));
-    o+=M('lowerback',`<rect x="52" y="114" width="16" height="16" rx="5"/>`);
-    o+=M('triceps',both(s=>E(X(s,22),82,6,14,s*10)));
-    o+=M('forearms',both(s=>E(X(s,14),128,5,15,s*6)));
-    o+=M('glutes',both(s=>E(X(s,49),143,12,11)));
-    o+=M('hamstrings',both(s=>E(X(s,47),183,10,24)));
-    o+=M('calves',both(s=>E(X(s,42),227,7,17)));
-  }
+  const M='translate(200,0) scale(-1,1)';
+  let o=`<ellipse cx="100" cy="38" rx="23" ry="29" fill="url(#gBody)"/>`;
+  o+=SIL.map(d=>`<path d="${d}" fill="url(#gBody)"/>`).join('');
+  o+=SIL_R.map(d=>`<path d="${d}" fill="url(#gBody)"/><path d="${d}" fill="url(#gBody)" transform="${M}"/>`).join('');
+  o+=`<ellipse cx="192" cy="306" rx="9" ry="13" fill="url(#gBody)"/><ellipse cx="8" cy="306" rx="9" ry="13" fill="url(#gBody)"/><ellipse cx="122" cy="418" rx="15" ry="7" fill="url(#gBody)"/><ellipse cx="78" cy="418" rx="15" ry="7" fill="url(#gBody)"/>`;
+  const parts=side==='front'?FRONT:BACK;
+  // every muscle is authored on the right side (x >= 100); the left side is its mirror
+  parts.forEach(([k,f,d])=>{ o+=`<path class="m" data-m="${k}" data-k="${f}" d="${d}"/><path class="m" data-m="${k}" data-k="${f}" d="${d}" transform="${M}"/>`; });
   return o;
 }
 function paintBody(rows){
   const svg=document.getElementById('bodySvg');
-  if(!svg.dataset.built){ svg.innerHTML=`<g transform="translate(5,4)">${figure('front')}</g><g transform="translate(125,4)">${figure('back')}</g>`; svg.dataset.built='1'; }
+  if(!svg.dataset.built){ svg.innerHTML=`${DEFS}<g transform="translate(6,6)">${figure('front')}</g><g transform="translate(214,6)">${figure('back')}</g><text x="106" y="438" class="figLab">FRONT</text><text x="314" y="438" class="figLab">BACK</text>`; svg.dataset.built='1'; }
   const max=rows.length?rows[0].pct:1; const byKey={}; rows.forEach(r=>byKey[r.k]=r.pct);
-  svg.querySelectorAll('.m').forEach(g=>{ const p=byKey[g.dataset.m]||0; if(p>=2){ g.style.fill='#6b5cff'; g.style.opacity=(0.18+0.82*Math.pow(p/max,0.9)).toFixed(2); } else { g.style.fill='#454545'; g.style.opacity='1'; } });
+  const els=[...svg.querySelectorAll('.m')];
+  els.forEach((g,i)=>{ const p=byKey[g.dataset.m]||0; const f=parseFloat(g.dataset.k||'1');
+    if(p>=2){ const it=Math.pow(p/max,0.85)*f; g.classList.add('on'); g.classList.toggle('hot',it>=0.6); g.style.transitionDelay=(i%12*25)+'ms'; g.style.opacity=(0.3+0.7*it).toFixed(2); }
+    else { g.classList.remove('on','hot'); g.style.opacity='1'; } });
 }
 
 /* ============================================================
