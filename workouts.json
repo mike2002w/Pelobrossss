@@ -8825,6 +8825,134 @@
        "warmup": false
       }
      ]
+    },
+    {
+     "name": "Calf Raises",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Calf Raises (Smith)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 15,
+       "warmup": true
+      },
+      {
+       "weight": 30,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 35,
+       "reps": 15,
+       "warmup": false
+      },
+      {
+       "weight": 35,
+       "reps": 15,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 100,
+   "date": "2026-10-10",
+   "type": "Pull",
+   "typeLabel": "Cardio + Pull + Arms",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 9.38,
+    "mi": null,
+    "cal": 76,
+    "hr": 130,
+    "notes": "9:23, 93 total cal, effort 4 (called it bike in chat; logged as Elliptical per convention). Stairs bout in extraCardio. Back still sore after Thursday's pinched nerve, so no rows or shrugs. Core rounds (dead bugs, bird dogs, crunches) done but not logged"
+   },
+   "exercises": [
+    {
+     "name": "Single Arm Lat Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Single Arm Lat Pulldown",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Tricep Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Tricep Pulldown",
+     "sets": [
+      {
+       "weight": 12.5,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 22.5,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 22.5,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
     }
    ]
   }
@@ -8938,6 +9066,14 @@
    "min": 16.08,
    "cal": 114,
    "hr": 123
+  },
+  {
+   "date": "2026-10-10",
+   "machine": "Stairs",
+   "min": 10.03,
+   "cal": 92,
+   "hr": 141,
+   "notes": "10:02, 111 total cal. Second bout after the elliptical"
   }
  ]
 }
