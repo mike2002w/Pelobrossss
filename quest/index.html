@@ -301,6 +301,7 @@ const DEFS=`<defs>
   <linearGradient id="gBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3e3e3e"/><stop offset="1" stop-color="#2c2c2c"/></linearGradient>
   <radialGradient id="gOff" cx="38%" cy="28%" r="85%"><stop offset="0" stop-color="#606060"/><stop offset="1" stop-color="#3d3d3d"/></radialGradient>
   <radialGradient id="gOn" cx="38%" cy="28%" r="85%"><stop offset="0" stop-color="#c4bbff"/><stop offset="0.55" stop-color="#8273ff"/><stop offset="1" stop-color="#4f3fd6"/></radialGradient>
+  <radialGradient id="gSpot" cx="50%" cy="45%" r="55%"><stop offset="0" stop-color="#6b5cff" stop-opacity="0.16"/><stop offset="1" stop-color="#6b5cff" stop-opacity="0"/></radialGradient>
   <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 </defs>`;
 const SIL=[
@@ -334,7 +335,6 @@ const FRONT=[
 const BACK=[
   ['traps',1,'M100 84 C124 86 148 96 154 100 L146 110 C132 128 114 146 100 158 Z'],
   ['shoulders',1,'M144 100 C156 96 168 106 164 122 C160 134 150 136 144 130 C140 122 140 108 144 100 Z'],
-  ['back',.7,'M108 118 C120 114 134 118 140 126 C140 134 132 142 120 142 C112 142 108 136 108 128 Z'],
   ['back',1,'M104 140 C118 140 134 146 146 156 C144 178 136 196 124 208 C116 214 106 214 103 208 Z'],
   ['lowerback',1,'M101 180 C106 180 110 188 110 204 L110 230 C108 238 102 240 101 234 Z'],
   ['triceps',1,'M152 118 C162 112 172 120 174 132 L180 180 C181 190 174 196 167 194 C161 192 158 186 157 178 L152 132 Z'],
@@ -356,7 +356,7 @@ function figure(side){
 }
 function paintBody(rows){
   const svg=document.getElementById('bodySvg');
-  if(!svg.dataset.built){ svg.innerHTML=`${DEFS}<g transform="translate(6,6)">${figure('front')}</g><g transform="translate(214,6)">${figure('back')}</g><text x="106" y="438" class="figLab">FRONT</text><text x="314" y="438" class="figLab">BACK</text>`; svg.dataset.built='1'; }
+  if(!svg.dataset.built){ svg.innerHTML=`${DEFS}<ellipse cx="106" cy="236" rx="118" ry="232" fill="url(#gSpot)"/><ellipse cx="314" cy="236" rx="118" ry="232" fill="url(#gSpot)"/><g transform="translate(6,6)">${figure('front')}</g><g transform="translate(214,6)">${figure('back')}</g><text x="106" y="438" class="figLab">FRONT</text><text x="314" y="438" class="figLab">BACK</text>`; svg.dataset.built='1'; }
   const max=rows.length?rows[0].pct:1; const byKey={}; rows.forEach(r=>byKey[r.k]=r.pct);
   const els=[...svg.querySelectorAll('.m')];
   els.forEach((g,i)=>{ const p=byKey[g.dataset.m]||0; const f=parseFloat(g.dataset.k||'1');
