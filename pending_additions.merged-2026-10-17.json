@@ -1,0 +1,114 @@
+{
+  "workouts": [
+    {
+      "id": 102,
+      "date": "2026-10-16",
+      "type": "Legs",
+      "typeLabel": "Cardio + Legs",
+      "cardio": {
+        "machine": "Elliptical",
+        "min": 13.23,
+        "mi": 2.94,
+        "cal": 109,
+        "hr": 144,
+        "notes": "13:14, 133 total cal, 72 rpm. Session was still open at sync time: he called Smith bench after calves but never posted the bench sets."
+      },
+      "exercises": [
+        {
+          "name": "Squats",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Squats",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "RDLs",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "RDLs",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 70,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 70,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 70,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Calf Raises",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Calf Raises (Smith)",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 15,
+              "warmup": true
+            },
+            {
+              "weight": 35,
+              "reps": 15,
+              "warmup": false
+            },
+            {
+              "weight": 35,
+              "reps": 15,
+              "warmup": false
+            },
+            {
+              "weight": 40,
+              "reps": 15,
+              "warmup": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "extraCardio": [],
+  "flaggedForReview": [
+    "2026-10-16: Smith bench was called after calves but no sets were posted (chat ends 16:50Z Oct 16). If he did it, add it as a missing exercise.",
+    "2026-10-16: calf raise first set typed as '20' without 'w'; logged as warmup (coach did the same), reps 15 per convention."
+  ]
+}
