@@ -1,0 +1,161 @@
+{
+  "workouts": [
+    {
+      "id": 103,
+      "date": "2026-10-20",
+      "type": "Pull",
+      "typeLabel": "Cardio + Back/Pull",
+      "cardio": {
+        "machine": "Elliptical",
+        "min": 10.15,
+        "mi": 1.94,
+        "cal": 81,
+        "hr": 134,
+        "notes": "10:09, 100 total cal, 61 rpm"
+      },
+      "exercises": [
+        {
+          "name": "Single Arm Lat Pulldown",
+          "equipment": "Cable",
+          "unit": "kg",
+          "sheetName": "Single Arm Lat Pulldown",
+          "sets": [
+            {
+              "weight": 12.5,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Smith Rows",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Smith Rows",
+          "sets": [
+            {
+              "weight": 30,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 65,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 65,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Shrugs",
+          "equipment": "DB",
+          "unit": "lb",
+          "sheetName": "Shrugs",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 45,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 45,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Bicep Curls",
+          "equipment": "DB",
+          "unit": "lb",
+          "sheetName": "Bicep Curls (DB)",
+          "sets": [
+            {
+              "weight": 15,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 25,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 25,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 25,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Face Pulls",
+          "equipment": "Cable",
+          "unit": "kg",
+          "sheetName": "Face Pulls",
+          "sets": [
+            {
+              "weight": 7.5,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 10,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 12.5,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "extraCardio": [],
+  "flaggedForReview": [
+    "2026-10-16: Smith bench (20w|70|100|100) was posted the next session (Oct 20) and is missing from the already-merged Oct 16 day. Staged here as a held add-on; approve to append it to Oct 16 (and optionally relabel the day 'Cardio + Legs + Chest').",
+    "2026-10-20 Face Pulls: he typed '7.5,10,,12.5' (double comma). Logged 3 sets as the coach did; there may be a missing 4th set.",
+    "2026-10-20 Bicep Curls first set 15 treated as warmup (coach recap marks it 15w); Shrugs first set 20 kept as a working set to match past Shrugs logging."
+  ]
+}

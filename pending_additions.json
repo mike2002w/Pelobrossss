@@ -1,7 +1,48 @@
 {
-  "workouts": [],
+  "workouts": [
+    {
+      "date": "2026-10-16",
+      "type": "Legs",
+      "typeLabel": "Cardio + Legs + Chest",
+      "cardio": null,
+      "exercises": [
+        {
+          "name": "Bench Press",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Bench Press (Smith)",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 70,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 100,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 100,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "extraCardio": [],
   "flaggedForReview": [
-    "Nothing staged. On 2026-10-17 1 session(s) (2026-10-16) were merged into workouts.json."
+    "1 session(s) held for review on 2026-10-20; see flaggedForReview.",
+    "2026-10-16: held, date already in workouts.json",
+    "2026-10-16: Smith bench (20w|70|100|100) was posted the next session (Oct 20) and is missing from the already-merged Oct 16 day. Staged here as a held add-on; approve to append it to Oct 16 (and optionally relabel the day 'Cardio + Legs + Chest').",
+    "2026-10-20 Face Pulls: he typed '7.5,10,,12.5' (double comma). Logged 3 sets as the coach did; there may be a missing 4th set.",
+    "2026-10-20 Bicep Curls first set 15 treated as warmup (coach recap marks it 15w); Shrugs first set 20 kept as a working set to match past Shrugs logging."
   ]
 }
