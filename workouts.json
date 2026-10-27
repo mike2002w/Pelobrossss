@@ -9316,6 +9316,168 @@
      ]
     }
    ]
+  },
+  {
+   "id": 104,
+   "date": "2026-10-23",
+   "type": "Push",
+   "typeLabel": "Cardio + Push/Chest",
+   "cardio": {
+    "machine": "Run",
+    "min": 20,
+    "mi": 1.67,
+    "cal": 272,
+    "hr": null,
+    "notes": "Peloton 20 min Intervals Run (Jon Hosking), 11:54 pace, 5 mph. No HR on the console readout"
+   },
+   "exercises": [
+    {
+     "name": "Bench Press",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Bench Press (Smith)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Incline Bench",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Incline Bench (DB)",
+     "sets": [
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 105,
+   "date": "2026-10-25",
+   "type": "Pull",
+   "typeLabel": "Cardio + Pull + Legs",
+   "cardio": {
+    "machine": "Run",
+    "min": 20,
+    "mi": 1.44,
+    "cal": 263,
+    "hr": null,
+    "notes": "Peloton 20 min Pop Run (Jess Sims), 12:38 pace, 4.7 mph. No HR on the console readout"
+   },
+   "exercises": [
+    {
+     "name": "Single Arm Lat Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Single Arm Lat Pulldown",
+     "sets": [
+      {
+       "weight": 12.5,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Smith Rows",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Smith Rows",
+     "sets": [
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Squats",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Squats",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
   }
  ],
  "extraCardio": [
