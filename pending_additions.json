@@ -39,6 +39,8 @@
   ],
   "extraCardio": [],
   "flaggedForReview": [
+    "1 session(s) held for review on 2026-10-28; see flaggedForReview.",
+    "2026-10-16: held, date already in workouts.json",
     "1 session(s) held for review on 2026-10-26; see flaggedForReview.",
     "2026-10-16: held, date already in workouts.json",
     "1 session(s) held for review on 2026-10-20; see flaggedForReview.",
@@ -48,6 +50,8 @@
     "2026-10-20 Bicep Curls first set 15 treated as warmup (coach recap marks it 15w); Shrugs first set 20 kept as a working set to match past Shrugs logging.",
     "2026-10-23: 'db incline bench' logged as existing Incline Bench (DB). Only 2 working sets (25w|40|40).",
     "2026-10-25: Single Arm Lat Pulldown typed '12.5,20,20,20' with no 'w'; logged 12.5 as warmup to match the coach recap and Oct 20.",
-    "2026-10-25: Smith Squats only 2 working sets at 40 (down from 50 on Oct 16), as typed."
+    "2026-10-25: Smith Squats only 2 working sets at 40 (down from 50 on Oct 16), as typed.",
+    "2026-10-27: session left open in the chat. Coach asked for Incline DB Press weight at 15:22 and got no reply; logged cardio + Smith bench only. If he did incline (or more), it needs adding to Oct 27.",
+    "2026-10-27: his cardio message was an image/blank text; elliptical numbers (20:17, 4.97 mi, 198 active/235 total cal, 147 bpm, 72 rpm) taken from the coach recap. 110 on Smith bench ties his PR."
   ]
 }
