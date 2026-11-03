@@ -9816,6 +9816,106 @@
      ]
     }
    ]
+  },
+  {
+   "id": 109,
+   "date": "2026-11-01",
+   "type": "Pull",
+   "typeLabel": "Cardio + Back/Pull",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 15.12,
+    "mi": null,
+    "cal": 146,
+    "hr": 140,
+    "notes": "15:07, 173 total cal, effort 6. Distance not in the console readout. Stairs bout in extraCardio"
+   },
+   "exercises": [
+    {
+     "name": "Single Arm Lat Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Single Arm Lat Pulldown",
+     "sets": [
+      {
+       "weight": 12.5,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Smith Rows",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Smith Rows",
+     "sets": [
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 65,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 65,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
   }
  ],
  "extraCardio": [
@@ -9935,6 +10035,14 @@
    "cal": 92,
    "hr": 141,
    "notes": "10:02, 111 total cal. Second bout after the elliptical"
+  },
+  {
+   "date": "2026-11-01",
+   "machine": "Stairs",
+   "min": 10.02,
+   "cal": 106,
+   "hr": 149,
+   "notes": "10:01, 124 total cal. Second bout after the elliptical"
   }
  ]
 }
