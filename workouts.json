@@ -9916,6 +9916,83 @@
      ]
     }
    ]
+  },
+  {
+   "id": 110,
+   "date": "2026-11-03",
+   "type": "Push",
+   "typeLabel": "Cardio + Push/Chest",
+   "cardio": {
+    "machine": "Run",
+    "min": 29.82,
+    "mi": 1.91,
+    "cal": 220,
+    "hr": null,
+    "notes": "Outdoor run, 29:49, 274 total cal, 123 spm, 196 ft elevation. No HR"
+   },
+   "exercises": [
+    {
+     "name": "Bench Press",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Bench Press (Smith)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 90,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Incline Bench",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Incline Bench (Smith)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
   }
  ],
  "extraCardio": [

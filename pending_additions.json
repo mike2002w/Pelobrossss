@@ -71,10 +71,50 @@
           ]
         }
       ]
+    },
+    {
+      "date": "2026-11-01",
+      "type": "Pull",
+      "typeLabel": "Cardio + Back/Pull",
+      "cardio": null,
+      "exercises": [
+        {
+          "name": "Shrugs",
+          "equipment": "DB",
+          "unit": "lb",
+          "sheetName": "Shrugs",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        }
+      ]
     }
   ],
   "extraCardio": [],
   "flaggedForReview": [
+    "3 session(s) held for review on 2026-11-03; see flaggedForReview.",
+    "2026-10-16: held, date already in workouts.json",
+    "2026-10-27: held, date already in workouts.json",
+    "2026-11-01: held, date already in workouts.json",
     "2 session(s) held for review on 2026-11-02; see flaggedForReview.",
     "2026-10-16: held, date already in workouts.json",
     "2026-10-27: held, date already in workouts.json",
@@ -101,7 +141,8 @@
     "2026-10-30: cardio was an outdoor run (0.81 mi, 11:29, 93 active/114 total cal, no HR); logged as machine 'Run' with 'Outdoor run' in notes.",
     "2026-10-30: DB Shoulder Press 15|15|15 all logged as working sets (first overhead press since the shoulder injury, deliberately light).",
     "2026-10-30: Smith bench 20w|70|105|90|90 as typed (drop after 105). DB Flyes 20 is a new top.",
-    "2026-11-01: OPEN ITEM. He said 'Shrug' and the coach asked 'What weight?' at 17:56 Nov 1 with no reply (>24h, chat has not moved on). Shrugs NOT logged; if he did them, add DB Shrugs to Nov 1 as an add-on.",
-    "2026-11-01: Smith Rows 65 is a new top (prior 60 on Oct 25). Bicep Curls (DB) 15w|25|30|25 as typed (drop after 30)."
+    "2026-11-01: Smith Rows 65 is a new top (prior 60 on Oct 25). Bicep Curls (DB) 15w|25|30|25 as typed (drop after 30).",
+    "2026-11-01: RESOLVED open item. He posted Shrugs '20w,40,50,50. Done' on Nov 3 at 19:36 (coach recap files it under Sun Nov 1). Staged as a held add-on; approve to append Shrugs (DB) 20w|40|50|50 to the already-merged Nov 1 day.",
+    "2026-11-03: cardio was an outdoor run (1.91 mi, 29:49, 220 active/274 total cal, no HR); logged as machine 'Run' with 'Outdoor run' in notes. Smith bench 20w|70|100|100|90 and Smith incline 20w|70|70|70 as typed."
   ]
 }
