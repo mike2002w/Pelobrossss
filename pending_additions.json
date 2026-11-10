@@ -111,6 +111,10 @@
   ],
   "extraCardio": [],
   "flaggedForReview": [
+    "3 session(s) held for review on 2026-11-09; see flaggedForReview.",
+    "2026-10-16: held, date already in workouts.json",
+    "2026-10-27: held, date already in workouts.json",
+    "2026-11-01: held, date already in workouts.json",
     "3 session(s) held for review on 2026-11-03; see flaggedForReview.",
     "2026-10-16: held, date already in workouts.json",
     "2026-10-27: held, date already in workouts.json",
@@ -143,6 +147,7 @@
     "2026-10-30: Smith bench 20w|70|105|90|90 as typed (drop after 105). DB Flyes 20 is a new top.",
     "2026-11-01: Smith Rows 65 is a new top (prior 60 on Oct 25). Bicep Curls (DB) 15w|25|30|25 as typed (drop after 30).",
     "2026-11-01: RESOLVED open item. He posted Shrugs '20w,40,50,50. Done' on Nov 3 at 19:36 (coach recap files it under Sun Nov 1). Staged as a held add-on; approve to append Shrugs (DB) 20w|40|50|50 to the already-merged Nov 1 day.",
-    "2026-11-03: cardio was an outdoor run (1.91 mi, 29:49, 220 active/274 total cal, no HR); logged as machine 'Run' with 'Outdoor run' in notes. Smith bench 20w|70|100|100|90 and Smith incline 20w|70|70|70 as typed."
+    "2026-11-03: cardio was an outdoor run (1.91 mi, 29:49, 220 active/274 total cal, no HR); logged as machine 'Run' with 'Outdoor run' in notes. Smith bench 20w|70|100|100|90 and Smith incline 20w|70|70|70 as typed.",
+    "2026-11-09: cardio was a Peloton run (30 min, 2.35 mi, 408 cal, no active/total split given, no HR); logged as machine 'Run' like earlier Peloton runs. Smith bench typed '20w,70,100x3 sets' = 20w|70|100|100|100. Lateral Raises '10 three sets' = 10|10|10, all working sets, reps default 8. He said 'Done' after three lifts."
   ]
 }

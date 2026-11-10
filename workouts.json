@@ -9993,6 +9993,106 @@
      ]
     }
    ]
+  },
+  {
+   "id": 111,
+   "date": "2026-11-09",
+   "type": "Push",
+   "typeLabel": "Cardio + Push/Chest",
+   "cardio": {
+    "machine": "Run",
+    "min": 30,
+    "mi": 2.35,
+    "cal": 408,
+    "hr": null,
+    "notes": "Peloton 30 min 90s Run (Jon Hosking), 12:20 pace, 4.9 mph. No HR on the console readout"
+   },
+   "exercises": [
+    {
+     "name": "Bench Press",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Bench Press (Smith)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 100,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Incline Bench",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Incline Bench (DB)",
+     "sets": [
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Lateral Raises",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Lateral Raises",
+     "sets": [
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 10,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
   }
  ],
  "extraCardio": [
