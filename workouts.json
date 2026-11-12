@@ -10093,6 +10093,78 @@
      ]
     }
    ]
+  },
+  {
+   "id": 112,
+   "date": "2026-11-10",
+   "type": "Legs",
+   "typeLabel": "Cardio + Legs",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 20.15,
+    "mi": 4.91,
+    "cal": 192,
+    "hr": 153,
+    "notes": "20:09, 229 total cal, 74 rpm. Session was still open at sync time: the coach asked for the Smith Calf Raises weight after RDLs and he never posted it."
+   },
+   "exercises": [
+    {
+     "name": "Squats",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Squats",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 45,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "RDLs",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "RDLs",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
   }
  ],
  "extraCardio": [
