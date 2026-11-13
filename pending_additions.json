@@ -107,10 +107,55 @@
           ]
         }
       ]
+    },
+    {
+      "date": "2026-11-10",
+      "type": "Legs",
+      "typeLabel": "Cardio + Legs",
+      "cardio": null,
+      "exercises": [
+        {
+          "name": "Calf Raises",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Calf Raises (Smith)",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 15,
+              "warmup": false
+            },
+            {
+              "weight": 40,
+              "reps": 15,
+              "warmup": false
+            },
+            {
+              "weight": 40,
+              "reps": 15,
+              "warmup": false
+            },
+            {
+              "weight": 40,
+              "reps": 15,
+              "warmup": false
+            }
+          ]
+        }
+      ]
     }
   ],
   "extraCardio": [],
   "flaggedForReview": [
+    "4 session(s) held for review on 2026-11-12; see flaggedForReview.",
+    "2026-10-16: held, date already in workouts.json",
+    "2026-10-27: held, date already in workouts.json",
+    "2026-11-01: held, date already in workouts.json",
+    "2026-11-10: held, date already in workouts.json",
+    "2026-11-10: RESOLVED open item. He posted Smith Calf Raises '20,40,40,40 done' on Nov 12 at 18:12Z (coach recap files it under Tue Nov 10 and shows 20 without a w). Staged as a held add-on; approve to append Calf Raises (Smith) 20|40|40|40 x15 to the already-merged Nov 10 day. 20 kept as a working set per the Oct 29 precedent.",
+    "2026-11-11: cardio-only day. His message was just 'Wednesday' (numbers came from screenshots); elliptical (10:09, 2.46 mi, 82 active/100 total cal, 83 rpm, no HR) and stairs (19:56, 220 active/256 total cal, 158 bpm) taken from the coach recap. Coach asked whether the screenshots were actually Thursday; he answered 'New session Thursday', so the Wed Nov 11 date stands.",
+    "2026-11-12: no cardio posted (went straight to pull). Single Arm Lat Pulldown 12.5w|20|22.5|20 (22.5 kg is a new top since the 25 kg PR). Smith Rows 30w|50|50|50 (down from 65 on Nov 1). Bicep Curls (DB) 15w|30|25|25 as typed.",
+    "2026-11-12 Shrugs: he typed '30,40,45' with no exercise name; coach guessed shrugs and asked him to confirm, he replied 'Done' and the coach logged Shrugs (DB) 30|40|45. Logged as 3 working sets of Shrugs (DB) at the default 8 reps; no warmup set, only 3 sets.",
     "3 session(s) held for review on 2026-11-11; see flaggedForReview.",
     "2026-10-16: held, date already in workouts.json",
     "2026-10-27: held, date already in workouts.json",

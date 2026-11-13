@@ -10165,6 +10165,137 @@
      ]
     }
    ]
+  },
+  {
+   "id": 113,
+   "date": "2026-11-11",
+   "type": "Cardio",
+   "typeLabel": "Cardio",
+   "cardio": {
+    "machine": "Elliptical",
+    "min": 10.15,
+    "mi": 2.46,
+    "cal": 82,
+    "hr": null,
+    "notes": "10:09, 100 total cal, 83 rpm. No HR in the console readout. Stairs bout in extraCardio"
+   },
+   "exercises": []
+  },
+  {
+   "id": 114,
+   "date": "2026-11-12",
+   "type": "Pull",
+   "typeLabel": "Back/Pull",
+   "cardio": null,
+   "exercises": [
+    {
+     "name": "Single Arm Lat Pulldown",
+     "equipment": "Cable",
+     "unit": "kg",
+     "sheetName": "Single Arm Lat Pulldown",
+     "sets": [
+      {
+       "weight": 12.5,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 22.5,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Smith Rows",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Smith Rows",
+     "sets": [
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Bicep Curls",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Bicep Curls (DB)",
+     "sets": [
+      {
+       "weight": 15,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Shrugs",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Shrugs",
+     "sets": [
+      {
+       "weight": 30,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 45,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
   }
  ],
  "extraCardio": [
@@ -10292,6 +10423,14 @@
    "cal": 106,
    "hr": 149,
    "notes": "10:01, 124 total cal. Second bout after the elliptical"
+  },
+  {
+   "date": "2026-11-11",
+   "machine": "Stairs",
+   "min": 19.93,
+   "cal": 220,
+   "hr": 158,
+   "notes": "19:56, 256 total cal. Second bout after the elliptical"
   }
  ]
 }
