@@ -147,6 +147,11 @@
   ],
   "extraCardio": [],
   "flaggedForReview": [
+    "4 session(s) held for review on 2026-11-13; see flaggedForReview.",
+    "2026-10-16: held, date already in workouts.json",
+    "2026-10-27: held, date already in workouts.json",
+    "2026-11-01: held, date already in workouts.json",
+    "2026-11-10: held, date already in workouts.json",
     "4 session(s) held for review on 2026-11-12; see flaggedForReview.",
     "2026-10-16: held, date already in workouts.json",
     "2026-10-27: held, date already in workouts.json",
@@ -198,6 +203,7 @@
     "2026-11-01: RESOLVED open item. He posted Shrugs '20w,40,50,50. Done' on Nov 3 at 19:36 (coach recap files it under Sun Nov 1). Staged as a held add-on; approve to append Shrugs (DB) 20w|40|50|50 to the already-merged Nov 1 day.",
     "2026-11-03: cardio was an outdoor run (1.91 mi, 29:49, 220 active/274 total cal, no HR); logged as machine 'Run' with 'Outdoor run' in notes. Smith bench 20w|70|100|100|90 and Smith incline 20w|70|70|70 as typed.",
     "2026-11-09: cardio was a Peloton run (30 min, 2.35 mi, 408 cal, no active/total split given, no HR); logged as machine 'Run' like earlier Peloton runs. Smith bench typed '20w,70,100x3 sets' = 20w|70|100|100|100. Lateral Raises '10 three sets' = 10|10|10, all working sets, reps default 8. He said 'Done' after three lifts.",
-    "2026-11-10: session left OPEN in the chat (coach asked 'What weight?' for Smith Calf Raises at 17:03Z Nov 10, no reply by sync 33 h later). Staged with squats 20w|40|40|45 and RDLs 20w|50|60|60 only; if he posts calves later the next sync stages them as a held add-on. Elliptical numbers (20:09, 4.91 mi, 192 active/229 total cal, 153 bpm, 74 rpm) taken from the coach recap."
+    "2026-11-10: session left OPEN in the chat (coach asked 'What weight?' for Smith Calf Raises at 17:03Z Nov 10, no reply by sync 33 h later). Staged with squats 20w|40|40|45 and RDLs 20w|50|60|60 only; if he posts calves later the next sync stages them as a held add-on. Elliptical numbers (20:09, 4.91 mi, 192 active/229 total cal, 153 bpm, 74 rpm) taken from the coach recap.",
+    "2026-11-13: cardio-only day. His message was just 'It's Friday Done' (numbers came from a screenshot); treadmill indoor walk (30:40, 1.90 mi, 262 active/314 total cal, 16:08 pace, 144 bpm) taken from the coach recap. No lifting."
   ]
 }

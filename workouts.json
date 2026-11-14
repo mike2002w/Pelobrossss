@@ -10296,6 +10296,21 @@
      ]
     }
    ]
+  },
+  {
+   "id": 115,
+   "date": "2026-11-13",
+   "type": "Cardio",
+   "typeLabel": "Cardio",
+   "cardio": {
+    "machine": "Treadmill",
+    "min": 30.67,
+    "mi": 1.9,
+    "cal": 262,
+    "hr": 144,
+    "notes": "30:40 indoor walk, 314 total cal, 16:08 pace. Cardio only, he wrote 'It's Friday. Done'"
+   },
+   "exercises": []
   }
  ],
  "extraCardio": [
