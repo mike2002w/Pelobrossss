@@ -1,5 +1,12 @@
 {
  "version": 1,
  "note": "Derived daily readiness score only; raw health data is kept private.",
- "days": []
+ "days": [
+  {
+   "date": "2026-11-17",
+   "score": 92,
+   "band": "green",
+   "calibrating": true
+  }
+ ]
 }
