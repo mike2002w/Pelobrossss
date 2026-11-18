@@ -79,6 +79,13 @@
   .nextHead .lab{font-size:12px; color:var(--mut); font-weight:600; letter-spacing:.5px; text-transform:uppercase; margin-bottom:4px}
   .nextHead .ready{text-align:right; font-size:13px; color:var(--mut); max-width:52%; line-height:1.4}
   .nextHead .ready b{color:var(--green); font-weight:600}
+  .rbox{display:flex; align-items:center; gap:14px; background:var(--card2); border-radius:12px; padding:12px 14px; margin:6px 0 12px}
+  .rring{width:58px; height:58px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:700; flex:0 0 58px}
+  .rring.green{border:4px solid var(--green); color:var(--green)} .rring.yellow{border:4px solid var(--amber); color:var(--amber)} .rring.red{border:4px solid #ff6b6b; color:#ff6b6b}
+  .rinfo{flex:1; min-width:0} .rinfo .t{font-size:15px; font-weight:600} .rinfo .s{font-size:12px; color:var(--mut); margin-top:2px; line-height:1.4}
+  .rdots{display:flex; gap:4px; margin-top:8px; align-items:flex-end; height:22px}
+  .rdots i{display:block; width:9px; border-radius:2px; background:#333}
+  .rdots i.green{background:var(--green)} .rdots i.yellow{background:var(--amber)} .rdots i.red{background:#ff6b6b}
   .caution{background:#2a1f12; border:1px solid #5a3f1a; color:#ffcf8a; border-radius:10px; padding:10px 12px; font-size:13px; margin-top:12px; line-height:1.45}
 
   /* body */
@@ -175,6 +182,7 @@
 
   <div class="card">
     <h2>Up next <span class="sub" style="margin:0" id="nextTag"></span></h2>
+    <div id="readyBox"></div>
     <div class="nextHead"><div><div class="lab">Suggested</div><div class="big" id="nextType">--</div></div><div class="ready" id="nextReady"></div></div>
     <p class="sub" id="nextWhy"></p>
     <div id="nextList"></div>
@@ -564,7 +572,7 @@ function coachLine(A,bosses,quests){
   return t;
 }
 
-function render(A,pending){
+function render(A,pending,ready){
   const today=todayLocal();
   const L=levelFor(A.T.xp), cur=xpFor(L), next=xpFor(L+1);
   const pct=Math.min(100,Math.round((A.T.xp-cur)/(next-cur)*100));
@@ -602,6 +610,16 @@ function render(A,pending){
   document.getElementById('nextTag').textContent='for '+fmtDow(nextDay)+' '+fmtDate(nextDay);
   document.getElementById('nextType').textContent=sg.pick.t+' day';
   document.getElementById('nextReady').innerHTML=sg.ready.length?`<b>${sg.ready.join(', ')}</b> recovered`:`nothing fully recovered yet, go light`;
+  // readiness from Apple Health (derived score only; raw data never leaves the Mac)
+  const rdays=(ready&&ready.days)||[]; const rByDate={}; rdays.forEach(x=>rByDate[x.date]=x);
+  const rNow=rByDate[nextDay]||rByDate[today]||rByDate[addDays(today,-1)]||null;
+  if(rNow){
+    const advice=rNow.band==='green'?'Green light: go for the plateau numbers.':rNow.band==='yellow'?'Train as planned, but hold the weights; no PR attempts today.':'Low readiness: make it cardio, mobility or light technique work.';
+    const last14=[]; for(let k=13;k>=0;k--){ const dd=addDays(rNow.date,-k); last14.push(rByDate[dd]||null); }
+    document.getElementById('readyBox').innerHTML=`<div class="rbox"><div class="rring ${rNow.band}">${rNow.score}</div><div class="rinfo"><div class="t">Readiness ${rNow.score}${rNow.calibrating?' <span class="pill dim">calibrating</span>':''}</div><div class="s">${advice} From Apple Watch HRV, resting heart rate and sleep vs your own baseline, plus recent training load. ${fmtDow(rNow.date)} ${fmtDate(rNow.date)}.</div><div class="rdots" title="last 14 days">${last14.map(x=>x?`<i class="${x.band}" style="height:${Math.max(4,Math.round(x.score/100*22))}px" title="${fmtDate(x.date)}: ${x.score}"></i>`:'<i style="height:3px"></i>').join('')}</div></div></div>`;
+    if(rNow.band==='red'){ document.getElementById('nextType').textContent='Light '+sg.pick.t.toLowerCase(); sg.why.unshift('readiness is low today'); }
+    else if(rNow.band==='yellow') sg.why.unshift('readiness is middling, so no PR attempts');
+  } else if(rdays.length){ document.getElementById('readyBox').innerHTML=`<div class="sub">No readiness reading for today yet (last ${fmtDate(rdays[rdays.length-1].date)}). The iPhone Shortcut may not have run.</div>`; }
   document.getElementById('nextWhy').textContent='Why: '+sg.why.join('; ')+'.';
   const exRow=c=>{ const u=unit(c.r.unit); const b=c.b; const sub=b?`${b.kind==='ghost'?'Reclaim your best':'Break the plateau'} · last ${c.lastH.top} ${u} on ${fmtDate(c.lastH.date)}`:`Last ${c.lastH.top} ${u} on ${fmtDate(c.lastH.date)} · ${MUSCLE_NAMES[c.p].toLowerCase()} ${(vol.tot[c.p]||0)<10?'under target':'on target'}`;
     return `<div class="row"><div class="l">${esc(c.r.name)} <span style="color:var(--mut);font-weight:400;font-size:13px">${esc(c.r.equip)}</span><small>${sub}</small></div><div class="r"><div style="text-align:right"><div class="acc">${b?b.target:c.lastH.top} ${u}</div><small>${b?(b.kind==='ghost'?'reclaim':'break'):'x 8'}</small></div></div></div>`; };
@@ -728,8 +746,9 @@ async function main(){
   try{
     const data=await fetch('../workouts.json',{cache:'no-store'}).then(r=>{ if(!r.ok) throw new Error('workouts.json '+r.status); return r.json(); });
     let pending=null; try{ const r=await fetch('../pending_additions.json',{cache:'no-store'}); if(r.ok) pending=await r.json(); }catch(e){}
+    let ready=null; try{ const r=await fetch('../readiness.json',{cache:'no-store'}); if(r.ok) ready=await r.json(); }catch(e){}
     const A=analyze(data);
-    render(A,pending);
+    render(A,pending,ready);
     window.addEventListener('resize',()=>drawXp(A.sessions));
   }catch(e){
     document.getElementById('err').innerHTML=`<div class="err">Could not load workouts.json (${e.message}). Open the quest from the tracker's site and try again.</div>`;

@@ -1,5 +1,5 @@
 /* Pelobrossss service worker — offline-first cache */
-const CACHE = 'pelobrossss-v12';
+const CACHE = 'pelobrossss-v13';
 const ASSETS = [
   './',
   './index.html',
@@ -12,7 +12,7 @@ const ASSETS = [
 ];
 // Workout history changes; the shell does not. Serving history cache-first
 // would pin the app to whatever was cached the day it installed.
-const FRESH = /workouts\.json$/;
+const FRESH = /(workouts|readiness)\.json$/;
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

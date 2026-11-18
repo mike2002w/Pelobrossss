@@ -226,6 +226,32 @@ def build(week_date=None):
     H.append(table(vrows) + f'<div style="font-size:11px;color:{MUT};margin-top:4px">Sets this week (last week in brackets). The band is a common coaching range, not a cited guideline.</div>')
     T += ["", "Volume (sets this week): " + ", ".join(f"{NAMES[k]} {num(vol.get(k, 0))}" for k in sorted(NAMES, key=lambda k: -vol.get(k, 0)) if vol.get(k, 0) >= 0.5)]
 
+    # recovery from Apple Health (private file; this email goes only to him)
+    health = {}
+    try: health = json.load(open(os.path.expanduser('~/.config/pelobrossss/health/health.json')))
+    except Exception: pass
+    rdy = {}
+    try: rdy = {x['date']: x for x in json.load(open(os.path.join(REPO, 'readiness.json')))['days']}
+    except Exception: pass
+    def avg(start, key, src):
+        vals = [src[k][key] for k in src if start <= d(k) <= start + dt.timedelta(days=6) and src[k].get(key) is not None]
+        return (sum(vals) / len(vals), len(vals)) if vals else (None, 0)
+    hrows, htxt = [], []
+    for label, key, src, f, better in (('Readiness', 'score', rdy, lambda v: f"{v:.0f}", 1), ('HRV', 'hrv', health, lambda v: f"{v:.0f} ms", 1),
+                                         ('Resting HR', 'resting_hr', health, lambda v: f"{v:.0f} bpm", -1), ('Sleep', 'sleep_min', health, lambda v: f"{int(v // 60)}h {int(v % 60):02d}m", 1)):
+        cur, nd = avg(wk, key, src); prev, _ = avg(prev_wk, key, src)
+        if cur is None: continue
+        chg = ''
+        if prev is not None and abs(cur - prev) >= 0.5:
+            good = (cur - prev) * better > 0
+            chg = f"<span style='color:{'#1d9e5f' if good else '#c0392b'}'>{'up' if cur > prev else 'down'} from {f(prev)}</span>"
+        hrows.append(row(label, f(cur), f"average of {nd} day{'s' if nd != 1 else ''}" + (f" · {chg}" if chg else '')))
+        htxt.append(f"{label} {f(cur)}" + (f" (last week {f(prev)})" if prev is not None else ''))
+    if hrows:
+        H.append(h2('Recovery (Apple Watch)'))
+        H.append(table(hrows) + f'<div style="font-size:11px;color:{MUT};margin-top:4px">Readiness is an app heuristic from HRV and resting HR against your 30-day baseline, sleep vs 7.5 h, and training load. Not a clinical measure.</div>')
+        T += ["", "Recovery: " + "; ".join(htxt)]
+
     H.append(h2('Plateaus to attack next week'))
     if bosses:
         H.append(table([row(f"{b['name']} <span style='color:{MUT};font-size:12px'>{b['equip']}</span>", f"{b['kind']} {num(b['target'])} {unit(b['unit'])}",
