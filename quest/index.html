@@ -86,6 +86,53 @@
   .rdots{display:flex; gap:4px; margin-top:8px; align-items:flex-end; height:22px}
   .rdots i{display:block; width:9px; border-radius:2px; background:#333}
   .rdots i.green{background:var(--green)} .rdots i.yellow{background:var(--amber)} .rdots i.red{background:#ff6b6b}
+  /* activity calendar (Apple Fitness style rings) */
+  .seg{display:flex; background:#232323; border-radius:9px; padding:2px; gap:2px}
+  .seg button{flex:1; border:0; background:none; color:#bbb; font:600 13px Inter,sans-serif; padding:6px 14px; border-radius:7px; cursor:pointer}
+  .seg button.on{background:#3a3a3c; color:#fff}
+  .calNav{display:flex; align-items:center; justify-content:space-between; margin:12px 0 6px}
+  .calNav .ttl{font-size:17px; font-weight:700}
+  .calNav button{background:none; border:0; color:var(--acc2); font-size:22px; padding:4px 10px; cursor:pointer; line-height:1}
+  .calNav button:disabled{color:#3a3a3a; cursor:default}
+  .wk{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:2px; text-align:center; touch-action:pan-y}
+  .wk .dl{font-size:12px; font-weight:600; color:#8e8e93; margin-bottom:6px}
+  .wk .dn{width:28px; height:28px; margin:0 auto 6px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600; color:#fff}
+  .wk .cell{cursor:pointer; padding:4px 0 6px; border-radius:10px}
+  .wk .cell.sel .dn{background:#fff; color:#000}
+  .wk .cell.today .dn{color:#fa114f}
+  .wk .cell.sel.today .dn{background:#fa114f; color:#fff}
+  .wk .cell.future{opacity:.35; cursor:default}
+  .mo{display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:6px 2px; text-align:center; touch-action:pan-y}
+  .mo .h{font-size:11px; font-weight:600; color:#8e8e93; padding-bottom:2px}
+  .mo .cell{cursor:pointer; padding:3px 0; border-radius:10px}
+  .mo .cell .n{font-size:11px; font-weight:600; color:#d1d1d6; margin-bottom:3px}
+  .mo .cell.today .n{color:#fa114f}
+  .mo .cell.sel{background:#2a2a2c}
+  .mo .cell.future{opacity:.3; cursor:default}
+  .mo .cell.blank{cursor:default}
+  .ringsvg{display:block; margin:0 auto}
+  .ringsvg circle.p{transition:stroke-dasharray .9s cubic-bezier(.2,.8,.2,1)}
+  @media (prefers-reduced-motion: reduce){ .ringsvg circle.p{transition:none} }
+  .dayCard{display:flex; gap:16px; align-items:center; background:var(--card2); border-radius:14px; padding:14px; margin-top:14px}
+  .dayCard .info{flex:1; min-width:0}
+  .dayCard .date{font-size:13px; color:#8e8e93; font-weight:600}
+  .dayCard .lab{font-size:16px; font-weight:700; margin:2px 0 8px}
+  .rstat{margin:5px 0}
+  .rstat .k{font-size:11px; font-weight:700; letter-spacing:.6px; text-transform:uppercase}
+  .rstat .v{font-size:20px; font-weight:700; letter-spacing:-.2px}
+  .rstat .v small{font-size:13px; font-weight:600}
+  .cXP{color:#fa114f} .cLIFT{color:#a6ff00} .cCARD{color:#00f0ff}
+  .dayEx{margin-top:10px}
+  .dayEx .ex{display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-top:1px solid var(--line); font-size:14px}
+  .dayEx .ex small{display:block; color:var(--mut); font-size:12px; margin-top:2px}
+  .dayEx .ex .v{color:var(--acc2); font-weight:600; white-space:nowrap}
+  .calSum{display:flex; gap:10px; margin-top:12px}
+  .calSum div{flex:1; background:var(--card2); border-radius:12px; padding:10px 8px; text-align:center}
+  .calSum b{display:block; font-size:18px} .calSum span{font-size:11px; color:var(--mut)}
+  .goalEdit{display:none; margin-top:10px; background:var(--card2); border-radius:12px; padding:10px 12px; font-size:13px}
+  .goalEdit.show{display:block}
+  .goalEdit label{display:flex; justify-content:space-between; align-items:center; padding:5px 0}
+  .goalEdit input{width:70px; background:#2a2a2a; border:1px solid #3a3a3a; color:#fff; border-radius:8px; padding:6px; font:600 14px Inter,sans-serif; text-align:right}
   .caution{background:#2a1f12; border:1px solid #5a3f1a; color:#ffcf8a; border-radius:10px; padding:10px 12px; font-size:13px; margin-top:12px; line-height:1.45}
 
   /* body */
@@ -178,6 +225,20 @@
     <div class="xpline"><span id="nextText"></span><span id="cumText"></span></div>
     <canvas id="xpChart"></canvas>
     <div class="xpline"><span>XP per workout, last 20</span><span id="avgText"></span></div>
+  </div>
+
+  <div class="card" id="calCard">
+    <h2>Activity <span class="seg" id="calSeg"><button data-v="week" class="on">Week</button><button data-v="month">Month</button></span></h2>
+    <div class="calNav"><button id="calPrev" aria-label="Previous">‹</button><div class="ttl" id="calTitle"></div><button id="calNext" aria-label="Next">›</button></div>
+    <div id="calGrid"></div>
+    <div id="calSum"></div>
+    <div id="calDay"></div>
+    <div class="link" id="goalLink">Change ring goals</div>
+    <div class="goalEdit" id="goalEdit">
+      <label><span class="cXP">XP per day</span><input type="number" id="gXP" min="50" step="25" inputmode="numeric"></label>
+      <label><span class="cLIFT">Working sets per day</span><input type="number" id="gLIFT" min="1" step="1" inputmode="numeric"></label>
+      <label><span class="cCARD">Cardio minutes per day</span><input type="number" id="gCARD" min="5" step="5" inputmode="numeric"></label>
+    </div>
   </div>
 
   <div class="card">
@@ -354,7 +415,7 @@ function analyze(data){
   const last=sessions[sessions.length-1]; const weekOf=last?mondayOf(last.date):null;
   const perWeek={}; for(const s of sessions){ const m=mondayOf(s.date); perWeek[m]=(perWeek[m]||0)+1; }
   let streak=0; if(weekOf){ let m=weekOf; if((perWeek[m]||0)>=1){ streak=1; m=addDays(m,-7); while((perWeek[m]||0)>=2){ streak++; m=addDays(m,-7); } } }
-  return {sessions,ex,prs,T,comebacks,streak,weekOf,perWeek,last,first:sessions[0]};
+  return {sessions,ex,prs,T,comebacks,streak,weekOf,perWeek,last,first:sessions[0],extra};
 }
 /* share of muscle work in a window ending on endDate (default: latest session) */
 function bodyActivity(A,days,endDate){
@@ -604,6 +665,8 @@ function render(A,pending,ready){
     {t:'Set a PR',v:inWeek.reduce((a,s)=>a+s.prs.length,0),g:1,u:'PR'}
   ].map(q=>({...q,done:q.v>=q.g}));
 
+  renderCalendar(A,today);
+
   // up next: judged for the earliest day you could train (tomorrow if you already trained today)
   const nextDay=(A.last&&A.last.date===today)?addDays(today,1):today;
   const sg=suggestNext(A,recoveryState(A,nextDay),vol,bossesAll,quests,nextDay);
@@ -738,6 +801,88 @@ function render(A,pending,ready){
   document.getElementById('shareBtn').onclick=()=>{ const ba=bodyActivity(A,period||30); const txt=[`PELOBROSSSS QUEST · ${fmtDateY(A.last.date)}`,`Level ${L} ${titleFor(L)} · ${n(A.T.xp)} XP (${n(next-A.T.xp)} to Level ${L+1}) · ${ach.unlocked.length}/${ach.defs.length} achievements`,`Up next: ${sg.pick.t} day. ${sg.list.map(c=>`${c.r.name} ${c.b?c.b.target:c.lastH.top} ${unit(c.r.unit)}`).join(', ')}`,`Body (last ${period||30} days): ${ba.rows.slice(0,5).map(r=>`${r.name} ${Math.round(r.pct)}%`).join(', ')}`,`Plateaus: ${bossesAll.map(b=>`${b.name} ${b.kind==='ghost'?'reclaim':'break'} ${b.target} ${unit(b.unit)}`).join('; ')||'none'}`,`Weekly goals: ${quests.map(q=>`${q.t} ${q.done?'done':q.v+'/'+q.g}`).join(' · ')}`].join('\n');
     (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>{ document.getElementById('through').textContent='summary copied'; setTimeout(()=>{ document.getElementById('through').textContent='through '+fmtDateY(A.last.date); },1800); }).catch(()=>{ prompt('Copy your summary:',txt); }); };
   window.__quest={A,levelFor,findBosses,bodyActivity,recoveryState,weeklyVolume,suggestNext,achievements,rec,vol,sg,ach,bossesAll,quests};
+}
+/* ============================================================
+   ACTIVITY CALENDAR: Apple Fitness style rings per day.
+   Outer red = XP vs goal, middle green = working sets vs goal,
+   inner cyan = cardio minutes vs goal. Goals live in localStorage.
+   ============================================================ */
+const RING_COL={XP:['#fa114f','#ff5c8a'],LIFT:['#a6ff00','#d4ff6b'],CARD:['#00f0ff','#7df7ff']};
+function ringSVG(p,size,stroke,gap){ /* p={XP,LIFT,CARD} fractions (may exceed 1) */
+  const c=size/2; let o=`<svg class="ringsvg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" aria-hidden="true"><g transform="rotate(-90 ${c} ${c})">`;
+  ['XP','LIFT','CARD'].forEach((k,i)=>{ const r=c-stroke/2-i*(stroke+gap); if(r<=0) return; const [col,hi]=RING_COL[k]; const v=Math.max(0,p[k]||0);
+    o+=`<circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="${col}" stroke-opacity=".22" stroke-width="${stroke}"/>`;
+    const first=Math.min(v,1)*100;
+    if(first>0) o+=`<circle class="p" cx="${c}" cy="${c}" r="${r}" fill="none" stroke="${col}" stroke-width="${stroke}" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100" data-d="${first.toFixed(2)} 100"/>`;
+    if(v>1){ const extra=Math.min(v-1,1)*100; o+=`<circle class="p" cx="${c}" cy="${c}" r="${r}" fill="none" stroke="${hi}" stroke-width="${stroke}" stroke-linecap="round" pathLength="100" stroke-dasharray="0 100" data-d="${extra.toFixed(2)} 100" style="filter:drop-shadow(0 0 ${Math.max(1,stroke/3)}px rgba(0,0,0,.9))"/>`; }
+  });
+  return o+'</g></svg>';
+}
+function animateRings(root){ const els=root.querySelectorAll('circle.p'); requestAnimationFrame(()=>requestAnimationFrame(()=>els.forEach(e=>e.setAttribute('stroke-dasharray',e.dataset.d)))); }
+function loadGoals(){ let g={XP:300,LIFT:10,CARD:20}; try{ const s=JSON.parse(localStorage.getItem('pq_goals')||'null'); if(s) g={...g,...s}; }catch(e){} return g; }
+function renderCalendar(A,today){
+  const goals=loadGoals();
+  const days={}; for(const s of A.sessions){ days[s.date]={s,xp:s.xp,sets:s.sets,cmin:s.cmin}; }
+  for(const ec of (A.extra||[])){ if(!days[ec.date]){ const xp=Math.round((ec.min||0)*3+(ec.mi||0)*20); days[ec.date]={s:null,xp,sets:0,cmin:ec.min||0,extraOnly:ec}; } }
+  const frac=d=>d?{XP:d.xp/goals.XP,LIFT:d.sets/goals.LIFT,CARD:d.cmin/goals.CARD}:{XP:0,LIFT:0,CARD:0};
+  const closedAll=d=>d&&d.xp>=goals.XP&&d.sets>=goals.LIFT&&d.cmin>=goals.CARD;
+  const firstDate=A.first?A.first.date:today;
+  let st={mode:'week',sel:today}; try{ const m=localStorage.getItem('pq_calmode'); if(m) st.mode=m; }catch(e){}
+  if(!days[today]&&A.last&&daysBetween(A.last.date,today)<=6) st.sel=today;
+  const grid=document.getElementById('calGrid'), title=document.getElementById('calTitle');
+  const DL=['M','T','W','T','F','S','S'];
+  const monthStart=d=>d.slice(0,8)+'01';
+  const addMonths=(d,k)=>{ const dt=new Date(d.slice(0,8)+'01T00:00'); dt.setMonth(dt.getMonth()+k); return isoLocal(dt); };
+  const dayDetail=()=>{ const d=days[st.sel]; const p=frac(d); const dt=new Date(st.sel+'T00:00');
+    const head=dt.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+    const label=d?(d.s?d.s.label:(d.extraOnly.machine||'Cardio')):(st.sel>today?'Upcoming':'Rest day');
+    let html=`<div class="dayCard"><div>${ringSVG(p,118,14,3)}</div><div class="info"><div class="date">${head}</div><div class="lab">${esc(label)}${closedAll(d)?' <span class="pill green">All rings</span>':''}</div>`+
+      `<div class="rstat"><div class="k cXP">XP</div><div class="v cXP">${n(d?d.xp:0)}<small>/${goals.XP}</small></div></div>`+
+      `<div class="rstat"><div class="k cLIFT">Lift</div><div class="v cLIFT">${d?d.sets:0}<small>/${goals.LIFT} SETS</small></div></div>`+
+      `<div class="rstat"><div class="k cCARD">Cardio</div><div class="v cCARD">${d?Math.round(d.cmin):0}<small>/${goals.CARD} MIN</small></div></div></div></div>`;
+    if(d&&d.s){ const s=d.s; const lifts=s.exDetail.filter(e=>e.sets>0);
+      html+='<div class="dayEx">'+lifts.map(e=>{ const pr=s.prs.find(x=>x.name===e.name&&x.equip===e.equip); return `<div class="ex"><div>${esc(e.name)} <span style="color:var(--mut);font-size:12px">${esc(e.equip)}</span><small>${e.sets} working set${e.sets===1?'':'s'}${pr?` · PR ${pr.from} → ${pr.to} ${unit(pr.unit)}`:''}</small></div><div class="v">${e.top!=null?e.top+' '+unit(e.unit):''}</div></div>`; }).join('')+
+        (s.cmin?`<div class="ex"><div>Cardio<small>${s.notes?esc(s.notes.slice(0,90)):''}</small></div><div class="v">${Math.round(s.cmin)} min${s.mi?' · '+n1(s.mi)+' mi':''}</div></div>`:'')+'</div>'; }
+    document.getElementById('calDay').innerHTML=html; animateRings(document.getElementById('calDay')); };
+  const summary=(from,to,label)=>{ let w=0,all=0,xp=0,sets=0,cm=0; for(let d=from; d<=to; d=addDays(d,1)){ const x=days[d]; if(!x) continue; if(x.s) w++; if(closedAll(x)) all++; xp+=x.xp; sets+=x.sets; cm+=x.cmin; }
+    document.getElementById('calSum').innerHTML=`<div class="calSum"><div><b>${w}</b><span>workouts</span></div><div><b class="cXP">${n(xp)}</b><span>XP</span></div><div><b class="cLIFT">${sets}</b><span>sets</span></div><div><b class="cCARD">${Math.round(cm)}</b><span>cardio min</span></div></div>`+(all?`<div class="sub" style="margin:8px 0 0;text-align:center">All three rings closed on ${all} day${all===1?'':'s'}</div>`:''); };
+  const draw=()=>{
+    document.querySelectorAll('#calSeg button').forEach(b=>b.classList.toggle('on',b.dataset.v===st.mode));
+    const prev=document.getElementById('calPrev'), next=document.getElementById('calNext');
+    if(st.mode==='week'){
+      const mon=mondayOf(st.sel), sun=addDays(mon,6);
+      const a=new Date(mon+'T00:00'), b=new Date(sun+'T00:00');
+      title.textContent=a.getMonth()===b.getMonth()?`${a.toLocaleDateString('en-US',{month:'short'})} ${a.getDate()}–${b.getDate()}`:`${fmtDate(mon)} – ${fmtDate(sun)}`;
+      let h='<div class="wk">';
+      for(let i=0;i<7;i++){ const d=addDays(mon,i); const fut=d>today; h+=`<div class="cell${d===st.sel?' sel':''}${d===today?' today':''}${fut?' future':''}" data-d="${d}"><div class="dl">${DL[i]}</div><div class="dn">${new Date(d+'T00:00').getDate()}</div>${ringSVG(fut?{}:frac(days[d]),40,5,1.5)}</div>`; }
+      grid.innerHTML=h+'</div>';
+      prev.disabled=mon<=mondayOf(firstDate); next.disabled=sun>=today;
+      summary(mon,sun,'this week');
+    } else {
+      const ms=monthStart(st.sel); const me=addDays(addMonths(ms,1),-1);
+      title.textContent=new Date(ms+'T00:00').toLocaleDateString('en-US',{month:'long',year:'numeric'});
+      let h='<div class="mo">'+DL.map(x=>`<div class="h">${x}</div>`).join('');
+      const lead=(new Date(ms+'T00:00').getDay()+6)%7; for(let i=0;i<lead;i++) h+='<div class="cell blank"></div>';
+      for(let d=ms; d<=me; d=addDays(d,1)){ const fut=d>today; h+=`<div class="cell${d===st.sel?' sel':''}${d===today?' today':''}${fut?' future':''}" data-d="${d}"><div class="n">${new Date(d+'T00:00').getDate()}</div>${ringSVG(fut?{}:frac(days[d]),34,4,1.2)}</div>`; }
+      grid.innerHTML=h+'</div>';
+      prev.disabled=ms<=monthStart(firstDate); next.disabled=me>=today;
+      summary(ms,me,'this month');
+    }
+    grid.querySelectorAll('.cell[data-d]').forEach(c=>c.onclick=()=>{ if(c.classList.contains('future')) return; st.sel=c.dataset.d; draw(); });
+    animateRings(grid); dayDetail();
+    try{ localStorage.setItem('pq_calmode',st.mode); }catch(e){} };
+  const shift=dir=>{ const b=document.getElementById(dir<0?'calPrev':'calNext'); if(b.disabled) return;
+    if(st.mode==='week'){ let d=addDays(st.sel,7*dir); if(d>today) d=today; if(d<firstDate) d=firstDate; st.sel=d; }
+    else { let d=addMonths(st.sel,dir); if(d>today) d=today; if(d<firstDate) d=firstDate; st.sel=d; }
+    draw(); };
+  document.getElementById('calPrev').onclick=()=>shift(-1); document.getElementById('calNext').onclick=()=>shift(1);
+  document.querySelectorAll('#calSeg button').forEach(b=>b.onclick=()=>{ st.mode=b.dataset.v; draw(); });
+  let tx=null; grid.addEventListener('touchstart',e=>{ tx=e.touches[0].clientX; },{passive:true});
+  grid.addEventListener('touchend',e=>{ if(tx==null) return; const dx=e.changedTouches[0].clientX-tx; tx=null; if(Math.abs(dx)>50) shift(dx<0?1:-1); },{passive:true});
+  const ge=document.getElementById('goalEdit'); document.getElementById('goalLink').onclick=()=>ge.classList.toggle('show');
+  [['gXP','XP'],['gLIFT','LIFT'],['gCARD','CARD']].forEach(([id,k])=>{ const el=document.getElementById(id); el.value=goals[k]; el.onchange=()=>{ const v=parseFloat(el.value); if(!(v>0)) { el.value=goals[k]; return; } goals[k]=v; try{ localStorage.setItem('pq_goals',JSON.stringify(goals)); }catch(e){} draw(); }; });
+  draw();
+  window.__cal={days,goals,st,draw};
 }
 function splash(big,sub){ document.getElementById('spBig').textContent=big; document.getElementById('spSub').textContent=sub; document.getElementById('splash').classList.add('show'); }
 document.getElementById('spOk').onclick=()=>{ document.getElementById('splash').classList.remove('show'); };
