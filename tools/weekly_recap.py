@@ -247,6 +247,19 @@ def build(week_date=None):
             chg = f"<span style='color:{'#1d9e5f' if good else '#c0392b'}'>{'up' if cur > prev else 'down'} from {f(prev)}</span>"
         hrows.append(row(label, f(cur), f"average of {nd} day{'s' if nd != 1 else ''}" + (f" · {chg}" if chg else '')))
         htxt.append(f"{label} {f(cur)}" + (f" (last week {f(prev)})" if prev is not None else ''))
+    stepsd = {}
+    try: stepsd = json.load(open(os.path.expanduser('~/.config/pelobrossss/health/steps.json')))
+    except Exception: pass
+    def steps_avg(start):
+        vals = [v for k, v in stepsd.items() if start <= d(k) <= start + dt.timedelta(days=6)]
+        return (sum(vals) / len(vals), len(vals)) if vals else (None, 0)
+    sc, sn = steps_avg(wk); sp, _ = steps_avg(prev_wk)
+    if sc is not None:
+        chg = ''
+        if sp is not None and abs(sc - sp) >= 1:
+            chg = f"<span style='color:{'#1d9e5f' if sc > sp else '#c0392b'}'>{'up' if sc > sp else 'down'} from {fmt(sp)}</span>"
+        hrows.append(row('Steps', f"{fmt(sc)}/day", f"average of {sn} day{'s' if sn != 1 else ''}" + (f" · {chg}" if chg else '')))
+        htxt.append(f"Steps {fmt(sc)}/day" + (f" (last week {fmt(sp)})" if sp is not None else ''))
     if hrows:
         H.append(h2('Recovery (Apple Watch)'))
         H.append(table(hrows) + f'<div style="font-size:11px;color:{MUT};margin-top:4px">Readiness is an app heuristic from HRV and resting HR against your 30-day baseline, sleep vs 7.5 h, and training load. Not a clinical measure.</div>')

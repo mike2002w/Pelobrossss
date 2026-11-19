@@ -7,6 +7,12 @@
    "score": 92,
    "band": "green",
    "calibrating": true
+  },
+  {
+   "date": "2026-11-18",
+   "score": 96,
+   "band": "green",
+   "calibrating": true
   }
  ]
 }
