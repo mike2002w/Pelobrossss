@@ -1,69 +1,134 @@
 {
-  "workouts": [],
+  "workouts": [
+    {
+      "id": 117,
+      "date": "2026-11-18",
+      "type": "Push",
+      "typeLabel": "Push/Chest + Legs",
+      "cardio": null,
+      "exercises": [
+        {
+          "name": "Bench Press",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Bench Press (Smith)",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 70,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 90,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 90,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 90,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Incline Bench",
+          "equipment": "DB",
+          "unit": "lb",
+          "sheetName": "Incline Bench (DB)",
+          "sets": [
+            {
+              "weight": 25,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "Squats",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "Squats",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 40,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        },
+        {
+          "name": "RDLs",
+          "equipment": "Smith",
+          "unit": "lb",
+          "sheetName": "RDLs",
+          "sets": [
+            {
+              "weight": 20,
+              "reps": 8,
+              "warmup": true
+            },
+            {
+              "weight": 50,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 60,
+              "reps": 8,
+              "warmup": false
+            },
+            {
+              "weight": 70,
+              "reps": 8,
+              "warmup": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "extraCardio": [],
   "flaggedForReview": [
-    "4 session(s) held for review on 2026-11-17; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "2026-10-27: held, date already in workouts.json",
-    "2026-11-01: held, date already in workouts.json",
-    "2026-11-10: held, date already in workouts.json",
-    "4 session(s) held for review on 2026-11-13; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "2026-10-27: held, date already in workouts.json",
-    "2026-11-01: held, date already in workouts.json",
-    "2026-11-10: held, date already in workouts.json",
-    "4 session(s) held for review on 2026-11-12; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "2026-10-27: held, date already in workouts.json",
-    "2026-11-01: held, date already in workouts.json",
-    "2026-11-10: held, date already in workouts.json",
-    "2026-11-10: RESOLVED open item. He posted Smith Calf Raises '20,40,40,40 done' on Nov 12 at 18:12Z (coach recap files it under Tue Nov 10 and shows 20 without a w). Staged as a held add-on; approve to append Calf Raises (Smith) 20|40|40|40 x15 to the already-merged Nov 10 day. 20 kept as a working set per the Oct 29 precedent.",
-    "2026-11-11: cardio-only day. His message was just 'Wednesday' (numbers came from screenshots); elliptical (10:09, 2.46 mi, 82 active/100 total cal, 83 rpm, no HR) and stairs (19:56, 220 active/256 total cal, 158 bpm) taken from the coach recap. Coach asked whether the screenshots were actually Thursday; he answered 'New session Thursday', so the Wed Nov 11 date stands.",
-    "2026-11-12: no cardio posted (went straight to pull). Single Arm Lat Pulldown 12.5w|20|22.5|20 (22.5 kg is a new top since the 25 kg PR). Smith Rows 30w|50|50|50 (down from 65 on Nov 1). Bicep Curls (DB) 15w|30|25|25 as typed.",
-    "2026-11-12 Shrugs: he typed '30,40,45' with no exercise name; coach guessed shrugs and asked him to confirm, he replied 'Done' and the coach logged Shrugs (DB) 30|40|45. Logged as 3 working sets of Shrugs (DB) at the default 8 reps; no warmup set, only 3 sets.",
-    "3 session(s) held for review on 2026-11-11; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "2026-10-27: held, date already in workouts.json",
-    "2026-11-01: held, date already in workouts.json",
-    "3 session(s) held for review on 2026-11-09; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "2026-10-27: held, date already in workouts.json",
-    "2026-11-01: held, date already in workouts.json",
-    "3 session(s) held for review on 2026-11-03; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "2026-10-27: held, date already in workouts.json",
-    "2026-11-01: held, date already in workouts.json",
-    "2 session(s) held for review on 2026-11-02; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "2026-10-27: held, date already in workouts.json",
-    "2 session(s) held for review on 2026-10-30; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "2026-10-27: held, date already in workouts.json",
-    "1 add-on held for review on 2026-10-29; see flaggedForReview.",
-    "1 session(s) held for review on 2026-10-28; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "1 session(s) held for review on 2026-10-26; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "1 session(s) held for review on 2026-10-20; see flaggedForReview.",
-    "2026-10-16: held, date already in workouts.json",
-    "2026-10-16: Smith bench (20w|70|100|100) was posted the next session (Oct 20) and is missing from the already-merged Oct 16 day. Staged here as a held add-on; approve to append it to Oct 16 (and optionally relabel the day 'Cardio + Legs + Chest').",
-    "2026-10-20 Face Pulls: he typed '7.5,10,,12.5' (double comma). Logged 3 sets as the coach did; there may be a missing 4th set.",
-    "2026-10-20 Bicep Curls first set 15 treated as warmup (coach recap marks it 15w); Shrugs first set 20 kept as a working set to match past Shrugs logging.",
-    "2026-10-23: 'db incline bench' logged as existing Incline Bench (DB). Only 2 working sets (25w|40|40).",
-    "2026-10-25: Single Arm Lat Pulldown typed '12.5,20,20,20' with no 'w'; logged 12.5 as warmup to match the coach recap and Oct 20.",
-    "2026-10-25: Smith Squats only 2 working sets at 40 (down from 50 on Oct 16), as typed.",
-    "2026-10-27: his cardio message was an image/blank text; elliptical numbers (20:17, 4.97 mi, 198 active/235 total cal, 147 bpm, 72 rpm) taken from the coach recap. 110 on Smith bench ties his PR.",
-    "2026-10-27: RESOLVED open item. He posted Incline DB Press '25w,40,40,40. Done.' on Oct 29 at 18:49 (coach recap files it under Tue Oct 27). Staged as a held add-on; approve to append Incline Bench (DB) 25w|40|40|40 to the already-merged Oct 27 day.",
-    "2026-10-29: Lunges typed as 'x3 sets' with no rep count; logged 3 BW sets at the default 8 reps (Sep 8 was 10/leg).",
-    "2026-10-29: Smith Calf Raises '20,40,50,50' had no 'w' and the coach recap shows 20 without one, so 20 is a working set (Oct 9/16 had 20 as warmup). Reps 15 per convention. 50 is a new top; RDL 80 is a new PR.",
-    "2026-10-30: cardio was an outdoor run (0.81 mi, 11:29, 93 active/114 total cal, no HR); logged as machine 'Run' with 'Outdoor run' in notes.",
-    "2026-10-30: DB Shoulder Press 15|15|15 all logged as working sets (first overhead press since the shoulder injury, deliberately light).",
-    "2026-10-30: Smith bench 20w|70|105|90|90 as typed (drop after 105). DB Flyes 20 is a new top.",
-    "2026-11-01: Smith Rows 65 is a new top (prior 60 on Oct 25). Bicep Curls (DB) 15w|25|30|25 as typed (drop after 30).",
-    "2026-11-01: RESOLVED open item. He posted Shrugs '20w,40,50,50. Done' on Nov 3 at 19:36 (coach recap files it under Sun Nov 1). Staged as a held add-on; approve to append Shrugs (DB) 20w|40|50|50 to the already-merged Nov 1 day.",
-    "2026-11-03: cardio was an outdoor run (1.91 mi, 29:49, 220 active/274 total cal, no HR); logged as machine 'Run' with 'Outdoor run' in notes. Smith bench 20w|70|100|100|90 and Smith incline 20w|70|70|70 as typed.",
-    "2026-11-09: cardio was a Peloton run (30 min, 2.35 mi, 408 cal, no active/total split given, no HR); logged as machine 'Run' like earlier Peloton runs. Smith bench typed '20w,70,100x3 sets' = 20w|70|100|100|100. Lateral Raises '10 three sets' = 10|10|10, all working sets, reps default 8. He said 'Done' after three lifts.",
-    "2026-11-10: session left OPEN in the chat (coach asked 'What weight?' for Smith Calf Raises at 17:03Z Nov 10, no reply by sync 33 h later). Staged with squats 20w|40|40|45 and RDLs 20w|50|60|60 only; if he posts calves later the next sync stages them as a held add-on. Elliptical numbers (20:09, 4.91 mi, 192 active/229 total cal, 153 bpm, 74 rpm) taken from the coach recap.",
-    "2026-11-13: cardio-only day. His message was just 'It's Friday Done' (numbers came from a screenshot); treadmill indoor walk (30:40, 1.90 mi, 262 active/314 total cal, 16:08 pace, 144 bpm) taken from the coach recap. No lifting."
+    "2026-11-18: no cardio mentioned in the chat; logged as lifting only. type set to Push (first group of a Push/Chest + Legs day)."
   ]
 }

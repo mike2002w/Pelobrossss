@@ -10439,6 +10439,132 @@
    },
    "exercises": [],
    "source": "apple-health"
+  },
+  {
+   "id": 117,
+   "date": "2026-11-18",
+   "type": "Push",
+   "typeLabel": "Push/Chest + Legs",
+   "cardio": null,
+   "exercises": [
+    {
+     "name": "Bench Press",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Bench Press (Smith)",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 90,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 90,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 90,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Incline Bench",
+     "equipment": "DB",
+     "unit": "lb",
+     "sheetName": "Incline Bench (DB)",
+     "sets": [
+      {
+       "weight": 25,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "Squats",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "Squats",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 40,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    },
+    {
+     "name": "RDLs",
+     "equipment": "Smith",
+     "unit": "lb",
+     "sheetName": "RDLs",
+     "sets": [
+      {
+       "weight": 20,
+       "reps": 8,
+       "warmup": true
+      },
+      {
+       "weight": 50,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 60,
+       "reps": 8,
+       "warmup": false
+      },
+      {
+       "weight": 70,
+       "reps": 8,
+       "warmup": false
+      }
+     ]
+    }
+   ]
   }
  ],
  "extraCardio": [
